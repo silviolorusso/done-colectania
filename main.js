@@ -1,4 +1,10 @@
+// --- global variables
+
+var holder = document.getElementById('page');
+var criticPopup = document.getElementById('critic');
+
 // --- M-V-C
+
 var model = {
 	// all our states
 	time: new Date().getTime(),
@@ -7,27 +13,39 @@ var model = {
 	images: []
 };
 
-timer();
-
-
 function controller(model, input) {
 
+	// expired?
 	if (model.timeLeft > 0) {
-		showTime(model)
+		showTime(model);
 	}
 	else {
-		model.expired == true;
-		showExpired();
+		model.expired = true;
+		showExpired(model);
+		noDrag();
 	}
+  
+	if (input && input.includes("data:image") && model.expired == false) {
+		
+		// update the model
+		model.images.push(input);
+		// drop file
+		dropFile(input);
+		// add bonus time
+		addtime(10000);
+		// critic speak
+		critic();
 
-	if (input && input.includes("data:image")) {
-		console.log('works');
-		model.images.push(event.target.result);
+	} else if (input && !input.includes("data:image")) {
+		
+		notAnImage();
+	
+	} else if (input && model.expired == true) {
+		
+		LateDropFile();
+	
 	}
-
 }
-
-
 
 
 // --- CONTROLLER
@@ -38,14 +56,35 @@ function timer() {
 		controller(model);
 	}, 10);
 }
+timer();
 
 function addtime(bonusTime) {
 	model.timeLeft = model.timeLeft + bonusTime;
-	console.log('added');
 }
 
+// dropFile
+holder.ondragover = function() {
+	this.className = 'hover';
+	return false;
+};
+holder.ondragend = function() {
+	this.className = '';
+	return false;
+};
+holder.ondrop = function (e) {
+  this.className = '';
+  e.preventDefault();
+  var file = e.dataTransfer.files[0], 
+      reader = new FileReader();
+  reader.onload = function (event) {
+    console.log(event.target);
+    controller(model, event.target.result);
+  };
+  console.log(file);
+  reader.readAsDataURL(file);
 
-
+	return false;
+};
 
 
 // --- VIEW
@@ -59,61 +98,32 @@ function showExpired() {
 	document.getElementById("counter").innerHTML = "expired!";
 }
 
-// -------------------------------------
+function notAnImage() {
+	alert('The file you dropped is not an image!');
+}
 
-// --- CRITIC
+function dropFile(src) {
+	var img = document.createElement("img");
+	img.className += " draggable";
+	img.src = src;
+	holder.appendChild(img);
+}
+
+function LateDropFile(src) {
+	alert('too late bro');
+}
+
+function noDrag() {
+	var elems = document.querySelectorAll(".draggable");
+  	[].forEach.call(elems, function(el) {
+    	el.classList.remove("draggable");
+  });
+}
 
 function critic() {
-	alert('Make this image bigger pls!');
+	criticPopup.innerHTML = 'Make this image bigger pls!';
 }
 
-// --- FILE DROP
-
-var holder = document.getElementById('page')
-
-if (typeof window.FileReader === 'undefined') {
-	console.log('fail');
-}
-else {
-	console.log('success');
-}
-
-holder.ondragover = function() {
-	this.className = 'hover';
-	return false;
-};
-holder.ondragend = function() {
-	this.className = '';
-	return false;
-};
-holder.ondrop = function(e) {
-	this.className = '';
-	e.preventDefault();
-
-	if (model.expired == false) {
-		// TODO: put the drop in VIEW
-		var file = e.dataTransfer.files[0],
-			reader = new FileReader();
-		reader.onload = function(event) {
-			console.log(event.target);
-			var img = document.createElement("img");
-			img.className += " draggable";
-			img.src = event.target.result;
-			holder.appendChild(img);
-
-
-			// model.images.push(event.target.result);
-			controller(model, event.target.result);
-
-		};
-		console.log(file);
-		reader.readAsDataURL(file);
-	}
-
-	return false;
-};
-
-// --- DRAG
 interact('.draggable')
 	.draggable({
 		onmove: window.dragMoveListener,
@@ -183,3 +193,4 @@ function dragMoveListener(event) {
 
 // this is used later in the resizing and gesture demos
 window.dragMoveListener = dragMoveListener;
+

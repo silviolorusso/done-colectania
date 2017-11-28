@@ -31,3 +31,14 @@ h1 {
   display: block;
   margin: auto;
 }
+
+#critic {
+  width: 200px;
+  height: 100px;
+  background-color: #aaa;
+  border-radius: 25px;
+  position: absolute;
+  right: 20px;
+  top: 200px;
+  padding: 20px;
+}
