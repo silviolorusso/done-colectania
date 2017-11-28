@@ -1,26 +1,34 @@
+// --- M-V-C
+var model = {
+  // all our states
+  time: new Date().getTime(),
+  timeLeft: 10000,
+  expired: false
+};
+
+function controller(input) {
+  // model.img.append(input)
+  if (input == "img") {
+    timeLeft = timeLeft + 1000;
+  }
+}
+
 // --- TIMER
-var expired = false;
 
 function timer() {
-  var period = 10000;
   var x = setInterval(function() {
-    seconds = period/1000;
-    document.getElementById("counter").innerHTML = seconds.toFixed(2) + " seconds left!";
-
-    // expiration    
-    if (period < 0) {
-      clearInterval(x);
-      document.getElementById("counter").innerHTML = "EXPIRED";
-      expired = true;
-
-      // call to all views
-      drag();
-    }
-    period = period - 10;
+    time = time - 10;
   }, 10);
+  controller();
 }
-timer();
 
+// -------------------------------------
+
+// --- CRITIC
+
+function critic() {
+  alert('Make this image bigger pls!');
+}
 
 // --- FILE DROP
 
@@ -47,6 +55,9 @@ holder.ondrop = function (e) {
       img.className += " draggable"; 
       img.src = event.target.result;
       holder.appendChild(img);
+
+      controller(event.target.result);
+
     };
     console.log(file);
     reader.readAsDataURL(file);
