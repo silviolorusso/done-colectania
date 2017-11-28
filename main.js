@@ -3,23 +3,26 @@ var model = {
 	// all our states
 	time: new Date().getTime(),
 	timeLeft: 10000,
-	expired: false
+	expired: false,
+	images: []
 };
 
 timer();
 
 
-function controller(model) {
-	// model.img.append(input)
-	// if (input == "img") {
-	// 	timeLeft = timeLeft + 1000;
-	// }
+function controller(model, input) {
+
 	if (model.timeLeft > 0) {
 		showTime(model)
 	}
 	else {
 		model.expired == true;
 		showExpired();
+	}
+
+	if (input && input.includes("data:image")) {
+		console.log('works');
+		model.images.push(event.target.result);
 	}
 
 }
@@ -34,6 +37,11 @@ function timer() {
 		model.timeLeft = model.timeLeft - 10;
 		controller(model);
 	}, 10);
+}
+
+function addtime(bonusTime) {
+	model.timeLeft = model.timeLeft + bonusTime;
+	console.log('added');
 }
 
 
@@ -83,6 +91,7 @@ holder.ondrop = function(e) {
 	e.preventDefault();
 
 	if (model.expired == false) {
+		// TODO: put the drop in VIEW
 		var file = e.dataTransfer.files[0],
 			reader = new FileReader();
 		reader.onload = function(event) {
@@ -92,7 +101,9 @@ holder.ondrop = function(e) {
 			img.src = event.target.result;
 			holder.appendChild(img);
 
-			controller(event.target.result);
+
+			// model.images.push(event.target.result);
+			controller(model, event.target.result);
 
 		};
 		console.log(file);
