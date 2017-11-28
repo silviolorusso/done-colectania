@@ -1,0 +1,33 @@
+body {
+  font-family: sans-serif;
+}
+
+h1 {
+  text-align: center;
+}
+
+#counter {
+  width: 100%;
+  text-align: center;
+  height: 30px;
+  color: red;
+  font-size: 30px;
+}
+
+#page {
+  width: 400px;
+  height: 600px;
+  border: 1px solid #000;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+#page img {
+  width: 25%;
+  height: auto;
+}
+
+.addpage {
+  display: block;
+  margin: auto;
+}
