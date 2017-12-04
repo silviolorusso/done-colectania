@@ -2,6 +2,7 @@
 
 var pages = $('.page');
 var criticPopup = $('#critic');
+var dropDelay = 100;
 
 // --- GENERAL FUNCTIONS
 
@@ -12,7 +13,12 @@ function makeId() {
 }
 
 function errorSound() {
-	var audio = new Audio('assets/audio/incorrect.swf.mp3');
+	var audio = new Audio('assets/audio/incorrect.mp3');
+	audio.play();
+}
+
+function dingSound() {
+	var audio = new Audio('assets/audio/ding.mp3');
 	audio.play();
 }
 
@@ -81,17 +87,22 @@ pages.on("drop", function(e) {
   $(this).removeClass('dragover');
   e.preventDefault();
   console.log(e);
-  var file = e.originalEvent.dataTransfer.files[0], 
-      reader = new FileReader();
-   var pageId = $(this).attr('id');
-  reader.onload = function (event) {
-    console.log(event.target);
-    // id, url, size, pos, rotation?, visible
-    controller(model, pageId, [makeId(), event.target.result, [0,0,0,0,0], true] );
-  };
-  console.log(file);
-  reader.readAsDataURL(file);
-
+  var files = e.originalEvent.dataTransfer.files
+  var y = 0;
+  for (var i = files.length - 1; i >= 0; i--) {
+	  reader = new FileReader();
+	  var pageId = $(this).attr('id');
+	  reader.onload = function (event) {
+	    console.log(event.target);
+	    // id, url, size, pos, rotation?, visible
+	    setTimeout(function(){
+	    	controller(model, pageId, [makeId(), event.target.result, [0,0,0,0,0], true] );
+	  	}, y * dropDelay);
+	  	y += 1;
+	  };
+	  console.log(files[i]);
+	  reader.readAsDataURL(files[i]);
+  }
 	return false;
 });
 // prevent drop on body
@@ -154,7 +165,8 @@ function dropFile(pageId, src, id) {
 		if (model.images[i][0] == id) {
 			model.images[i][2] = elementPos;
 		}
-	} 
+	}
+	dingSound();
 }
 
 function LateDropFile(src) {
