@@ -3,11 +3,24 @@
 var pages = $('.page');
 var criticPopup = $('#critic');
 
+// --- GENERAL FUNCTIONS
+
+function makeId() {
+	var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+	var id = randLetter + Date.now();
+	return id; 
+}
+
+function errorSound() {
+	var audio = new Audio('assets/audio/incorrect.swf.mp3');
+	audio.play();
+}
+
 // --- M-V-C
 
 var model = {
 	// all our states
-	timeLeft: 5000,
+	timeLeft: 100000,
 	expired: false,
 	images: []
 };
@@ -24,25 +37,21 @@ function controller(model, page, input) {
 		noDrag();
 	}
   
-	if (input && input.includes("data:image") && model.expired == false) {
-		
+	if ( input && input[1].includes("data:image") && input[3] == true && model.expired == false) { // new element
 		// update the model
 		model.images.push(input);
 		// drop file
-		dropFile(page, input);
+		dropFile(page, input[1], input[0]);
 		// add bonus time
 		addtime(10000);
 		// critic speak
 		critic();
-
-	} else if (input && !input.includes("data:image")) {
-		
+	} else if ( input && !input[1].includes("data:image") && model.expired == false) { // not an image
 		notAnImage();
-	
-	} else if (input && model.expired == true) {
-		
+	} else if (input && input[3] == false && model.expired == false) { // deleting an element
+		removeElement(input[0]);
+	} else if (input && model.expired == true) { // too late
 		LateDropFile();
-	
 	}
 }
 
@@ -77,20 +86,32 @@ pages.on("drop", function(e) {
    var pageId = $(this).attr('id');
   reader.onload = function (event) {
     console.log(event.target);
-    controller(model, pageId, event.target.result);
+    // id, url, size, pos, rotation?, visible
+    controller(model, pageId, [makeId(), event.target.result, [0,0,0,0,0], true] );
   };
   console.log(file);
   reader.readAsDataURL(file);
 
 	return false;
 });
+// prevent drop on body
+$('body').on("dragover", function(e) {
+	e.preventDefault();
+});
+$('body').on("dragleave", function(e) {
+	e.preventDefault();
+});
+$('body').on("drop", function(e) {
+  e.preventDefault();
+  errorSound();
+});
 
-// remove picture
-// add del option
+// remove element
 $(document).on('click', '.close', function () {
 	var pageId = $(this).closest('.page').attr('id');
-	console.log(pageId);
-	controller(model, pageId, event.target.result);
+	var elementId = $(this).parent().attr('id');
+	var elementSrc = $(this).siblings().attr('src');
+	controller(model, pageId, [elementId, elementSrc, [0,0,0,0,0], false]);
 });
 
 // --- VIEW
@@ -110,15 +131,30 @@ function showExpired() {
 }
 
 function notAnImage() {
+	errorSound();
 	alert('The file you dropped is not an image!');
 }
 
-function dropFile(pageId, src) {
+function dropFile(pageId, src, id) {
 	var pageElement = $("<div>", {"class": "page-element draggable"});
 	var pageElementContent = $("<img>", {"src": src});
 	var pageElementClose = $("<span>", {"class": "close"}).text('x');
 	pageElement.append(pageElementContent, pageElementClose);
+	pageElement.attr('id', id);
 	$('#' + pageId).append(pageElement);
+	// read size, pos, rot and add them to model
+	elementPos = [
+		pageElement.position().left,
+		pageElement.position().top,
+		pageElement.width(),
+		pageElement.height(),
+		0 // rotation (TODO)
+	];
+	for(var i = 0 ; i < model.images.length; i += 1) {
+		if (model.images[i][0] == id) {
+			model.images[i][2] = elementPos;
+		}
+	} 
 }
 
 function LateDropFile(src) {
@@ -134,6 +170,11 @@ function noDrag() {
 
 function critic() {
 	criticPopup.innerHTML = 'Make this image bigger pls!';
+}
+
+function removeElement(id) {
+	$('#' + id).hide();
+	console.log(id);
 }
 
 interact('.draggable')
