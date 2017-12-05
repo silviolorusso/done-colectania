@@ -12,51 +12,52 @@ function makeId() {
 	return id; 
 }
 
-function errorSound() {
-	var audio = new Audio('assets/audio/incorrect.mp3');
-	audio.play();
-}
-
-function dingSound() {
-	var audio = new Audio('assets/audio/ding.mp3');
-	audio.play();
-}
+var Sound = {
+	error: function() {
+		var audio = new Audio('assets/audio/incorrect.mp3');
+		audio.play();
+	},
+	ding: function() {
+		var audio = new Audio('assets/audio/ding.mp3');
+		audio.play();
+	}
+};
 
 // --- M-V-C
 
-var model = {
+var Model = {
 	// all our states
 	timeLeft: 100000,
 	expired: false,
 	images: []
 };
 
-function controller(model, page, input) {
+function controller(Model, page, input) {
 
 	// expired?
-	if (model.timeLeft > 0) {
-		showTime(model);
+	if (Model.timeLeft > 0) {
+		showTime(Model);
 	}
 	else {
-		model.expired = true;
-		showExpired(model);
+		Model.expired = true;
+		showExpired(Model);
 		noDrag();
 	}
   
-	if ( input && input[1].includes("data:image") && input[3] == true && model.expired == false) { // new element
-		// update the model
-		model.images.push(input);
+	if ( input && input[1].includes("data:image") && input[3] == true && Model.expired == false) { // new element
+		// update the Model
+		Model.images.push(input);
 		// drop file
 		dropFile(page, input[1], input[0]);
 		// add bonus time
 		addtime(10000);
 		// critic speak
 		critic();
-	} else if ( input && !input[1].includes("data:image") && model.expired == false) { // not an image
+	} else if ( input && !input[1].includes("data:image") && Model.expired == false) { // not an image
 		notAnImage();
-	} else if (input && input[3] == false && model.expired == false) { // deleting an element
+	} else if (input && input[3] == false && Model.expired == false) { // deleting an element
 		removeElement(input[0]);
-	} else if (input && model.expired == true) { // too late
+	} else if (input && Model.expired == true) { // too late
 		LateDropFile();
 	}
 }
@@ -65,12 +66,12 @@ function controller(model, page, input) {
 // --- CONTROLLER
 
 var x = setInterval(function() {
-	model.timeLeft = model.timeLeft - 10;
-	controller(model);
+	Model.timeLeft = Model.timeLeft - 10;
+	controller(Model);
 }, 10);
 
 function addtime(bonusTime) {
-	model.timeLeft = model.timeLeft + bonusTime;
+	Model.timeLeft = Model.timeLeft + bonusTime;
 }
 
 // dropFile
@@ -96,7 +97,7 @@ pages.on("drop", function(e) {
 	    console.log(event.target);
 	    // id, url, size, pos, rotation?, visible
 	    setTimeout(function(){
-	    	controller(model, pageId, [makeId(), event.target.result, [0,0,0,0,0], true] );
+	    	controller(Model, pageId, [makeId(), event.target.result, [0,0,0,0,0], true] );
 	  	}, y * dropDelay);
 	  	y += 1;
 	  };
@@ -114,7 +115,7 @@ $('body').on("dragleave", function(e) {
 });
 $('body').on("drop", function(e) {
   e.preventDefault();
-  errorSound();
+  Sound.error();
 });
 
 // remove element
@@ -122,13 +123,13 @@ $(document).on('click', '.close', function () {
 	var pageId = $(this).closest('.page').attr('id');
 	var elementId = $(this).parent().attr('id');
 	var elementSrc = $(this).siblings().attr('src');
-	controller(model, pageId, [elementId, elementSrc, [0,0,0,0,0], false]);
+	controller(Model, pageId, [elementId, elementSrc, [0,0,0,0,0], false]);
 });
 
 // --- VIEW
 
-function showTime(model) {
-	seconds = model.timeLeft / 1000;
+function showTime(Model) {
+	seconds = Model.timeLeft / 1000;
 	document.getElementById("counter").innerHTML = seconds.toFixed(2) + " seconds left!";
 }
 
@@ -142,7 +143,7 @@ function showExpired() {
 }
 
 function notAnImage() {
-	errorSound();
+	Sound.error();
 	alert('The file you dropped is not an image!');
 }
 
@@ -153,7 +154,7 @@ function dropFile(pageId, src, id) {
 	pageElement.append(pageElementContent, pageElementClose);
 	pageElement.attr('id', id);
 	$('#' + pageId).append(pageElement);
-	// read size, pos, rot and add them to model
+	// read size, pos, rot and add them to Model
 	elementPos = [
 		pageElement.position().left,
 		pageElement.position().top,
@@ -161,12 +162,12 @@ function dropFile(pageId, src, id) {
 		pageElement.height(),
 		0 // rotation (TODO)
 	];
-	for(var i = 0 ; i < model.images.length; i += 1) {
-		if (model.images[i][0] == id) {
-			model.images[i][2] = elementPos;
+	for(var i = 0 ; i < Model.images.length; i += 1) {
+		if (Model.images[i][0] == id) {
+			Model.images[i][2] = elementPos;
 		}
 	}
-	dingSound();
+	Sound.ding();
 }
 
 function LateDropFile(src) {
@@ -253,8 +254,37 @@ function dragMoveListener(event) {
 	// update the posiion attributes
 	target.setAttribute('data-x', x);
 	target.setAttribute('data-y', y);
+
+	// update z-index
+	var maxzIndex = 0,
+		i = 0;
+	pageElements = $('#' + target.id).parent().children();
+	pageElements.each(function () {
+		i += 1;
+		if ( $(this).css("z-index") >= maxzIndex ) {
+			maxzIndex = parseInt($(this).css("z-index"));
+		}
+		if(i == pageElements.length) {
+			if (target.style.zIndex != maxzIndex | target.style.zIndex == 0) {
+    		target.style.zIndex = maxzIndex + 1;
+    	}
+  	}
+	});
+	// target.style.zIndex = maxzIndex + 1;
 }
 
 // this is used later in the resizing and gesture demos
 window.dragMoveListener = dragMoveListener;
 
+
+// // make pdf
+// var element = document.getElementById('p1');
+// $('#p1').click(function(){
+// 	html2pdf(element, {
+// 	  margin:       1,
+// 	  filename:     'myfile.pdf',
+// 	  image:        { type: 'jpeg', quality: 0.98 },
+// 	  html2canvas:  { dpi: 72, letterRendering: true, height: 2970, width: 5100 },
+// 	  jsPDF:        { unit: 'mm', format: 'A4', orientation: 'portrait' }
+// 	});
+// });

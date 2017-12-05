@@ -16,9 +16,7 @@
     "url": "https://github.com/silviolorusso/done-colectania/issues"
   },
   "homepage": "https://github.com/silviolorusso/done-colectania#readme",
-  "dependencies": {
-
-  },
+  "dependencies": {},
   "devDependencies": {
     "gulp": "latest",
     "gulp-util": "latest",
@@ -29,4 +27,3 @@
     "gulp-sourcemaps": "latest"
   }
 }
-

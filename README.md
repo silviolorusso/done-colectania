@@ -22,3 +22,14 @@ So, why not making publishing challenging by defining some obstacles, limitation
 - cinema-like badges
 - voting
 - critic
+
+### PDF Generation Resources
+
+- https://wkhtmltopdf.org/
+- https://evanbrooks.info/bindery/
+- https://github.com/eKoopmans/html2pdf
+- https://jsreport.net/learn/phantom-pdf
+- http://diethardsteiner.github.io/reporting/2015/02/17/CSS-for-print.html
+- take a screenshot, cut it in pieces and make the pdf out of it
+
+
