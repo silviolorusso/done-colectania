@@ -27,9 +27,9 @@ var Sound = {
 
 var Model = {
 	// all our states
-	timeLeft: 100000,
+	timeLeft: 30000,
 	expired: false,
-	images: []
+	elements: []
 };
 
 function controller(Model, page, input) {
@@ -44,19 +44,34 @@ function controller(Model, page, input) {
 		noDrag();
 	}
   
-	if ( input && input[1].includes("data:image") && input[3] == true && Model.expired == false) { // new element
-		// update the Model
-		Model.images.push(input);
-		// drop file
-		dropFile(page, input[1], input[0]);
-		// add bonus time
-		addtime(10000);
-		// critic speak
-		critic();
-	} else if ( input && !input[1].includes("data:image") && Model.expired == false) { // not an image
-		notAnImage();
-	} else if (input && input[3] == false && Model.expired == false) { // deleting an element
-		removeElement(input[0]);
+  if (input && Model.expired == false) {
+		switch (true) {
+			case	input[3] == false : // deleting an element
+				removeElement(input[0]);
+				break;
+			case 	input[1].includes("data:image") && 
+						input[3] == true : // new image
+				// update the Model
+				Model.elements.push(input);
+				// drop file
+				dropFile(page, input[1], input[0]);
+				// add bonus time
+				addtime(1000);
+				// critic speak
+				critic();
+				break;
+			case 	input[1].includes("data:text/plain") && 
+						input[3] == true : // new text
+				// update the Model
+				Model.elements.push(input);
+				// drop file
+				dropFile(page, input[1], input[0]);
+				break;
+			case 	!input[1].includes("data:image") &&
+						!input[1].includes("data:text/plain") : // neither an image nor text
+				notAnImage();
+				break;
+		}
 	} else if (input && Model.expired == true) { // too late
 		LateDropFile();
 	}
@@ -148,8 +163,15 @@ function notAnImage() {
 }
 
 function dropFile(pageId, src, id) {
+	if (src.includes("data:image")) {
+		var pageElementContent = $("<img>", {"src": src});
+	} else {
+		var deBasedText = atob( src.substring(23) );
+		var htmlBrText = deBasedText.replace(/\n/g, "<br/>"); 
+		console.log(htmlBrText);
+		var pageElementContent = $("<p>").append(htmlBrText); // remove "data:text/plain;base64"
+	}
 	var pageElement = $("<div>", {"class": "page-element draggable"});
-	var pageElementContent = $("<img>", {"src": src});
 	var pageElementClose = $("<span>", {"class": "close"}).text('x');
 	pageElement.append(pageElementContent, pageElementClose);
 	pageElement.attr('id', id);
@@ -162,9 +184,9 @@ function dropFile(pageId, src, id) {
 		pageElement.height(),
 		0 // rotation (TODO)
 	];
-	for(var i = 0 ; i < Model.images.length; i += 1) {
-		if (Model.images[i][0] == id) {
-			Model.images[i][2] = elementPos;
+	for(var i = 0 ; i < Model.elements.length; i += 1) {
+		if (Model.elements[i][0] == id) {
+			Model.elements[i][2] = elementPos;
 		}
 	}
 	Sound.ding();
