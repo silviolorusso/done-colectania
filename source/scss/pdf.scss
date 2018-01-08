@@ -1,0 +1,30 @@
+body {
+  zoom: 200%;
+}
+header {
+  display: none;
+}
+#counter {
+  display: none;
+}
+* {
+  box-shadow :none !important;
+}
+.wrapper {
+  padding: 0;
+  .spread {
+    max-width: 450px !important;
+    margin: 0;
+    outline: none !important;
+    .page {
+      break-after: always;
+      // padding: 0;
+      .page-element {
+        border: none;
+        .close {
+          display: none;
+        }
+      }
+    }
+  }
+}

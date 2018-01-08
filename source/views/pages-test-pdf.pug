@@ -1,0 +1,41 @@
+doctype html  
+html(lang='en') 
+  head
+    title P/P (Publish or Perish)
+    link(rel='stylesheet', href='assets/css/style.css')
+    link(rel='stylesheet', href='assets/css/pdf.css')
+    script(src='assets/js/jquery-3.2.1.min.js')
+    script(src='assets/js/interact.min.js')
+    script(src='assets/js/jspdf.min.js')
+    script(src='assets/js/html2canvas.min.js')
+    script(src='assets/js/html2pdf.bundle.min.js')
+  body
+    header
+      h1 
+       a(href='level.html') P/P (Publish or Perish)
+      a About
+
+div#counter
+
+// pages
+div.wrapper
+  div.spread
+    div.page#p1
+      img(src="assets/img/cat.jpg",style="width: 417px; height: 306px; transform: translate(0px, 0px);").page-element.draggable
+  div.spread
+    div.page#p2
+      img(src="assets/img/cat.jpg",style="width: 452px; height: 638.359px; transform: translate(-20px, -20px);").page-element.draggable
+    div.page#p3
+  div.spread
+    div.page#p4
+      img(src="assets/img/cat.jpg",style="width: 257px; height: 323.359px; transform: translate(58px, 54px);").page-element.draggable
+    div.page#p5
+  div.spread
+    div.page#p6
+    div.page#p7
+      <div class="page-element draggable" id="D1515413306233" data-x="0" data-y="0" style="width: 397px; height: 428px; transform: translate(0px, 0px);"><p>ux toolss<br><br><br>these were the products recommended by ux friends in threads and through messages: <br>http://patternlab.io <br>https://moqups.com<br>http://framebox.org<br>http://origami.design<br>https://webflow.com<br>http://www.solidifyapp.com<br>https://www.hotgloo.com <br>https://www.figma.com<br>http://gliffy.com<br>https://mockflow.com <br>https://pidoco.com/en<br>https://www.fluidui.com<br>https://atomic.io<br>indigo-studio https://www.infragistics.com/products/indigo-studio</p><span class="close">x</span></div>
+  div.spread
+    div.page#p8
+      img(src="assets/img/cat.jpg",style="width: 122px; height: 121.344px; margin-left: 1px; margin-top: 480.016px;").page-element.draggable
+
+script(src='assets/js/main.js')

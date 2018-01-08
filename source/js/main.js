@@ -27,7 +27,7 @@ var Sound = {
 
 var Model = {
 	// all our states
-	timeLeft: 30000,
+	timeLeft: 10000000,
 	expired: false,
 	elements: []
 };
