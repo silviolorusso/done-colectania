@@ -30,7 +30,7 @@ var Model = {
 	timeLeft: 10000000,
 	expired: false,
 	elements: []
-};
+}; // add title, date and id
 
 function controller(Model, page, input) {
 
@@ -310,3 +310,19 @@ window.dragMoveListener = dragMoveListener;
 // 	  jsPDF:        { unit: 'mm', format: 'A4', orientation: 'portrait' }
 // 	});
 // });
+
+
+// --- ARCHIVE
+
+$.ajax({
+	url: "http://localhost:28017/test",
+	type: 'get',
+	dataType: 'jsonp',
+	jsonp: 'jsonp', // mongodb is expecting that
+	success: function (data) {
+    console.log('success', data);
+  },
+  error: function (XMLHttpRequest, textStatus, errorThrown) {
+    console.log('error', errorThrown);
+  }                                                                            
+});

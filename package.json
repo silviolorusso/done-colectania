@@ -18,12 +18,15 @@
   "homepage": "https://github.com/silviolorusso/done-colectania#readme",
   "dependencies": {},
   "devDependencies": {
+    "express": "^4.16.2",
     "gulp": "latest",
-    "gulp-util": "latest",
-    "gulp-sass": "latest",
     "gulp-concat": "latest",
-    "gulp-pug": "latest",
     "gulp-plumber": "latest",
-    "gulp-sourcemaps": "latest"
+    "gulp-pug": "latest",
+    "gulp-sass": "latest",
+    "gulp-sourcemaps": "latest",
+    "gulp-util": "latest",
+    "mongoose": "^4.13.9",
+    "pug": "^2.0.0-rc.4"
   }
 }
