@@ -37,4 +37,5 @@ So, why not making publishing challenging by defining some obstacles, limitation
 1) `git clone https://github.com/silviolorusso/done-colectania.git`
 2) `cd done-colectania`
 3) `mongod`
-4) `npm start or [nodemon](https://nodemon.io/)`
+4) `gulp`
+5) `npm start or [nodemon](https://nodemon.io/)`
