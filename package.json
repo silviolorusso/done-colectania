@@ -4,7 +4,7 @@
 	"description": "## Premise: Digital Publishing is Easy",
 	"main": "server/server.js",
 	"scripts": {
-		"start": "node server/server.js",
+		"start": "mongod & gulp & node server/server.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
@@ -28,5 +28,8 @@
 		"gulp-util": "latest",
 		"mongoose": "^4.13.9",
 		"pug": "^2.0.0-rc.4"
+	},
+	"dependencies": {
+		"gulp-run-command": "0.0.9"
 	}
 }
