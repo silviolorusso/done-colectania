@@ -14,7 +14,7 @@ return gulp.src('source/scss/**/*.scss')
     	.pipe(plumber())
       .pipe(sass().on('error', sass.logError))
     .pipe(sourcemaps.write()) // Add the map to modified source.
-    .pipe(gulp.dest('public/assets/css'));
+    .pipe(gulp.dest('public/assets/css'))
 });
 
 gulp.task('build-js', function() {
@@ -22,7 +22,7 @@ gulp.task('build-js', function() {
     .pipe(sourcemaps.init())
       .pipe(concat('main.js'))
       //only uglify if gulp is ran with '--type production'
-      .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop()) 
+      .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('public/assets/js'));
 });
