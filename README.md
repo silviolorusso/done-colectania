@@ -8,7 +8,7 @@ Mass Indie is the zine publishing of web publishing. The everyperson indie. Goda
 
 ## Goal: Make Digital Publishing Challenging Again
 
-Why making another publishing tool that mimics the functions of the already simple and effective tools available? We have already plenty of  generalist tools and workflows, and they work just fine. 
+Why making another publishing tool that mimics the functions of the already simple and effective tools available? We have already plenty of  generalist tools and workflows, and they work just fine.
 
 So, why not making publishing challenging by defining some obstacles, limitations, etc that need to be overcome by the publisher/user? What if publishing had obstacles? What if some friction in the publishing process make the publication more rewarding? What if we apply the IKEA principle to publishing?
 
@@ -32,4 +32,9 @@ So, why not making publishing challenging by defining some obstacles, limitation
 - http://diethardsteiner.github.io/reporting/2015/02/17/CSS-for-print.html
 - take a screenshot, cut it in pieces and make the pdf out of it
 
+## Running P/P Locally
 
+1) `git clone https://github.com/silviolorusso/done-colectania.git`
+2) `cd done-colectania`
+3) `mongod`
+4) `npm start or [nodemon](https://nodemon.io/)`
