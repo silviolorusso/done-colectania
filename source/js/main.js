@@ -9,7 +9,7 @@ var dropDelay = 100;
 function makeId() {
   var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
   var id = randLetter + Date.now();
-  return id; 
+  return id;
 }
 
 var Sound = {
@@ -27,7 +27,7 @@ var Sound = {
 
 var Model = {
   // all our states
-  timeLeft: 1000,
+  timeLeft: 100000000000000000,
   expired: false,
   elements: []
 }; // add title, date and id
@@ -45,13 +45,13 @@ function controller(Model, page, input) {
     makePdf()
     checkPdf()
   }
-  
+
   if (input && Model.expired == false) {
     switch (true) {
       case  input[3] == false : // deleting an element
         removeElement(input[0]);
         break;
-      case  input[1].includes("data:image") && 
+      case  input[1].includes("data:image") &&
             input[3] == true : // new image
         // update the Model
         Model.elements.push(input);
@@ -62,7 +62,7 @@ function controller(Model, page, input) {
         // critic speak
         critic();
         break;
-      case  input[1].includes("data:text/plain") && 
+      case  input[1].includes("data:text/plain") &&
             input[3] == true : // new text
         // update the Model
         Model.elements.push(input);
@@ -153,8 +153,8 @@ function showTime(Model) {
 function showExpired() {
   document.getElementById("counter").innerHTML = "expired!";
   $('body').addClass('expired');
-  //setTimeout(function(){ 
-  //  window.print(); 
+  //setTimeout(function(){
+  //  window.print();
   //}, 1000);
   clearInterval(x);
 }
@@ -195,7 +195,7 @@ function dropFile(pageId, src, id) {
     var pageElementContent = $("<img>", {"src": src});
   } else {
     var deBasedText = atob( src.substring(23) );
-    var htmlBrText = deBasedText.replace(/\n/g, "<br/>"); 
+    var htmlBrText = deBasedText.replace(/\n/g, "<br/>");
     console.log(htmlBrText);
     var pageElementContent = $("<p>").append(htmlBrText); // remove "data:text/plain;base64"
   }
@@ -352,5 +352,5 @@ window.dragMoveListener = dragMoveListener;
 //   },
 //   error: function (XMLHttpRequest, textStatus, errorThrown) {
 //     console.log('error', errorThrown);
-//   }                                                                            
+//   }
 // });
