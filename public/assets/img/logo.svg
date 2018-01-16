@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="407px" height="166px" viewBox="0 0 407 166" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Splash-screen" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-308.000000, -340.000000)" font-weight="normal">
+        <g id="Group-3" transform="translate(305.000000, 340.000000)">
+            <text id="Publish" font-family="AGaramondPro-Regular, Adobe Garamond Pro" font-size="80" fill="#000000">
+                <tspan x="0.08" y="58">Publish</tspan>
+            </text>
+            <text id="or" font-family="AGaramondPro-Regular, Adobe Garamond Pro" font-size="48" fill="#000000">
+                <tspan x="130.368" y="96">or</tspan>
+            </text>
+            <text id="Perish" font-family="Shlop-Regular, Shlop" font-size="110" fill="#CD1602">
+                <tspan x="179.79" y="146">Perish</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
