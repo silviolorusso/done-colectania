@@ -5,7 +5,7 @@ const pdf = require('./pdf.js')
 const app = express()
 const port = 3000
 
-mongoose.connect('mongodb://localhost/test')
+mongoose.connect('mongodb://localhost/test', { useMongoClient: true })
 const db = mongoose.connection;
 
 // how to avoid declaring the publication schema here?
