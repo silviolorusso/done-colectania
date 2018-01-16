@@ -40,10 +40,18 @@ app.get('/', function (req, res) {
 
 })
 
+
+// pages
+app.get('/difficulty', function (req, res) {
+  res.render(__dirname + '/../source/views/difficulty')
+  console.log('serving difficulty')
+})
+
+
 // pages
 app.get('/game', function (req, res) {
   res.render(__dirname + '/../source/views/game')
-  console.log('serving pages')
+  console.log('serving game')
 })
 
 // archive
