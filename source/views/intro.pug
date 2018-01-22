@@ -22,10 +22,11 @@ div.wrapper.level
   a(href='game')
     button f***ing hard (fast & furious)
 
-  h2 Last Publications
+  h2 Latest Publications
 
   each p_id in p_ids
-    div.publication(style='width: 100px; height: 170px; border: 1px solid #000; float: left; margin-right: 20px; font-size: 7px;')
-      p= p_id
+    a(href='saved?id=' + p_id)
+      div.publication(style='width: 100px; height: 170px; border: 1px solid #000; float: left; margin-right: 20px; margin-bottom: 20px; font-size: 7px;')
+        p= p_id
 
   a(href='archive') full archive

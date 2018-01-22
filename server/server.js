@@ -1,15 +1,31 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const pdf = require('./pdf.js')
+const bodyParser = require('body-parser');
 
 const app = express()
 const port = 3000
+
+// --- GENERAL FUNCTIONS
+
+function objToString(obj) {
+    var str = '';
+    for (var p in obj) {
+        if (obj.hasOwnProperty(p)) {
+            str += p + '::' + obj[p] + '\n';
+        }
+    }
+    return str;
+}
+
+// --- DB STUFF
 
 mongoose.connect('mongodb://localhost/test', { useMongoClient: true })
 const db = mongoose.connection;
 
 // how to avoid declaring the publication schema here?
 var publicationSchema = mongoose.Schema({
+  id: String,
   title: String,
   date: Number,
   expired: Boolean,
@@ -18,8 +34,12 @@ var publicationSchema = mongoose.Schema({
 
 var Publication = mongoose.model('Publication', publicationSchema)
 
+// --- SERVER STUFF
+
 app.set('view engine', 'pug')
 app.use(express.static('public'))
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 // home
 app.get('/', function (req, res) {
@@ -43,7 +63,7 @@ app.get('/', function (req, res) {
 // pages
 app.get('/game', function (req, res) {
   res.render(__dirname + '/../source/views/game')
-  console.log('serving pages')
+  console.log('serving game')
 })
 
 // archive
@@ -55,7 +75,7 @@ app.get('/archive', function (req, res) {
     // get ids
     var publication_ids = [];
     for (var i = 0; i < publications.length; i++) {
-      publication_ids.push( publications[i]._id )
+      publication_ids.push( publications[i].id )
     }
     res.render(__dirname + '/../source/views/archive', { p_ids: publication_ids })
 
@@ -77,6 +97,49 @@ app.get('/print-test', function (req, res) {
   console.log('serving print-test')
 })
 
+// save to db
+app.post('/db', function(req, res) {
+    var publication = new Publication( req.body )
+    publication.save(function (err, publication) {
+      if (err) return console.error(err);
+
+      console.log('saved to db')
+    });
+
+    console.log('saving to db');
+    // console.log(req.body);
+});
+
+// show saved
+app.get('/saved', function (req, res) {
+  var publication_id = req.param('id'); // e.g. http://localhost:3000/saved?id=R1516627472029
+
+  // find publication
+  var publication_model
+  Publication.findOne({ 'id': publication_id }, function (err, publication) {
+    if (err) return console.error(err);
+
+    publication_model = publication
+    publication_model = JSON.stringify(publication_model)
+
+    console.log('found:')
+    console.log(publication_model)
+
+    // script to insert the saved model into saved
+    var publication_script = '<script>var Publication = ' +  publication_model + ';</script>' 
+
+    res.render(__dirname + '/../source/views/game', { publication_script: publication_script })
+  })
+  console.log('serving saved publication')
+})
+
+// show all publications in console
+app.get('/overview', function (req, res) {
+  Publication.find(function (err, publications) {
+    if (err) return console.error(err);
+    console.log(publications);
+  })
+})
 
 // listen
 app.listen(port, (err) => {

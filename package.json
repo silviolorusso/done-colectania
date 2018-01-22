@@ -1,35 +1,36 @@
 {
-	"name": "done-colectania",
-	"version": "1.0.0",
-	"description": "## Premise: Digital Publishing is Easy",
-	"main": "server/server.js",
-	"scripts": {
-		"start": "mongod & gulp & node server/server.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/silviolorusso/done-colectania.git"
-	},
-	"author": "",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/silviolorusso/done-colectania/issues"
-	},
-	"homepage": "https://github.com/silviolorusso/done-colectania#readme",
-	"devDependencies": {
-		"express": "^4.16.2",
-		"gulp": "^3.9.1",
-		"gulp-concat": "latest",
-		"gulp-plumber": "latest",
-		"gulp-pug": "latest",
-		"gulp-sass": "latest",
-		"gulp-sourcemaps": "latest",
-		"gulp-util": "latest",
-		"mongoose": "^4.13.9",
-		"pug": "^2.0.0-rc.4"
-	},
-	"dependencies": {
-		"gulp-run-command": "0.0.9"
-	}
+  "name": "done-colectania",
+  "version": "1.0.0",
+  "description": "## Premise: Digital Publishing is Easy",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "mongod & gulp & node server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silviolorusso/done-colectania.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/silviolorusso/done-colectania/issues"
+  },
+  "homepage": "https://github.com/silviolorusso/done-colectania#readme",
+  "devDependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "gulp": "^3.9.1",
+    "gulp-concat": "latest",
+    "gulp-plumber": "latest",
+    "gulp-pug": "latest",
+    "gulp-sass": "latest",
+    "gulp-sourcemaps": "latest",
+    "gulp-util": "latest",
+    "mongoose": "^4.13.9",
+    "pug": "^2.0.0-rc.4"
+  },
+  "dependencies": {
+    "gulp-run-command": "0.0.9"
+  }
 }
