@@ -5,7 +5,7 @@ div.wrapper.intro
   p Why making another publishing tool that mimics the functions of the already simple and effective tools available? We have already plenty of  generalist tools and workflows, and they work just fine. 
     
   p So, why not making publishing challenging by defining some obstacles, limitations, etc that need to be overcome by the publisher/user? What if publishing had obstacles? What if some friction in the publishing process make the publication more rewarding? What if we apply the IKEA principle to publishing?
-  
+
   a(href='difficulty')
     .stylized
       span Start 
@@ -14,7 +14,8 @@ div.wrapper.intro
   h2 Last Publications
 
   each p_id in p_ids
-    div.publication(style='width: 100px; height: 170px; border: 1px solid #000; float: left; margin-right: 20px; font-size: 7px;')
-      p= p_id
+    a(href='saved?id=' + p_id)
+      div.publication(style='width: 100px; height: 170px; border: 1px solid #000; float: left; margin-right: 20px; margin-bottom: 20px; font-size: 7px;')
+        p= p_id
 
   a(href='archive') Show more
