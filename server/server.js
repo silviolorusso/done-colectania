@@ -94,9 +94,13 @@ app.get('/archive', function (req, res) {
 
 // make-pdf
 app.get('/pdf', function (req, res) {
-  pdf.makePdf()
+
+  var publication_id = req.param('id');
+
+  pdf.makePdf(publication_id)
   res.send('Pdf is in the making.')
   console.log('making-pdf')
+
 })
 
 // test for print
@@ -110,17 +114,16 @@ app.post('/db', function(req, res) {
     var publication = new Publication( req.body )
     publication.save(function (err, publication) {
       if (err) return console.error(err);
-
       console.log('saved to db')
     });
 
     console.log('saving to db');
-    // console.log(req.body);
 });
 
 // show saved
 app.get('/saved', function (req, res) {
   var publication_id = req.param('id'); // e.g. http://localhost:3000/saved?id=R1516627472029
+  var print = req.param('print');
 
   // find publication
   var publication_model
@@ -130,13 +133,15 @@ app.get('/saved', function (req, res) {
     publication_model = publication
     publication_model = JSON.stringify(publication_model)
 
-    console.log('found:')
-    console.log(publication_model)
+    // code to insert print
+    if (print) {
+      var print_code = '<link rel="stylesheet" href="assets/css/pdf.css"/>' 
+    }
 
     // script to insert the saved model into saved
     var publication_script = '<script>var Publication = ' +  publication_model + ';</script>' 
 
-    res.render(__dirname + '/../source/views/game', { publication_script: publication_script })
+    res.render(__dirname + '/../source/views/game', { print_code: print_code, publication_script: publication_script })
   })
   console.log('serving saved publication')
 })

@@ -7,7 +7,6 @@ var dropDelay = 100;
 
 
 
-
 // --- GENERAL FUNCTIONS
 
 function makeId() {
@@ -121,7 +120,7 @@ $( document ).ready(function() {
   if (window.location.href.indexOf("saved") < 0) { // if not a saved publication
     var x = setInterval(function() {
       Publication.timeLeft = Publication.timeLeft - 10;
-      controller(Publication);
+      controller(Publication)
     }, 10);
   } else {
     renderPublication(Publication)
@@ -350,14 +349,15 @@ window.dragMoveListener = dragMoveListener;
 
 function renderPublication(Publication) {
   for (let element of Publication.elements) {
-    console.log(element.data)
     createElement(element)
     console.log('saved pub')
+    $(".page").css("background-color", "yellow");
+    $("body").css("background-color", "yellow");
   }
 }
-
-
-
+$('.page').click(function(){ //test
+  renderPublication(Publication)
+})
 
 
 

@@ -4,12 +4,12 @@ var childProcess = require('child_process')
 var phantomjs = require('phantomjs-prebuilt')
 var binPath = phantomjs.path
 
-function makePdf() {
+function makePdf(publication_id) {
 
   var phantomArgs = [
     path.join(__dirname, 'take_screenshots.js'),
-    'http://localhost:3000/print-test', // read
-    'public/assets/pdf/print-test-0' //dest
+    'http://localhost:3000/saved?print=true&id=' + publication_id, // // e.g. http://localhost:3000/saved?print=true&id=R1516627472029
+    'public/pdf-test/print-test-0' //dest
   ]
 
   var convertArgs = [
@@ -40,5 +40,8 @@ function makePdf() {
 module.exports = {
     makePdf: makePdf
 };
+
+// test
+makePdf('Y1516628075388')
 
 // need to eliminate padding from page, convert "translate" to margin

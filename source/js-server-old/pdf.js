@@ -4,11 +4,11 @@ var childProcess = require('child_process')
 var phantomjs = require('phantomjs-prebuilt')
 var binPath = phantomjs.path
 
-function makePdf() {
+function makePdf(publication_id) {
 
   var phantomArgs = [
     path.join(__dirname, 'take_screenshots.js'),
-    'http://localhost:3000/print-test', // read
+    'http://localhost:3000/saved?id=' + publication_id, // read
     'public/pdf-test/print-test-0' //dest
   ]
 
