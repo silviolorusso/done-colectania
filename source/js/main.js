@@ -13,7 +13,7 @@ var dropDelay = 100;
 function makeId() {
   var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
   var id = randLetter + Date.now();
-  return id; 
+  return id;
 }
 
 function createElement(element) {
@@ -56,7 +56,7 @@ var Publication = {
   // all our states
   id: makeId(),
   title: 'TEST PUB',
-  timeLeft: 5000,
+  timeLeft: 50000000,
   expired: false,
   elements: [],
   authors: []
@@ -212,8 +212,8 @@ function showTime(Publication) {
 function showExpired() {
   document.getElementById("counter").innerHTML = "expired!";
   $('body').addClass('expired');
-  //setTimeout(function(){ 
-  //  window.print(); 
+  //setTimeout(function(){
+  //  window.print();
   //}, 1000);
   clearInterval(x);
 }
@@ -428,5 +428,5 @@ function savetoDb(publication) {
 //   },
 //   error: function (XMLHttpRequest, textStatus, errorThrown) {
 //     console.log('error', errorThrown);
-//   }                                                                            
+//   }
 // });

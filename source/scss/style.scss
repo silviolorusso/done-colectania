@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'Shlop-Regular';
+  src: url('public/assets/font/shlop.ttf')  format('truetype'), /* Safari, Android, iOS */
+}
+
+
 // --- COLORS
 
 $element-border: #588ac5;
@@ -6,9 +12,17 @@ $white: #FFFFFF;
 $gray: #F4F4F4;
 $red: #CD1602;
 
+$box-shadow: 4px 4px 0 0 rgba(137,137,137,0.48);
+
 // --- Type
 $font: AGaramondPro;
 $font-game: Shlop-Regular;
+
+.center {
+	text-align: center;
+}
+
+// --- General
 
 body {
 	font-family: sans-serif;
@@ -20,6 +34,8 @@ body {
 	font-family: $font;
 	color: $black;
 	background: $gray;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 	&.expired {
 		background: #222;
 	}
@@ -45,8 +61,12 @@ header {
 			display: inline-block;
 			position: absolute;
 			padding-left: 26px;
+			margin-top: 15px;
 			font-size: 36px;
 			color: $black;
+		}
+		img {
+			width: 70px;
 		}
 	}
 	#about {
@@ -56,22 +76,22 @@ header {
 }
 
 #counter {
-	right: 0;
-	left: 0;
-	margin: auto;
-	width: 50%;
 	text-align: center;
 	height: 30px;
 	color: red;
-	font-size: 30px;
-	position: fixed;
-	top: 0;
+	position: absolute;
+	bottom: 0;
 	font-size: 20px;
 	padding: 10px;
 	z-index: 99999999;
+	font-family: Times-Bold;
+	font-size: 18px;
+	color: $black;
+	background-color: $white;
+	height: 20px;
 }
 
-// --- SPREADS
+// --- SPREADS (game)
 
 $spread-width: 900px;
 
@@ -193,34 +213,50 @@ $spread-width: 900px;
 	}
 }
 
-// --- LEVEL
+// --- intro
 
-.level {
+.intro {
 	width: 650px;
 	margin: auto;
 	font-size: 22px;
 	color: $black;
 	line-height: 30px;
-	button {
+
+	.menu {
+		background: $white;
+		border: 2px solid $black;
+		box-shadow: $box-shadow;
+		padding: 30px;
+		margin-top: 40px;
+		a {
+			width: 320px;
+			font-size: 24px;
+			display: block;
+		}
+	}
+
+	a {
 		background: $white;
 		border: 2px solid $black;
 		font-size: 24px;
 		color: $black;
-		margin-left: auto;
-		margin-right: auto;
-		display: block;
-		cursor: pointer;
+		display: inline-block;
 		padding: 10px 30px;
-		&:first-child {
-			font-family: $font;
-		}
-		span:last-of-type {
-			font-family: $font-game;
-			color: $red;
-		}
-	}
-	a {
+		margin: 20px auto;
 		text-decoration: none;
-		cursor: pointer;
+		text-align: center;
+		.stylized {
+			&:first-child {
+				font-family: $font;
+			}
+			span:last-of-type {
+				font-family: $font-game;
+				color: $red;
+			}
+		}
+		&:hover {
+			background-color: $black;
+			color: $white;
+		}
 	}
 }
