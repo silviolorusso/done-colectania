@@ -70,19 +70,19 @@ header {
 }
 
 #counter {
-	right: 0;
-	left: 0;
-	margin: auto;
-	width: 50%;
 	text-align: center;
 	height: 30px;
 	color: red;
-	font-size: 30px;
-	position: fixed;
-	top: 0;
+	position: absolute;
+	bottom: 0;
 	font-size: 20px;
 	padding: 10px;
 	z-index: 99999999;
+	font-family: Times-Bold;
+	font-size: 18px;
+	color: $black;
+	background-color: $white;
+	height: 20px;
 }
 
 // --- SPREADS (game)
