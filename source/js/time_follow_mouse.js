@@ -5,15 +5,14 @@ $(document).bind('mousemove', function(e){
     $('#counter').addClass('mouse_right');
     $('#counter').css({
       left:  e.pageX - 20 - $('#counter').width(),
-      top:   e.pageY
+      top:   e.pageY + 50
     });
   } else {
     // if mouse of left side of page
     $('#counter').removeClass('mouse_right');
     $('#counter').css({
       left:  e.pageX + 20,
-      top:   e.pageY
+      top:   e.pageY + 50
     });
   }
-
 });
