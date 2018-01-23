@@ -6,22 +6,30 @@ var binPath = phantomjs.path
 
 function makePdf(publication_id) {
 
+  publication_dir = 'public/assets/pdf/' + publication_id
+
+  if (!fs.existsSync(publication_dir)){
+    fs.mkdirSync(publication_dir);
+  }
+
   var phantomArgs = [
     path.join(__dirname, 'take_screenshots.js'),
-    'http://localhost:3000/saved?print=true&id=' + publication_id, // // e.g. http://localhost:3000/saved?print=true&id=R1516627472029
-    'public/pdf-test/print-test-0' //dest
+    'http://localhost:3000/saved?print=true&id=' + publication_id, // e.g. http://localhost:3000/saved?print=true&id=Y1516628075388
+    publication_dir //dest
   ]
 
+  publication_dir + '/' + publication_id + '.pdf'
+
   var convertArgs = [
-    'public/assets/pdf/print-test-00.png',
-    'public/assets/pdf/print-test-01.png',
-    'public/assets/pdf/print-test-02.png',
-    'public/assets/pdf/print-test-03.png',
-    'public/assets/pdf/print-test-04.png',
-    'public/assets/pdf/print-test-05.png',
-    'public/assets/pdf/print-test-06.png',
-    'public/assets/pdf/print-test-07.png',
-    'public/assets/pdf/print-test.pdf' // output
+    publication_dir + '/' + '00.png',
+    publication_dir + '/' + '01.png',
+    publication_dir + '/' + '02.png',
+    publication_dir + '/' + '03.png',
+    publication_dir + '/' + '04.png',
+    publication_dir + '/' + '05.png',
+    publication_dir + '/' + '06.png',
+    publication_dir + '/' + '07.png',
+    publication_dir + '/' + publication_id + '.pdf' // output
   ]
    
   childProcess.execFile(binPath, phantomArgs, function(err, stdout, stderr) {

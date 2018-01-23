@@ -39,7 +39,7 @@ var Publication = mongoose.model('Publication', publicationSchema)
 app.set('view engine', 'pug')
 app.use(express.static('public'))
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' })); // support encoded bodies
 
 // home
 app.get('/', function (req, res) {

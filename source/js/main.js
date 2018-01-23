@@ -45,7 +45,23 @@ function createElement(element) {
   }
 }
 
+function createElementCanvas(element) {
 
+  var canvas = document.createElement('canvas');
+
+  canvas.width = element.pos[2]
+  canvas.height = 300 // should be element.pos[3]
+  canvas.style.marginLeft = element.pos[0] + 'px';
+  canvas.style.marginTop = element.pos[1] + 'px';
+  var ctx = canvas.getContext("2d");
+  $('#' + element.page).append(canvas);
+
+  var image = new Image();
+  image.onload = function() {
+    ctx.drawImage(image, 0, 0, element.pos[2], 300);
+  };
+  image.src = element.data;
+}
 
 
 
@@ -55,7 +71,7 @@ var Publication = {
   // all our states
   id: makeId(),
   title: 'TEST PUB',
-  timeLeft: 50000000,
+  timeLeft: 5000,
   expired: false,
   elements: [],
   authors: []
@@ -72,7 +88,7 @@ function controller(Publication, input) {
     showExpired(Publication)
     noDrag()
     savetoDb(Publication)
-    // makePdf()
+    // makePdf(Publication.id)
     // checkPdf()
   }
   
@@ -116,9 +132,10 @@ function controller(Publication, input) {
 
 // --- CONTROLLER
 
+var x
 $( document ).ready(function() {
   if (window.location.href.indexOf("saved") < 0) { // if not a saved publication
-    var x = setInterval(function() {
+    x = setInterval(function() {
       Publication.timeLeft = Publication.timeLeft - 10;
       controller(Publication)
     }, 10);
@@ -348,24 +365,28 @@ window.dragMoveListener = dragMoveListener;
 // --- SAVED
 
 function renderPublication(Publication) {
-  for (let element of Publication.elements) {
-    createElement(element)
-    console.log('saved pub')
-    $(".page").css("background-color", "yellow");
-    $("body").css("background-color", "yellow");
+  var i;
+  for (i = 0; i < Publication.elements.length; ++i) {
+    if ( window.location.href.indexOf("print=true") > 0 ) {
+      createElementCanvas(Publication.elements[i])
+      console.log('print pub')
+    } else {
+      createElement(Publication.elements[i])
+      console.log('saved pub')      
+    }
   }
 }
-$('.page').click(function(){ //test
-  renderPublication(Publication)
-})
+
+
+
 
 
 
 // --- BACKEND
 
 // send call to server to make pdf
-function makePdf() {
-  $.get( '/pdf', function( data ) {
+function makePdf(id) {
+  $.get( '/pdf?id=' + id, function( data ) {
     console.log( 'Sent call to make PDF.' );
   });
 }
