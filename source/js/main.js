@@ -88,10 +88,8 @@ function controller(Publication, input) {
     Publication.expired = true
     showExpired(Publication)
     noDrag()
-    savetoDb(Publication)
-    makePdf(Publication.id)
-    showPdf(Publication.id)
-    checkPdf(Publication.id)
+    showSaveModal()
+
   }
   
   if (input && Publication.expired == false) {
@@ -389,16 +387,27 @@ function dragMoveListener(event) {
 window.dragMoveListener = dragMoveListener;
 
 
-// show pdf box
+// show save modal
 
-function showPdf(id) {
-  $('#pdfbox').show()
+function showSaveModal() {
+  $('#save-modal').show()
+  $('#save').click(function() {
+    savetoDb(Publication)
+    makePdf(Publication.id)
+    genPdf(Publication.id)
+    checkPdf(Publication.id)
+  });
+}
+
+function genPdf(id) {
+  $('#save-modal').show()
+  $('#save-modal').html('')
   var y = setInterval(function(){
     if (pdfReady == true) {
-      $('#pdfbox').html('Download your pdf <a href="assets/pdf/' + id + '/' + id + '.pdf">here</a>' )
+      $('#save-modal').html('Download your pdf <a href="assets/pdf/' + id + '/' + id + '.pdf">here</a>' )
       clearInterval(y)
     } else {
-      $('#pdfbox').text('Your PDF is being generated')
+      $('#save-modal').text('Your PDF is being generated')
     }
   }, 100) 
 } 
@@ -424,7 +433,7 @@ function pdfDownload() {
   $('#pdf-download').show()
   $('#pdf-download').click(function() {
     makePdf(Publication.id)
-    showPdf(Publication.id)
+    genPdf(Publication.id)
     checkPdf(Publication.id)
   });
 }
@@ -451,9 +460,9 @@ function checkPdf(id) {
         clearInterval(y);
         pdfReady = true;
       },
-      error: function(jqXHR, textStatus, errorThrown){
+      error: function(jqXHR, textStatus, error){
         console.log(jqXHR);
-        console.log(errorThrown);
+        console.log(error);
       }
     })
   }, 100);

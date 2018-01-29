@@ -112,7 +112,7 @@ header {
 
 // --- pdf box
 
-#pdfbox {
+#save-modal {
 	display: none;
 	position: fixed;
 	width: 500px;
@@ -123,6 +123,7 @@ header {
 	margin-left: -250px; /* Negative half of width. */
 	padding: 20px;
 	background-color: #eee;
+	z-index: 9999999;
 }
 
 #pdf-download {
@@ -131,6 +132,7 @@ header {
 	top: 20px;
 	text-align: center;
 	width: 100%;
+	cursor: pointer;
 }
 
 // --- SPREADS (game)

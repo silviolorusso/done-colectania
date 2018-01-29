@@ -36,6 +36,7 @@ function makePdf(publication_id) {
     console.log(err);
     // merge screenshots into PDF
     childProcess.execFile('/usr/local/bin/convert', convertArgs, function(err, stdout, stderr) {
+      console.log(err);
       // remove temp images
       for (var i = 0; i < convertArgs.length -1; i++) { // minus one cause i don't want to delete the output
         fs.unlink(convertArgs[i]);

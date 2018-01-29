@@ -140,6 +140,8 @@ app.get('/saved', function (req, res) {
     res.render(__dirname + '/../source/views/game', { print_code: print_code, publication_script: publication_script })
   })
   console.log('serving saved publication')
+
+  console.log(publication_model)
 })
 
 // show all publications in console
