@@ -15,6 +15,7 @@ function playDing () {
 
 // countdown timer
 function countdown(startTime) {
+  $('#countdown').show();
   if (startTime >= 1) {
     createjs.Sound.play('beep-2');
     setTimeout( function(){
@@ -32,6 +33,4 @@ function countdown(startTime) {
   }
 }
 
-var startTime = 4;
-countdown(startTime);
-$('#countdown').html(startTime);
+

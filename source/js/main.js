@@ -3,6 +3,7 @@
 var pages = $('.page');
 var criticPopup = $('#critic');
 var dropDelay = 100;
+var pdfReady = false
 
 
 
@@ -71,7 +72,7 @@ var Publication = {
   // all our states
   id: makeId(),
   title: 'TEST PUB',
-  timeLeft: 5000,
+  timeLeft: 15000,
   expired: false,
   elements: [],
   authors: []
@@ -80,16 +81,17 @@ var Publication = {
 function controller(Publication, input) {
 
   // expired?
-  if (Publication.timeLeft > 0) {
-    showTime(Publication);
+  if (Publication.timeLeft > 0) { // expired
+    showTime(Publication)
   }
-  else {
+  else { // not expired
     Publication.expired = true
     showExpired(Publication)
     noDrag()
     savetoDb(Publication)
-    // makePdf(Publication.id)
-    // checkPdf()
+    makePdf(Publication.id)
+    showPdf(Publication.id)
+    checkPdf(Publication.id)
   }
   
   if (input && Publication.expired == false) {
@@ -139,9 +141,17 @@ $( document ).ready(function() {
       Publication.timeLeft = Publication.timeLeft - 10;
       controller(Publication)
     }, 10);
+
+    mouseCounter()
+
+    // countdown
+    var startTime = 4;
+    countdown(startTime);
+    $('#countdown').html(startTime);
   } else {
     renderPublication(Publication)
     noDrag()
+    pdfDownload()
   }
 });
 
@@ -220,9 +230,30 @@ var Sound = {
   }
 };
 
+// merge these two
 function showTime(Publication) {
   seconds = Publication.timeLeft / 1000;
+  $('#counter').show();
   document.getElementById("counter").innerHTML = seconds.toFixed(2) + " seconds left!";
+}
+function mouseCounter() {
+  $(document).bind('mousemove', function(e){
+    if (e.pageX >= ($(document).width()/2)) {
+      // if mouse of right side of page
+      $('#counter').addClass('mouse_right');
+      $('#counter').css({
+        left:  e.pageX - 20 - $('#counter').width(),
+        top:   e.pageY + 50
+      });
+    } else {
+      // if mouse of left side of page
+      $('#counter').removeClass('mouse_right');
+      $('#counter').css({
+        left:  e.pageX + 20,
+        top:   e.pageY + 50
+      });
+    }
+  });
 }
 
 function showExpired() {
@@ -358,7 +389,19 @@ function dragMoveListener(event) {
 window.dragMoveListener = dragMoveListener;
 
 
+// show pdf box
 
+function showPdf(id) {
+  $('#pdfbox').show()
+  var y = setInterval(function(){
+    if (pdfReady == true) {
+      $('#pdfbox').html('Download your pdf <a href="assets/pdf/' + id + '/' + id + '.pdf">here</a>' )
+      clearInterval(y)
+    } else {
+      $('#pdfbox').text('Your PDF is being generated')
+    }
+  }, 100) 
+} 
 
 
 
@@ -377,7 +420,14 @@ function renderPublication(Publication) {
   }
 }
 
-
+function pdfDownload() {
+  $('#pdf-download').show()
+  $('#pdf-download').click(function() {
+    makePdf(Publication.id)
+    showPdf(Publication.id)
+    checkPdf(Publication.id)
+  });
+}
 
 
 
@@ -392,19 +442,18 @@ function makePdf(id) {
 }
 
 // check if pdf exists and redirect to file
-function checkPdf() {
+function checkPdf(id) {
   var y = setInterval(function(){
     $.ajax({
       type: 'HEAD',
-      url: 'assets/pdf/print-test.pdf',
+      url: 'assets/pdf/' + id + '/' + id + '.pdf',
       success: function(msg){
-        alert('Go to PDF!');
         clearInterval(y);
-        window.location.href = 'assets/pdf/print-test.pdf';
+        pdfReady = true;
       },
       error: function(jqXHR, textStatus, errorThrown){
-        log(jqXHR);
-        log(errorThrown);
+        console.log(jqXHR);
+        console.log(errorThrown);
       }
     })
   }, 100);

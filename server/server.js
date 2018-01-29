@@ -6,17 +6,9 @@ const bodyParser = require('body-parser');
 const app = express()
 const port = 3000
 
-// --- GENERAL FUNCTIONS
 
-function objToString(obj) {
-    var str = '';
-    for (var p in obj) {
-        if (obj.hasOwnProperty(p)) {
-            str += p + '::' + obj[p] + '\n';
-        }
-    }
-    return str;
-}
+
+
 
 // --- DB STUFF
 
@@ -34,6 +26,10 @@ var publicationSchema = mongoose.Schema({
 
 var Publication = mongoose.model('Publication', publicationSchema)
 
+
+
+
+
 // --- SERVER STUFF
 
 app.set('view engine', 'pug')
@@ -50,7 +46,7 @@ app.get('/', function (req, res) {
     // get ids
     var publication_ids = [];
     for (var i = 0; i < publications.length; i++) {
-      publication_ids.push( publications[i]._id );
+      publication_ids.push( publications[i].id );
     }
     res.render(__dirname + '/../source/views/intro', { p_ids: publication_ids })
 
