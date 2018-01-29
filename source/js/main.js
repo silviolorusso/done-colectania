@@ -30,19 +30,13 @@ function createElement(element) {
   pageElement.append(pageElementContent, pageElementClose);
   pageElement.attr('id', element.id);
   $('#' + element.page).append(pageElement);
+
   if (element.pos) {   // reconstructing saved element
-    pageElement.position().left = element.pos[0]
-    pageElement.position().top = element.pos[1]
-    // pageElement.width(element.pos[2]) // problems with these two
-    // pageElement.height(element.pos[3]) 
+    setTimeout(function() {
+       modElementPosition(pageElement, element.pos)
+    }, 700)
   } else { // dropping new file
-    return elementPos = [
-      pageElement.position().left,
-      pageElement.position().top,
-      pageElement.width(),
-      pageElement.height(),
-      0 // rotation (TODO)
-    ];
+    return getElementPosition(pageElement)
   }
 }
 
@@ -50,21 +44,39 @@ function createElementCanvas(element) {
 
   var canvas = document.createElement('canvas');
 
-  canvas.width = element.pos[2]
-  canvas.height = 300 // should be element.pos[3]
-  canvas.style.marginLeft = element.pos[0] + 'px';
-  canvas.style.marginTop = element.pos[1] + 'px';
+  canvas.style.marginLeft = element.pos[0] + 'px'
+  canvas.style.marginTop = element.pos[1] + 'px'
+  canvas.style.width = element.pos[2] + 'px'
+  canvas.style.height = element.pos[3] + 'px'
+  canvas.style.zIndex = element.pos[4]
+
   var ctx = canvas.getContext("2d");
   $('#' + element.page).append(canvas);
 
   var image = new Image();
   image.onload = function() {
-    ctx.drawImage(image, 0, 0, element.pos[2], 300);
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
   };
   image.src = element.data;
 }
 
+function getElementPosition(element) {
+  return elementPos = [
+    parseFloat( element.css("marginLeft") ),
+    parseFloat( element.css("marginTop") ),
+    element.width(),
+    element.height(),
+    parseInt( element.css("z-index") ) // TODO rotation maybe
+  ];
+}
 
+function modElementPosition(pageElement, newPos) {
+  pageElement.css({'margin-left':newPos[0] + 'px'});
+  pageElement.css({'margin-top':newPos[1] + 'px'});
+  pageElement.width(newPos[2])
+  pageElement.height(newPos[3]) 
+  pageElement.css({'z-index':newPos[4]});
+}
 
 // --- M-V-C
 
@@ -72,7 +84,7 @@ var Publication = {
   // all our states
   id: makeId(),
   title: 'TEST PUB',
-  timeLeft: 15000,
+  timeLeft: 9000000,
   expired: false,
   elements: [],
   authors: []
@@ -98,7 +110,8 @@ function controller(Publication, input) {
       case  input.visible == false : // deleting an element
         removeElement(input.id);
         break;
-      case  input.data.includes("data:image") && 
+      case  input.data &&
+            input.data.includes("data:image") && 
             input.visible == true : // new image
         // update the Publication
         Publication.elements.push(input);
@@ -109,16 +122,27 @@ function controller(Publication, input) {
         // critic speak
         // critic();
         break;
-      case  input.data.includes("data:text/plain") && 
+      case  input.data &&  
+            input.data.includes("data:text/plain") && 
             input.visible == true : // new text
         // update the Publication
         Publication.elements.push(input);
         // drop file
         dropElement(input.page, input.data, input.id);
         break;
-      case  !input.data.includes("data:image") &&
+      case  input.data &&
+            !input.data.includes("data:image") &&
             !input.data.includes("data:text/plain") : // neither an image nor text
         notAnImage();
+        break;
+      case  input.move == true : // moving or scaling an image
+        var movingElement
+        for (var i = 0 ; i < Publication.elements.length; i += 1) { // find element by id
+          if (Publication.elements[i].id == input.id) {
+            movingElement = Publication.elements[i];  // read pos and add it to Publication
+          }
+        }
+        movingElement.pos = input.pos
         break;
     }
   } else if (input && Publication.expired == true) { // too late
@@ -179,7 +203,7 @@ pages.on("drop", function(e) {
     var pageId = $(this).attr('id');
     reader.onload = function (event) {
       console.log(event.target);
-      // id, data, size, pos, rotation?, visible
+      // id, data, [pos x, pos y, width, height, z-index, (rotation?)], visible, page
       setTimeout(function(){
         controller(Publication, { id: makeId(), data: event.target.result, pos: [0,0,0,0,0], visible: true, page: pageId } );
       }, y * dropDelay);
@@ -270,14 +294,16 @@ function notAnImage() {
 
 function dropElement(pageId, data, id) {
   var element = {id: id, data: data, page: pageId}
-  // read size, pos, rot and add them to Publication
   var elementPos = createElement(element)
-  for(var i = 0 ; i < Publication.elements.length; i += 1) {
-    if (Publication.elements[i].id == id) {
-      Publication.elements[i].pos = elementPos;
+  setTimeout(function() { // timeout to get the actual height :(
+    elementPos[3] = $('#' + id).height()
+    for (var i = 0 ; i < Publication.elements.length; i += 1) { // find element by id
+      if (Publication.elements[i].id == id) {
+        Publication.elements[i].pos = elementPos;  // read pos and add it to Publication
+      }
     }
-  }
-  Sound.ding();
+    Sound.ding();
+  }, 1)
 }
 
 function LateDropFile(src) {
@@ -343,11 +369,14 @@ interact('.draggable')
     x += event.deltaRect.left;
     y += event.deltaRect.top;
 
-    target.style.webkitTransform = target.style.transform =
-      'translate(' + x + 'px,' + y + 'px)';
+    target.style.marginLeft = x + 'px'
+    target.style.marginTop = y + 'px'
 
     target.setAttribute('data-x', x);
     target.setAttribute('data-y', y);
+
+    var pageElementPos = getElementPosition( $('#' + target.id) )
+    controller(Publication, {id: target.id, pos: pageElementPos, move: true} ) // sending element id and position
   });
 
 function dragMoveListener(event) {
@@ -357,9 +386,8 @@ function dragMoveListener(event) {
     y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
   // translate the element
-  target.style.webkitTransform =
-    target.style.transform =
-    'translate(' + x + 'px, ' + y + 'px)';
+  target.style.marginLeft = x + 'px'
+  target.style.marginTop = y + 'px'
 
   // update the posiion attributes
   target.setAttribute('data-x', x);
@@ -381,6 +409,9 @@ function dragMoveListener(event) {
     }
   });
   // target.style.zIndex = maxzIndex + 1;
+
+  var pageElementPos = getElementPosition( $('#' + target.id) )
+  controller(Publication, {id: target.id, pos: pageElementPos, move: true} ) // sending element id and position
 }
 
 // this is used later in the resizing and gesture demos

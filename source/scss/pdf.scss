@@ -24,7 +24,9 @@ header {
     outline: none !important;
     .page {
       break-after: always;
-      // padding: 0;
+      canvas {
+        position: absolute;
+      }
       .page-element {
         border: none;
         .close {
