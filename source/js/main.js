@@ -435,7 +435,7 @@ function genPdf(id) {
   $('#save-modal').html('')
   var y = setInterval(function(){
     if (pdfReady == true) {
-      $('#save-modal').html('Download your pdf <a href="assets/pdf/' + id + '/' + id + '.pdf">here</a>' )
+      $('#save-modal').html('Download your pdf <a href="assets/pdf/' + id + '/' + id + '.pdf?download=true">here</a>' )
       clearInterval(y)
     } else {
       $('#save-modal').text('Your PDF is being generated')

@@ -1,8 +1,10 @@
-const express = require('express')
 const mongoose = require('mongoose')
 const pdf = require('./pdf.js')
 const bodyParser = require('body-parser');
+const fs = require('fs')
+const rmdir = require('rimraf')
 
+const express = require('express')
 const app = express()
 const port = 3000
 
@@ -33,9 +35,28 @@ var Publication = mongoose.model('Publication', publicationSchema)
 // --- SERVER STUFF
 
 app.set('view engine', 'pug')
-app.use(express.static('public'))
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' })); // support encoded bodies
+
+// static
+app.use('/assets/pdf', function(req, res, next) {
+  download = req.param('download')
+  if (download) { // if a used downloaded the pdf, download it
+    pub_id = req.url.split( '/' )[1]
+    setTimeout(function() {
+      rmdir('public/assets/pdf/' + pub_id, function(err){
+        if (err) {
+            console.log("failed to delete pdf: " + err)
+        } else {
+            console.log('successfully deleted pdf')
+        }
+      })
+    }, 5000) // delete after 5 sec
+    console.log('user download')
+  }
+  next(); // Continue on to the next middleware/route handler
+});
+app.use(express.static('public'))
 
 // home
 app.get('/', function (req, res) {

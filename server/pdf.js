@@ -39,7 +39,13 @@ function makePdf(publication_id) {
       console.log(err);
       // remove temp images
       for (var i = 0; i < convertArgs.length -1; i++) { // minus one cause i don't want to delete the output
-        fs.unlink(convertArgs[i]);
+        fs.unlink(convertArgs[i], (err) => {
+          if (err) {
+            console.log("failed to delete screenshot: " + err );
+          } else {
+            console.log('successfully deleted screenshots');                                
+          }
+        })
       }
     })
   })
