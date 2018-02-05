@@ -172,6 +172,8 @@ function controller(Publication, input) {
 					}
 					movingElement.pos = input.pos;
 					break
+			case input.hasOwnProperty('title') : // changing title
+					Publication.title = input.title;
 		}
 	} else if (input && Publication.expired == true) {
 		// too late
@@ -195,6 +197,7 @@ $(document).ready(function() {
 		renderPublication(Publication);
 		noDrag();
 		pdfDownload();
+		$('body').addClass('saved');
 	}
 });
 
@@ -272,6 +275,13 @@ $(document).on('click', '.close', function() {
 		page: pageId
 	});
 });
+
+// changing title
+$('#title').change(function() {
+	controller(Publication, {
+		title: $(this).val()
+	});
+})
 
 // --- VIEW
 
@@ -502,12 +512,10 @@ function genPdf(id) {
 function renderPublication(Publication) {
 	var i;
 	for (i = 0; i < Publication.elements.length; ++i) {
-		if (window.location.href.indexOf('print=true') > 0) {
+		if (window.location.href.indexOf('print=true') > 0) { // print pub
 			createElementCanvas(Publication.elements[i]);
-			console.log('print pub');
 		} else {
-			createElement(Publication.elements[i]);
-			console.log('saved pub');
+			createElement(Publication.elements[i]); // saved pub
 		}
 	}
 }
