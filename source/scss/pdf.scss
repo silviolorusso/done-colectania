@@ -14,6 +14,7 @@ header {
   display: none !important;
 }
 * {
+  outline: none !important; // remove this to test the page alignment in the pdf
   box-shadow :none !important;
 }
 .wrapper {
@@ -35,4 +36,8 @@ header {
       }
     }
   }
+}
+
+.achievements {
+  display:none !important; 
 }
