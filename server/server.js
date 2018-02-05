@@ -77,6 +77,12 @@ app.get('/', function (req, res) {
 
 })
 
+// splash
+app.get('/splash', function (req, res) {
+  res.render(__dirname + '/../source/views/splash')
+  console.log('serving splash')
+})
+
 
 // pages
 app.get('/difficulty', function (req, res) {
@@ -152,11 +158,11 @@ app.get('/saved', function (req, res) {
 
     // code to insert print
     if (print) {
-      var print_code = '<link rel="stylesheet" href="assets/css/pdf.css"/>' 
+      var print_code = '<link rel="stylesheet" href="assets/css/pdf.css"/>'
     }
 
     // script to insert the saved model into saved
-    var publication_script = '<script>var Publication = ' +  publication_model + ';</script>' 
+    var publication_script = '<script>var Publication = ' +  publication_model + ';</script>'
 
     res.render(__dirname + '/../source/views/game', { print_code: print_code, publication_script: publication_script })
   })
