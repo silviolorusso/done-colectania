@@ -199,6 +199,17 @@ header {
       float: left;
       background: white;
       position: relative; }
+      .wrapper .spread .page #title {
+        margin: auto;
+        display: block;
+        border: none;
+        font-size: 30px;
+        margin-top: 189px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 99999;
+        background-color: transparent; }
       .wrapper .spread .page .page-element {
         width: 40%;
         height: auto;
@@ -224,42 +235,6 @@ header {
           cursor: crosshair; }
     .wrapper .spread:first-child .page {
       float: right; }
-
-#critic {
-  width: 200px;
-  height: 100px;
-  background-color: #aaa;
-  border-radius: 25px;
-  position: absolute;
-  right: 20px;
-  top: 200px;
-  padding: 20px; }
-
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 0; }
-  * {
-    -webkit-print-color-adjust: exact; }
-  header,
-  #counter,
-  #critic {
-    display: none; }
-  .wrapper {
-    width: 0 !important; }
-  .spread {
-    outline: none !important;
-    width: 0 !important; }
-    .spread .page {
-      display: block;
-      outline: none !important;
-      -webkit-transform: scale(2.3);
-      transform: scale(2.3);
-      /* Equal to scaleX(0.7) scaleY(0.7) */
-      left: 0;
-      float: left !important;
-      page-break-after: always !important;
-      page-break-before: always !important; } }
 
 .intro {
   width: 650px;

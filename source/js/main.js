@@ -13,6 +13,10 @@ function makeId() {
 	return id;
 }
 
+function byteCount(s) {
+    return encodeURI(s).split(/%..|./).length - 1;
+}
+
 function createElement(element) {
 	if (element.data.includes('data:image')) {
 		var pageElementContent = $('<img>', { src: element.data });
@@ -40,22 +44,43 @@ function createElement(element) {
 }
 
 function createElementCanvas(element) {
-	var canvas = document.createElement('canvas');
+	if (element.data.indexOf('data:image') >= 0) {
 
-	canvas.style.marginLeft = element.pos[0] + 'px';
-	canvas.style.marginTop = element.pos[1] + 'px';
-	canvas.style.width = element.pos[2] + 'px';
-	canvas.style.height = element.pos[3] + 'px';
-	canvas.style.zIndex = element.pos[4];
+		var canvas = document.createElement('canvas');
+		canvas.style.marginLeft = element.pos[0] + 'px';
+		canvas.style.marginTop = element.pos[1] + 'px';
+		canvas.width = element.pos[2] * 3; // to have crisp images
+		canvas.height = element.pos[3] * 3; // to have crisp images
+		canvas.style.width = element.pos[2] + 'px';
+		canvas.style.height = element.pos[3] + 'px';
+		canvas.style.zIndex = element.pos[4];
 
-	var ctx = canvas.getContext('2d');
-	$('#' + element.page).append(canvas);
+		var ctx = canvas.getContext('2d');
+		$('#' + element.page).append(canvas);
 
-	var image = new Image();
-	image.onload = function() {
-		ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-	};
-	image.src = element.data;
+		var image = new Image();
+		image.onload = function() {
+			ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+		};
+		image.src = element.data;
+
+	} else {
+
+		var deBasedText = atob(element.data.substring(23));
+		var htmlBrText = deBasedText.replace(/\n/g, '<br/>');
+		console.log(htmlBrText);
+		var pageElementContent = $('<p>').append(htmlBrText); // remove "data:text/plain;base64"
+
+		var pageElement = $('<div>', { class: 'page-element draggable' });
+		var pageElementClose = $('<span>', { class: 'close' }).text('x');
+		pageElement.append(pageElementContent, pageElementClose);
+		pageElement.attr('id', element.id);
+		$('#' + element.page).append(pageElement);
+
+		setTimeout(function() {
+			modElementPosition(pageElement, element.pos);
+		}, 700);
+	}
 }
 
 function getElementPosition(element) {
@@ -102,50 +127,57 @@ function controller(Publication, input) {
 	}
 
 	if (input && Publication.expired == false) {
-		console.log(input);
+		console.log(input)
 		switch (true) {
 			case input.visible == false: // deleting an element
-				removeElement(input.id);
-				break;
+					removeElement(input.id)
+					break
+			case input.data &&
+				byteCount(input.data) > 1398117 : // file too big (1mb)
+				 	Error.tooBig()
+					break
 			case input.data &&
 				input.data.includes('data:image') &&
 				input.visible == true: // new image
-				// update the Publication
-				Publication.elements.push(input);
-				// drop file
-				dropElement(input.page, input.data, input.id);
-				// add bonus time
-				addtime(1000);
-				// critic speak
-				// critic();
-				break;
+					// update the Publication
+					Publication.elements.push(input);
+					// drop file
+					dropElement(input.page, input.data, input.id);
+					// add bonus time
+					addtime(1000)
+					// critic speak
+					// critic();
+					break
 			case input.data &&
 				input.data.includes('data:text/plain') &&
 				input.visible == true: // new text
-				// update the Publication
-				Publication.elements.push(input);
-				// drop file
-				dropElement(input.page, input.data, input.id);
-				break;
+					// update the Publication
+					Publication.elements.push(input);
+					// drop file
+					dropElement(input.page, input.data, input.id)
+					addtime(1000)
+					break
 			case input.data &&
 				!input.data.includes('data:image') &&
 				!input.data.includes('data:text/plain'): // neither an image nor text
-				notAnImage();
-				break;
-			case input.move == true: // moving or scaling an image
-				var movingElement;
-				for (var i = 0; i < Publication.elements.length; i += 1) {
-					// find element by id
-					if (Publication.elements[i].id == input.id) {
-						movingElement = Publication.elements[i]; // read pos and add it to Publication
+					Error.notAllowed()
+					break
+			case input.move == true : // moving or scaling an image
+					var movingElement;
+					for (var i = 0; i < Publication.elements.length; i += 1) {
+						// find element by id
+						if (Publication.elements[i].id == input.id) {
+							movingElement = Publication.elements[i]; // read pos and add it to Publication
+						}
 					}
-				}
-				movingElement.pos = input.pos;
-				break;
+					movingElement.pos = input.pos;
+					break
+			case input.hasOwnProperty('title') : // changing title
+					Publication.title = input.title;
 		}
 	} else if (input && Publication.expired == true) {
 		// too late
-		LateDropFile();
+		Error.tooLate();
 	}
 }
 
@@ -165,6 +197,7 @@ $(document).ready(function() {
 		renderPublication(Publication);
 		noDrag();
 		pdfDownload();
+		$('body').addClass('saved');
 	}
 });
 
@@ -243,6 +276,13 @@ $(document).on('click', '.close', function() {
 	});
 });
 
+// changing title
+$('#title').change(function() {
+	controller(Publication, {
+		title: $(this).val()
+	});
+})
+
 // --- VIEW
 
 var Sound = {
@@ -292,10 +332,6 @@ function showExpired() {
 	clearInterval(x);
 }
 
-function notAnImage() {
-	Sound.error();
-	alert('The file you dropped is not an image!');
-}
 
 function dropElement(pageId, data, id) {
 	var element = { id: id, data: data, page: pageId };
@@ -313,9 +349,23 @@ function dropElement(pageId, data, id) {
 	}, 1);
 }
 
-function LateDropFile(src) {
-	alert('too late bro');
-}
+// errors
+
+var Error = {
+	notAllowed: function() {
+		Sound.error()
+		alert('The file you dropped is not allowed!')
+	},
+	tooBig: function() {
+		Sound.error();
+		alert('The file you dropped is too big!'); 
+	},
+	tooLate: function() {
+		Sound.error();
+			alert('too late bro'); 
+	}
+};
+
 
 function noDrag() {
 	var elems = document.querySelectorAll('.draggable');
@@ -462,12 +512,10 @@ function genPdf(id) {
 function renderPublication(Publication) {
 	var i;
 	for (i = 0; i < Publication.elements.length; ++i) {
-		if (window.location.href.indexOf('print=true') > 0) {
+		if (window.location.href.indexOf('print=true') > 0) { // print pub
 			createElementCanvas(Publication.elements[i]);
-			console.log('print pub');
 		} else {
-			createElement(Publication.elements[i]);
-			console.log('saved pub');
+			createElement(Publication.elements[i]); // saved pub
 		}
 	}
 }
@@ -519,30 +567,3 @@ function savetoDb(publication) {
 		}
 	});
 }
-
-// // make pdf
-// var element = document.getElementById('p1');
-// $('#p1').click(function(){
-//  html2pdf(element, {
-//    margin:       1,
-//    filename:     'myfile.pdf',
-//    image:        { type: 'jpeg', quality: 0.98 },
-//    html2canvas:  { dpi: 72, letterRendering: true, height: 2970, width: 5100 },
-//    jsPDF:        { unit: 'mm', format: 'A4', orientation: 'portrait' }
-//  });
-// });
-
-// --- ARCHIVE
-
-// $.ajax({
-//  url: "http://localhost:28017/test",
-//  type: 'get',
-//  dataType: 'jsonp',
-//  jsonp: 'jsonp', // mongodb is expecting that
-//  success: function (data) {
-//     console.log('success', data);
-//   },
-//   error: function (XMLHttpRequest, textStatus, errorThrown) {
-//     console.log('error', errorThrown);
-//   }
-// });
