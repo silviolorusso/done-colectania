@@ -1,9 +1,8 @@
 include parts/header.pug
-
+canvas#canvas
 div.wrapper
   div.splashwrapper
     div.border
-    div.shadowborder
     div.splashpage
         div.logotype
           span#publish Publish
@@ -12,7 +11,8 @@ div.wrapper
         p.copyright Copyright Ⓒ 1991 - 2018 Hogeschool van Amsterdam. All rights reserved. Created by PublishingLab (Silvio Lorusso, Stef Kors), This product is licenced to: Done Colectania. Serial Number: 009993234884772
     div.loadingbar
       div#loader
-      span#text
-        span#percentage 20
-        span % 
-        span#message loading assets
+    div#text
+      span#percentage  
+      span#message 
+  
+script(src='assets/js/interface-js.js')

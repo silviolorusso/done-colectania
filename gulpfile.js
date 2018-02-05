@@ -27,6 +27,16 @@ gulp.task('build-js', function() {
     .pipe(gulp.dest('public/assets/js'));
 });
 
+gulp.task('build-interface-js', function() {
+  return gulp.src('source/interface-js/**/*.js')
+    .pipe(sourcemaps.init())
+      .pipe(concat('interface-js.js'))
+      //only uglify if gulp is ran with '--type production'
+      .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('public/assets/js'));
+});
+
 gulp.task('build-html', function() {
   return gulp.src('source/views/*.pug')
 			.pipe(plumber())
@@ -42,5 +52,6 @@ gulp.task('default', ['watch']);
 gulp.task('watch', function() {
   gulp.watch('source/scss/**/*.scss', ['build-css']);
   gulp.watch('source/js/**/*.js', ['build-js']);
+  gulp.watch('source/interface-js/**/*.js', ['build-interface-js']);
   gulp.watch('source/views/**/*.pug', ['build-html']);
 });
