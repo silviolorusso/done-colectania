@@ -54,3 +54,8 @@ Temporary Items
 npm-debug.log
 .DS_Store
 /*.env
+
+
+------ 
+
+/public/assets/pdf/*
