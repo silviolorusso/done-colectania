@@ -23,7 +23,7 @@ function countdownWrapper() {
 
 	// when page is ready do this
 	$(document).ready(function() {
-		$('#countdown').html('Get ready!');
+		$('#countdown').html('Get ready!').show();
 		// countdown timer
 		function countdown(startTime) {
 			if (startTime >= 1) {
@@ -49,3 +49,5 @@ function countdownWrapper() {
 		$('#countdown').html(startTime);
 	});
 }
+
+countdownWrapper();
