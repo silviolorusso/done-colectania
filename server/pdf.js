@@ -47,6 +47,11 @@ function makePdf(publication_id) {
           }
         })
       }
+      childProcess.execFile( 'server/make-booklet.sh', [ publication_dir + '/' + publication_id + '.pdf' ], function(err, stdout, stderr) {
+        console.log(err)
+        console.log(stdout)
+        console.log('successfully created booklet')
+      })
     })
   })
 
@@ -55,8 +60,3 @@ function makePdf(publication_id) {
 module.exports = {
     makePdf: makePdf
 };
-
-// test
-makePdf('Y1516628075388')
-
-// need to eliminate padding from page, convert "translate" to margin
