@@ -2,7 +2,7 @@ $('.wrapper').css('opacity', '0');
 $('.loadingbar').css('opacity', '0');
 $('#message').addClass('blink');
 
-
+var allowed = true;
 $( ".wrapper" ).delay(3000).animate({
     opacity: 1,
     paddingTop: "80px",
@@ -10,10 +10,15 @@ $( ".wrapper" ).delay(3000).animate({
     // Animation complete.
     $('#message').html('press ENTER to start');
     document.onkeydown = checkKey;
+    $(document).click(function () {
+      checkKey();
+    })
 
-    function checkKey(e) {
-        if (e.keyCode) {
-          loadgame()
+
+    function checkKey() {
+      if (allowed) {
+        loadgame()
+        allowed = false;
       }
     }
 });
@@ -116,7 +121,7 @@ function loadgame() {
         paddingTop: "100px",
       }, 1000, function() {
         // send page to game
-        $(location).attr('href', '/')
+        // $(location).attr('href', '/');
     });
 
   }, 12000);

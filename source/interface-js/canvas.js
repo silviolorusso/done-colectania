@@ -15,11 +15,10 @@
 
 		$(window).ready(function() {
 			var i = 1;
-			var interval = setInterval(step, 100);
+			var interval = setInterval(step, 30);
 
 
 			function step() {
-				console.log('print');
 				context.fillStyle = '#D0D0D0';
 				context.globalAlpha = 0.5;
 				context.fill();

@@ -362,6 +362,12 @@ $spread-width: 900px;
 		margin: 20px auto;
 		text-decoration: none;
 		text-align: center;
+		box-shadow: $box-shadow;
+		transition: .2s;
+		&:hover {
+			box-shadow: $box-shadow-hover;
+			transition: .2s;
+		}
 		.stylized {
 			&:first-child {
 				font-family: $font;
@@ -384,8 +390,8 @@ $spread-width: 900px;
 	background-color: $white;
 	border: 1px solid $black;
 	box-shadow: $box-shadow;
-	max-width: 540px;
-	height: 400px;
+	max-width: 50vw;
+	height: 70vh;
 	margin-left: auto;
 	margin-right: auto;
 	.logotype {
@@ -393,7 +399,7 @@ $spread-width: 900px;
 		margin-left: auto;
 		margin-right: auto;
 		text-align: center;
-		padding-bottom: 80px;
+		padding-bottom: 10vh;
 		#publish {
 			font-size: 80px;
 			display: block;
@@ -411,10 +417,10 @@ $spread-width: 900px;
 		}
 	}
 	.copyright {
-		font-size: 10px;
+		font-size: 12px;
 		color: $black;
 		text-align: center;
-		padding: 0 30px;
+		padding: 0 10px;
 	}
 	.monospace {
 		font-family: monospace;
@@ -423,8 +429,8 @@ $spread-width: 900px;
 
 .border {
 	border: 1px solid $black;
-	max-width: 580px;
-	height: 360px;
+	max-width: 55vw;
+	height: 60vh;
 	position: absolute;
 	margin-top: 20px;
 	margin-left: auto;
