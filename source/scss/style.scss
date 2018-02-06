@@ -11,8 +11,9 @@ $white: #ffffff;
 $gray: #f4f4f4;
 $red: #cd1602;
 $accent: #00ff00;
+$shadow: rgba(137, 137, 137, 0.48);
 
-$box-shadow: 4px 4px 0 0 rgba(137, 137, 137, 0.48);
+$box-shadow: 4px 4px 0 0 $shadow;
 
 // --- Type
 $font: AGaramondPro;
@@ -111,7 +112,7 @@ header {
 	}
 }
 
-$time: 1s;
+$time: 1.5s;
 $timewiggle: $time;
 
 .fadeinout {
@@ -250,6 +251,9 @@ $spread-width: 900px;
 
 .wrapper {
 	padding-top: 100px;
+	position: absolute;
+  left: 0px;
+  right: 0px;
 	.spread {
 		max-width: $spread-width;
 		height: $spread-width * 0.7070707; // A* ratio
@@ -373,6 +377,115 @@ $spread-width: 900px;
 	}
 }
 
+// --- splash screen
+
+.splashpage {
+	background-color: $white;
+	border: 1px solid $black;
+	box-shadow: $box-shadow;
+	max-width: 540px;
+	height: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	.logotype {
+		margin-top: 50px;
+		margin-left: auto;
+		margin-right: auto;
+		text-align: center;
+		padding-bottom: 80px;
+		#publish {
+			font-size: 80px;
+			display: block;
+			padding-right: 130px;
+		}
+		#or {
+			font-size: 48px;
+			padding-left: 110px;
+		}
+		#perish {
+			font-family: $font-game;
+			color: $red;
+			font-size: 110px;
+			line-height: 60px;
+		}
+	}
+	.copyright {
+		font-size: 10px;
+		color: $black;
+		text-align: center;
+		padding: 0 30px;
+	}
+	.monospace {
+		font-family: monospace;
+	}
+}
+
+.border {
+	border: 1px solid $black;
+	max-width: 580px;
+	height: 360px;
+	position: absolute;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	filter: drop-shadow(4px 4px 0px rgba(137, 137, 137, 0.48));
+}
+
+.loadingbar {
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	position: relative;
+	text-align: center;
+	width: 200px;
+	height: 10px;
+	border: 1px solid $black;
+	border-radius: 100px;
+	#loader {
+		height: 10px;
+		width: 0%;
+		border-radius: 100px;
+		background-color: $red;
+	}
+}
+
+#text {
+	font-size: 12px;
+	padding-top: 5px;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	position: relative;
+	text-align: center;
+}
+
+.blink {
+	animation: fade 1s forwards;
+	animation-iteration-count: infinite;
+}
+
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+
+
+#canvas {
+	width:100vw;
+	height:100vh;
+	position: absolute;
+}
 
 // --- saved
 
