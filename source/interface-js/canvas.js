@@ -1,7 +1,7 @@
 // ------------ Background Canvas ------------ //
 (function() {
 	var canvas = document.getElementById('canvas'),
-		context = canvas.getContext('2d');
+	context = canvas.getContext('2d');
 
 	// resize the canvas to fill browser window dynamically
 	window.addEventListener('resize', resizeCanvas, false);
@@ -12,26 +12,20 @@
 		canvas.width = width;
 		canvas.height = height;
 		function drawStuff() {
-
-      // styling
-			context.fillStyle = "rgba(200,200,200,1)";
-
-      var chars = 'abcdefghijklmnopqrstuvwxyz';
-      var array = chars.split('');
-
       function getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
       }
 
-      context.font = '12px serif';
-
-      for (var i = 0; i < 600; i++) {
-        context.fillText(array[getRandomInt(array.length)], getRandomInt(width), getRandomInt(height));
-      }
-
-
+			for (var i = 0; i < 160; i++) {
+				context.fillStyle = 'red';
+				context.fill();
+				var radius = 1;
+				context.arc((15*i), -15, radius, 0, Math.PI * 2);
+				context.arc(-15, (10*i), radius, 0, Math.PI * 2);
+			}
 		}
 		$(window).ready(function() {
+			// drawStuff();
 			drawStuff();
 		})
 	}

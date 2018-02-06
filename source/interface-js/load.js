@@ -3,7 +3,7 @@ $('.loadingbar').css('opacity', '0');
 $('#message').addClass('blink');
 
 
-$( ".wrapper" ).animate({
+$( ".wrapper" ).delay(3000).animate({
     opacity: 1,
     paddingTop: "80px",
   }, 3000, function() {
