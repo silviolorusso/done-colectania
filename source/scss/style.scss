@@ -272,11 +272,12 @@ $spread-width: 900px;
 				margin: auto;
 		    display: block;
 		    border: none;
+		    font-family: sans-serif;
 		    font-size: 30px;
 		    margin-top: 189px;
 		    position: absolute;
-		    left: 50%;
-		    transform: translateX(-50%);
+		    margin-left: 15%;
+		    width: 70%;
 		    z-index: 99999;
 		    background-color: transparent;
 			}
