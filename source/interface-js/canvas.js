@@ -1,5 +1,6 @@
 // ------------ Background Canvas ------------ //
 (function() {
+
 	var canvas = document.getElementById('canvas'),
 	context = canvas.getContext('2d');
 
@@ -11,24 +12,32 @@
     var height = window.innerHeight*2;
 		canvas.width = width;
 		canvas.height = height;
-		function drawStuff() {
-      function getRandomInt(max) {
-        return Math.floor(Math.random() * Math.floor(max));
-      }
 
-			for (var i = 0; i < 160; i++) {
-				context.fillStyle = 'red';
-				context.fill();
-				var radius = 1;
-				context.arc((15*i), -15, radius, 0, Math.PI * 2);
-				context.arc(-15, (10*i), radius, 0, Math.PI * 2);
-			}
-		}
 		$(window).ready(function() {
-			// drawStuff();
-			drawStuff();
+			var i = 1;
+			var interval = setInterval(step, 100);
+
+
+			function step() {
+				console.log('print');
+				context.fillStyle = '#D0D0D0';
+				context.globalAlpha = 0.5;
+				context.fill();
+				var radius = 5;
+				context.arc((35*i), -10, radius, 0, Math.PI * 2);
+				context.arc(-120, (25*i), radius, 0, Math.PI * 2);
+				i++
+
+				if(i === 350){
+					console.log('clear');
+					clearInterval(interval);
+					return
+				}
+			}
 		})
 	}
 	resizeCanvas();
+
+
 
 })();

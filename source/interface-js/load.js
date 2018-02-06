@@ -116,6 +116,7 @@ function loadgame() {
         paddingTop: "100px",
       }, 1000, function() {
         // send page to game
+        $(location).attr('href', '/')
     });
 
   }, 12000);

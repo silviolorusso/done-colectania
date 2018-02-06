@@ -391,7 +391,7 @@ $spread-width: 900px;
 		margin-left: auto;
 		margin-right: auto;
 		text-align: center;
-		padding-bottom: 60px;
+		padding-bottom: 80px;
 		#publish {
 			font-size: 80px;
 			display: block;
@@ -409,10 +409,13 @@ $spread-width: 900px;
 		}
 	}
 	.copyright {
-		font-size: 12px;
+		font-size: 10px;
 		color: $black;
 		text-align: center;
 		padding: 0 30px;
+	}
+	.monospace {
+		font-family: monospace;
 	}
 }
 
@@ -444,12 +447,13 @@ $spread-width: 900px;
 		height: 10px;
 		width: 0%;
 		border-radius: 100px;
-		background-color: $shadow;
+		background-color: $red;
 	}
 }
 
 #text {
 	font-size: 12px;
+	padding-top: 5px;
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
