@@ -1,10 +1,29 @@
 include parts/headerLogo.pug
 
-div.wrapper
+div.wrapper.intro
   h1 archive
-  each p_id in p_ids
-    a(href='saved?id=' + p_id)
-      div.publication(style='width: 100px; height: 170px; border: 1px solid #000; float: left; margin-right: 20px; margin-bottom: 20px; font-size: 7px;')
-        p= p_id
-
-script(src='assets/js/main.js')
+  div.collection
+    each publication in publications
+      a(href='saved?id=' + publication.id).tile
+        div.publication
+          p= publication.title
+        div.description
+          title= publication.title
+          div.author
+            span Written by 
+            span= publication.id
+          div.date
+            span Created on: 
+            span= publication.id
+          div.assets
+            span Number of assets: 
+            span= publication.id
+          div.pages
+            span Number of pages:  
+            span= publication.id
+          div.time
+            span Total time:  
+            span= publication.id
+          div.awards
+            span Awards won: 
+            span= publication.id

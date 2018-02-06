@@ -99,12 +99,10 @@ app.get('/archive', function (req, res) {
   // find all publications
   Publication.find(function (err, publications) {
     if (err) return console.error(err);
-    // get ids
-    var publication_ids = [];
-    for (var i = 0; i < publications.length; i++) {
-      publication_ids.push( publications[i].id )
-    }
-    res.render(__dirname + '/../source/views/archive', { p_ids: publication_ids })
+
+    res.render(__dirname + '/../source/views/archive', {
+      publications: publications
+    })
 
     console.log('serving archive')
   })

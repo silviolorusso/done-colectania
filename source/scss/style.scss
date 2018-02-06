@@ -14,6 +14,7 @@ $accent: #00ff00;
 $shadow: rgba(137, 137, 137, 0.48);
 
 $box-shadow: 4px 4px 0 0 $shadow;
+$box-shadow-hover: 6px 6px 0 0 $shadow;
 
 // --- Type
 $font: AGaramondPro;
@@ -513,6 +514,12 @@ body.saved {
 		color: $black;
 		display: block;
 		text-decoration: none;
+		&:hover {
+			.publication {
+				box-shadow: $box-shadow-hover;
+				transition: .2s;
+			}
+		}
 		.publication {
 			float: left;
 			width: 100px;
@@ -520,6 +527,7 @@ body.saved {
 			background: $white;
 			border: 1px solid $black;
 			box-shadow: $box-shadow;
+			transition: .2s;
 			display: inline-block;
 			p {
 				padding: 10px 15px;
