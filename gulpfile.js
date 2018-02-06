@@ -20,7 +20,7 @@ return gulp.src('source/scss/**/*.scss')
 gulp.task('build-js', function() {
   return gulp.src('source/js/**/*.js')
     .pipe(sourcemaps.init())
-      .pipe(concat('main.js'))
+      // .pipe(concat('main.js'))
       //only uglify if gulp is ran with '--type production'
       .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
     .pipe(sourcemaps.write())

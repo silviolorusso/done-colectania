@@ -17,6 +17,21 @@ function byteCount(s) {
     return encodeURI(s).split(/%..|./).length - 1;
 }
 
+var getUrlParameter = function getUrlParameter(sParam) {
+  var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+    sURLVariables = sPageURL.split('&'),
+    sParameterName,
+    i;
+
+  for (i = 0; i < sURLVariables.length; i++) {
+    sParameterName = sURLVariables[i].split('=');
+
+    if (sParameterName[0] === sParam) {
+        return sParameterName[1] === undefined ? true : sParameterName[1];
+    }
+  }
+};
+
 function createElement(element) {
 	if (element.data.includes('data:image')) {
 		var pageElementContent = $('<img>', { src: element.data });
@@ -187,6 +202,9 @@ var x;
 $(document).ready(function() {
 	if (window.location.href.indexOf('saved') < 0) {
 		// if not a saved publication
+		if ( getUrlParameter('time') ) { // difficulty
+			Publication.timeLeft = getUrlParameter('time');
+		}
 		x = setInterval(function() {
 			Publication.timeLeft = Publication.timeLeft - 10;
 			controller(Publication);
@@ -498,7 +516,7 @@ function genPdf(id) {
 					id +
 					'/' +
 					id +
-					'.pdf?download=true">here</a>'
+					'.pdf?download=true" target="_blank">here</a>'
 			);
 			clearInterval(y);
 		} else {
@@ -510,6 +528,7 @@ function genPdf(id) {
 // --- SAVED
 
 function renderPublication(Publication) {
+	$('#title').val(Publication.title).attr("disabled","disabled");
 	var i;
 	for (i = 0; i < Publication.elements.length; ++i) {
 		if (window.location.href.indexOf('print=true') > 0) { // print pub
