@@ -520,7 +520,7 @@ function genPdf(id) {
 					id +
 					'/' +
 					id +
-					'-booklet.pdf?download=true" target="_blank">here</a>.'
+					'-booklet.pdf?download=true" target="_blank">here</a>.' // add "on click close save modal"
 			);
 			clearInterval(y);
 		} else {

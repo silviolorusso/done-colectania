@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# --- convert single page pdf to printable booklet pdf
+# --- convert single page pdf to printable booklet pdf (thanks OSP)
 
 # get filename without extension
 fullfilename=$1
