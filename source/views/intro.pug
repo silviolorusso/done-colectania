@@ -6,16 +6,37 @@ div.wrapper.intro
     
   p So, why not making publishing challenging by defining some obstacles, limitations, etc that need to be overcome by the publisher/user? What if publishing had obstacles? What if some friction in the publishing process make the publication more rewarding? What if we apply the IKEA principle to publishing?
 
-  a(href='difficulty')
+  a.button(href='difficulty')
     .stylized
       span Start 
       span Game
         
   h2 Last Publications
-
-  each p_id in p_ids
-    a(href='saved?id=' + p_id)
-      div.publication(style='width: 100px; height: 170px; border: 1px solid #000; float: left; margin-right: 20px; margin-bottom: 20px; font-size: 7px;')
-        p= p_id
+  
+  div.collection
+    each publication in publications
+      a(href='saved?id=' + publication.id).tile
+        div.publication
+          p= publication.title
+        div.description
+          title= publication.title
+          div.author
+            span Written by 
+            span= publication.id
+          div.date
+            span Created on: 
+            span= publication.id
+          div.assets
+            span Number of assets: 
+            span= publication.id
+          div.pages
+            span Number of pages:  
+            span= publication.id
+          div.time
+            span Total time:  
+            span= publication.id
+          div.awards
+            span Awards won: 
+            span= publication.id
 
   a(href='archive') Show more

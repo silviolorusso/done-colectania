@@ -344,14 +344,14 @@ $spread-width: 900px;
 		box-shadow: $box-shadow;
 		padding: 30px;
 		margin-top: 40px;
-		a {
+		.button {
 			width: 320px;
 			font-size: 24px;
 			display: block;
 		}
 	}
 
-	a {
+	.button {
 		background: $white;
 		border: 1px solid $black;
 		font-size: 24px;
@@ -498,6 +498,53 @@ body.saved {
 		border: none !important;
 		.close {
 			display: none !important;
+		}
+	}
+}
+
+.collection {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	.tile {
+		width: 49%;
+		margin-bottom: 10px;
+		font-size: 24px;
+		color: $black;
+		display: block;
+		text-decoration: none;
+		.publication {
+			float: left;
+			width: 100px;
+			height: 140px;
+			background: $white;
+			border: 1px solid $black;
+			box-shadow: $box-shadow;
+			display: inline-block;
+			p {
+				padding: 10px 15px;
+				margin: 0;
+				font-size: 14px;
+				line-height: 16px;
+				font-weight: bold;
+				text-align: center;
+				word-wrap: break-word;
+			}
+		}
+
+		.description {
+			display: inline-block;
+			float: left;
+			padding: 10px 15px;
+			div {
+				display: block;
+				font-size: 12px;
+				text-align: left;
+				line-height: 14px;
+				span {
+					display: inline;
+				}
+			}
 		}
 	}
 }
