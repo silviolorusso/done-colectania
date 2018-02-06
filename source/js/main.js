@@ -516,7 +516,11 @@ function genPdf(id) {
 					id +
 					'/' +
 					id +
-					'.pdf?download=true" target="_blank">here</a>'
+					'.pdf?download=true" target="_blank">here</a> and printable pdf booklet <a href="assets/pdf/' +
+					id +
+					'/' +
+					id +
+					'-booklet.pdf?download=true" target="_blank">here</a>.' // add "on click close save modal"
 			);
 			clearInterval(y);
 		} else {
@@ -562,7 +566,7 @@ function checkPdf(id) {
 	var y = setInterval(function() {
 		$.ajax({
 			type: 'HEAD',
-			url: 'assets/pdf/' + id + '/' + id + '.pdf',
+			url: 'assets/pdf/' + id + '/' + id + '-booklet.pdf', // check the booklet
 			success: function(msg) {
 				clearInterval(y);
 				pdfReady = true;
