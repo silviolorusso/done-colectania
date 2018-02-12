@@ -3,6 +3,9 @@ const pdf = require('./pdf.js')
 const bodyParser = require('body-parser');
 const fs = require('fs')
 const rmdir = require('rimraf')
+const fabric = require('fabric').fabric;
+const Rsvg = require('librsvg').Rsvg;
+const stream = require('stream');
 
 const express = require('express')
 const app = express()
@@ -23,7 +26,8 @@ var publicationSchema = mongoose.Schema({
   title: String,
   date: Number,
   expired: Boolean,
-  elements: Array
+  elements: Array, // remove this after fabric works
+  pages: Object
 })
 
 var Publication = mongoose.model('Publication', publicationSchema)
@@ -80,16 +84,22 @@ app.get('/splash', function (req, res) {
 })
 
 
-// pages
+// difficulty
 app.get('/difficulty', function (req, res) {
   res.render(__dirname + '/../source/views/difficulty')
   console.log('serving difficulty')
 })
 
 
-// pages
+// game
 app.get('/game', function (req, res) {
   res.render(__dirname + '/../source/views/game')
+  console.log('serving game')
+})
+
+// game (fabric.js test)
+app.get('/game-fabric', function (req, res) {
+  res.render(__dirname + '/../source/views/game-fabric')
   console.log('serving game')
 })
 
@@ -165,6 +175,72 @@ app.get('/saved', function (req, res) {
   console.log('serving saved publication')
 
   console.log(publication_model)
+})
+
+// show saved
+app.get('/saved-fabric', function (req, res) {
+  var publication_id = req.param('id'); // e.g. http://localhost:3000/saved?id=R1516627472029
+  var print = req.param('print');
+
+  // find publication
+  var publication_model
+  Publication.findOne({ 'id': publication_id }, function (err, publication) {
+    if (err) return console.error(err);
+
+    publication_model = publication
+    publication_model = JSON.stringify(publication_model)
+    console.log(publication_model)
+
+    // code to insert print
+    if (print) {
+      var print_code = '<link rel="stylesheet" href="assets/css/pdf.css"/>'
+    }
+
+    // script to insert the saved model into saved
+    var publication_script = '<script>var Publication = ' +  publication_model + ';</script>'
+
+    res.render(__dirname + '/../source/views/game-fabric', { print_code: print_code, publication_script: publication_script })
+  })
+  console.log('serving saved publication')
+
+  console.log(publication_model)
+})
+
+
+// show svg
+app.get('/pdf-fabric', function (req, res) {
+  var publication_id = req.param('id'); // e.g. http://localhost:3000/saved?id=R1516627472029
+
+  // find publication
+  var publication_model
+  Publication.findOne({ 'id': publication_id }, function (err, publication) {
+    if (err) return console.error(err);
+    
+    var p1 = publication.pages.p1
+    var canvas = new fabric.StaticCanvas('c')
+    canvas.loadFromJSON(publication.pages.p8); // cause i have images there in P1518452006750
+
+    // Create SVG render instance. 
+    var svg = new Rsvg();
+ 
+    // When finishing reading SVG, render and save as PDF file. 
+    svg.on('finish', function() {
+      console.log('SVG width: ' + svg.width);
+      console.log('SVG height: ' + svg.height);
+      res.setHeader('Content-Type', 'application/pdf');
+      res.send( svg.render({
+        format: 'pdf',
+        width: 600,
+        height: 400
+      }).data);
+    });
+     
+    var bufferStream = new stream.PassThrough();
+    bufferStream.end(new Buffer( canvas.toSVG() ));
+    bufferStream.pipe(svg)
+  })
+  console.log('serving pdf')
+
 })
 
 // show all publications in console

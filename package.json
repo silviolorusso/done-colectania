@@ -20,6 +20,7 @@
   "devDependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "fabric": "^2.0.1",
     "gulp": "^3.9.1",
     "gulp-concat": "latest",
     "gulp-plumber": "latest",
@@ -27,9 +28,11 @@
     "gulp-sass": "latest",
     "gulp-sourcemaps": "latest",
     "gulp-util": "latest",
+    "librsvg": "^0.7.0",
     "mongoose": "^4.13.9",
     "pug": "^2.0.0-rc.4",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "stream": "0.0.2"
   },
   "dependencies": {
     "gulp-run-command": "0.0.9"
