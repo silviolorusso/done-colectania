@@ -9,7 +9,10 @@ div.wrapper
   div.spread
     // maybe move achievements outside spread
     div.achievements 
-      p This is a paragraph
+      h2 Instructions
+      p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
+      h2 Achievements
+      img(href="assets/img/achievement.png")
     div.page#p1
       input#title(type='textarea', placeholder='Insert Title Here')
   div.spread
@@ -25,8 +28,36 @@ div.wrapper
     div.page#p8
 
 div#save-modal
-  p Do you want to save this publication?
-  button#save yes
+  h2 Time has expired!
+  p Do you wish to print this publication?
+  div.collection
+    a(href='saved?id=').tile#full_width
+      div.publication
+        p publication
+        img(src='assets/img/cover.png')
+      div.description
+        title publication
+        div.author
+          span Written by 
+          span publication id
+        div.date
+          span Created on: 
+          span publication id
+        div.assets
+          span Number of assets: 
+          span publication id
+        div.pages
+          span Number of pages:  
+          span publication id
+        div.time
+          span Total time:  
+          span publication id
+        div.awards
+          span Awards won: 
+          span publication id
+  div.button#save Print Publication   ⎙
+  div#loader
+    #loadingbar
 
 p#pdf-download download as pdf 
 

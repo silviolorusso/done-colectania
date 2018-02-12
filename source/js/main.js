@@ -347,6 +347,7 @@ function showExpired() {
 	//setTimeout(function(){
 	//  window.print();
 	//}, 1000);
+	animateUp($('#save-modal'));
 	clearInterval(x);
 }
 
@@ -376,11 +377,11 @@ var Error = {
 	},
 	tooBig: function() {
 		Sound.error();
-		alert('The file you dropped is too big!'); 
+		alert('The file you dropped is too big!');
 	},
 	tooLate: function() {
 		Sound.error();
-			alert('too late bro'); 
+			alert('too late bro');
 	}
 };
 
@@ -524,7 +525,7 @@ function genPdf(id) {
 			);
 			clearInterval(y);
 		} else {
-			$('#save-modal').text('Your PDF is being generated');
+			$('#save-modal').html('Your Publication is being generated<span id="loading_dots">...</span><div id="loader"><div id="loadingbar"></div></div>');
 		}
 	}, 100);
 }
@@ -590,3 +591,15 @@ function savetoDb(publication) {
 		}
 	});
 }
+
+function animateUp(obj) {
+	obj.show();
+	obj.css('margin-top', '20px');
+	obj.animate({
+	    opacity: 1,
+	    marginTop: "0px",
+	  }, 3000, function() {
+	    // Animation complete.
+
+	});
+};
