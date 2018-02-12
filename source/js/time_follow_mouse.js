@@ -1,5 +1,6 @@
 // #counter follows the mouse
 function updateMouseCounter(e) {
+  $('.counter').css('opacity', '1');
   if (e.clientX >= 200) { // ($(document).width()/2)
     // if mouse of right side of client
     $('.counter').addClass('mouse_right');

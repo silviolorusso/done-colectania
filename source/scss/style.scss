@@ -1,10 +1,9 @@
 @font-face {
 	font-family: 'Shlop-Regular';
-	src: url('../../assets/fonts/shlop.ttf') format('truetype'); /* Safari, Android, iOS */
+	src: url('../../assets/fonts/shlop.ttf') format('truetype');
+	/* Safari, Android, iOS */
 }
-
 // --- COLORS
-
 $element-border: #588ac5;
 $black: #191919;
 $white: #ffffff;
@@ -12,18 +11,14 @@ $gray: #f4f4f4;
 $red: #cd1602;
 $accent: #00ff00;
 $shadow: rgba(137, 137, 137, 0.48);
-
 $box-shadow: 4px 4px 0 0 $shadow;
-$box-shadow-hover: 6px 6px 0 0 $shadow;
-
-// --- Type
+$box-shadow-hover: 6px 6px 0 0 $shadow; // --- Type
 $font: AGaramondPro;
 $font-game: Shlop-Regular;
 
 .center {
 	text-align: center;
 }
-
 // --- General
 
 body {
@@ -38,6 +33,7 @@ body {
 	background: $gray;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+
 	&.expired {
 		background: #222;
 	}
@@ -49,15 +45,18 @@ header {
 	width: 100%;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
+
 	* {
 		font-size: 20px;
 		font-weight: bold;
 	}
+
 	#logo {
 		text-align: left;
 		margin: 0;
 		display: block;
 		float: left;
+
 		h1 {
 			text-decoration: none;
 			display: inline-block;
@@ -67,20 +66,31 @@ header {
 			font-size: 16px;
 			color: $black;
 		}
+
 		img {
 			width: 40px;
 		}
 	}
+
 	#about {
 		float: right;
 		display: block;
+		margin-top: 13px;
+		font-size: 16px;
+		color: $black;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration: underline;
+		}
 	}
 }
-
 // --- TIME COUNTER
+
 .counter {
 	position: fixed;
 	z-index: 99999999;
+	opacity: 0;
 
 	#bonusTime {
 		position: absolute;
@@ -112,7 +122,6 @@ header {
 		}
 	}
 }
-
 $time: 1.5s;
 $timewiggle: $time;
 
@@ -128,72 +137,83 @@ $timewiggle: $time;
 	color: $red;
 	transition: $timewiggle/2;
 }
-
 @keyframes wiggle {
 	0% {
 		transform: skewX(-10deg);
 		transform: skewy(-10deg);
 	}
+
 	10% {
 		transform: skewX(9deg);
 		transform: skewy(9deg);
 	}
+
 	20% {
 		transform: skewX(-8deg);
 		transform: skewY(-8deg);
 	}
+
 	30% {
 		transform: skewX(7deg);
 		transform: skewY(7deg);
 	}
+
 	40% {
 		transform: skewX(-6deg);
 		transform: skewY(-6deg);
 	}
+
 	50% {
 		transform: skewX(5deg);
 		transform: skewY(5deg);
 	}
+
 	60% {
 		transform: skewX(-4deg);
 		transform: skewY(-4deg);
 	}
+
 	70% {
 		transform: skewX(3deg);
 		transform: skewY(3deg);
 	}
+
 	80% {
 		transform: skewX(-2deg);
 		transform: skewY(-2deg);
 	}
+
 	90% {
 		transform: skewX(1deg);
 		transform: skewY(1deg);
 	}
+
 	100% {
 		transform: skewX(0deg);
 		transform: skewY(0deg);
 	}
 }
-
 @keyframes fadeinout {
 	10% {
 		opacity: 1;
 	}
+
 	30% {
 		opacity: 0;
 	}
+
 	50% {
 		opacity: 1;
 	}
+
 	70% {
 		opacity: 0;
 	}
+
 	90% {
 		opacity: 1;
 	}
 }
-
 // --- COUNTDOWN
 
 #countdown {
@@ -210,7 +230,6 @@ $timewiggle: $time;
 	border: 1px $black solid;
 	transform: translateX(-25%) translateY(-25%);
 }
-
 // --- pdf box
 
 #save-modal {
@@ -220,8 +239,10 @@ $timewiggle: $time;
 	height: 200px;
 	top: 50%;
 	left: 50%;
-	margin-top: -100px; /* Negative half of height. */
-	margin-left: -250px; /* Negative half of width. */
+	margin-top: -100px;
+	/* Negative half of height. */
+	margin-left: -250px;
+	/* Negative half of width. */
 	padding: 20px;
 	background-color: #eee;
 	z-index: 9999999;
@@ -235,15 +256,14 @@ $timewiggle: $time;
 	width: 100%;
 	cursor: pointer;
 }
-
 // --- SPREADS (game)
-
 $spread-width: 900px;
 
 .page-shadow {
 	outline: 1px solid $black;
 	box-shadow: 4px 4px 0 0 rgba(137, 137, 137, 0.48);
 }
+
 .no-page-shadow {
 	outline: none;
 	-webkit-box-shadow: none;
@@ -253,17 +273,20 @@ $spread-width: 900px;
 .wrapper {
 	padding-top: 100px;
 	position: absolute;
-  left: 0px;
-  right: 0px;
+	left: 0;
+	right: 0;
+
 	.spread {
 		max-width: $spread-width;
 		height: $spread-width * 0.7070707; // A* ratio
-		margin: 0 auto 50px auto;
+		margin: 0 auto 50px;
 		@extend .page-shadow;
+
 		.achievements {
 			width: $spread-width / 2;
 			display: inline-block;
 		}
+
 		.page {
 			-webkit-box-sizing: border-box;
 			box-sizing: border-box;
@@ -273,19 +296,21 @@ $spread-width: 900px;
 			background: white;
 			position: relative;
 			@extend .page-shadow;
+
 			#title {
 				margin: auto;
-		    display: block;
-		    border: none;
-		    font-family: sans-serif;
-		    font-size: 30px;
-		    margin-top: 189px;
-		    position: absolute;
-		    margin-left: 15%;
-		    width: 70%;
-		    z-index: 99999;
-		    background-color: transparent;
+				display: block;
+				border: none;
+				font-family: sans-serif;
+				font-size: 30px;
+				margin-top: 189px;
+				position: absolute;
+				margin-left: 15%;
+				width: 70%;
+				z-index: 99999;
+				background-color: transparent;
 			}
+
 			.page-element {
 				width: 40%;
 				height: auto;
@@ -295,14 +320,17 @@ $spread-width: 900px;
 				position: absolute;
 				border: 1px solid $element-border;
 				line-height: 0;
+
 				img {
 					width: 100%;
 					height: 100%;
 				}
+
 				p {
 					font-size: 12px;
 					line-height: 15px;
 				}
+
 				.close {
 					float: right;
 					display: block;
@@ -314,22 +342,25 @@ $spread-width: 900px;
 				}
 			}
 		}
+
 		&:first-child {
 			@extend .no-page-shadow;
+
 			.page {
 				float: right;
 				@extend .page-shadow;
 			}
 		}
+
 		&:last-child {
 			@extend .no-page-shadow;
+
 			.page {
 				@extend .page-shadow;
 			}
 		}
 	}
 }
-
 // --- intro
 
 .intro {
@@ -345,6 +376,7 @@ $spread-width: 900px;
 		box-shadow: $box-shadow;
 		padding: 30px;
 		margin-top: 40px;
+
 		.button {
 			width: 320px;
 			font-size: 24px;
@@ -364,26 +396,29 @@ $spread-width: 900px;
 		text-align: center;
 		box-shadow: $box-shadow;
 		transition: .2s;
+
 		&:hover {
 			box-shadow: $box-shadow-hover;
 			transition: .2s;
 		}
+
 		.stylized {
 			&:first-child {
 				font-family: $font;
 			}
+
 			span:last-of-type {
 				font-family: $font-game;
 				color: $red;
 			}
 		}
+
 		&:hover {
 			background-color: $black;
 			color: $white;
 		}
 	}
 }
-
 // --- splash screen
 
 .splashpage {
@@ -394,21 +429,25 @@ $spread-width: 900px;
 	height: 450px;
 	margin-left: auto;
 	margin-right: auto;
+
 	.logotype {
 		margin-top: 50px;
 		margin-left: auto;
 		margin-right: auto;
 		text-align: center;
 		padding-bottom: 80px;
+
 		#publish {
 			font-size: 80px;
 			display: block;
 			padding-right: 130px;
 		}
+
 		#or {
 			font-size: 48px;
 			padding-left: 110px;
 		}
+
 		#perish {
 			font-family: $font-game;
 			color: $red;
@@ -422,6 +461,7 @@ $spread-width: 900px;
 		color: $black;
 		text-align: center;
 		padding: 0 10px;
+
 		.monospace {
 			font-family: monospace;
 		}
@@ -452,9 +492,10 @@ $spread-width: 900px;
 	height: 10px;
 	border: 1px solid $black;
 	border-radius: 100px;
+
 	#loader {
 		height: 10px;
-		width: 0%;
+		width: 0;
 		border-radius: 100px;
 		background-color: $red;
 	}
@@ -474,36 +515,37 @@ $spread-width: 900px;
 	animation: fade 1s forwards;
 	animation-iteration-count: infinite;
 }
-
 @keyframes fade {
 	0% {
 		opacity: 0;
 	}
+
 	50% {
 		opacity: 1;
 	}
+
 	100% {
 		opacity: 0;
 	}
 }
 
-
-
 #canvas {
-	width:100vw;
-	height:100vh;
+	width: 100vw;
+	height: 100vh;
 	position: absolute;
 }
-
 // --- saved
 
 body.saved {
 	// display: none; // add this to hide everything before images are put in place
-	#counter, #countdown {
-  	display: none;
+	#countdown,
+	#counter {
+		display: none;
 	}
+
 	.page-element {
 		border: none !important;
+
 		.close {
 			display: none !important;
 		}
@@ -514,6 +556,7 @@ body.saved {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
+
 	.tile {
 		width: 49%;
 		margin-bottom: 10px;
@@ -521,12 +564,14 @@ body.saved {
 		color: $black;
 		display: block;
 		text-decoration: none;
+
 		&:hover {
 			.publication {
 				box-shadow: $box-shadow-hover;
 				transition: .2s;
 			}
 		}
+
 		.publication {
 			float: left;
 			width: 100px;
@@ -536,6 +581,7 @@ body.saved {
 			box-shadow: $box-shadow;
 			transition: .2s;
 			display: inline-block;
+
 			p {
 				padding: 10px 15px;
 				margin: 0;
@@ -551,11 +597,13 @@ body.saved {
 			display: inline-block;
 			float: left;
 			padding: 10px 15px;
+
 			div {
 				display: block;
 				font-size: 12px;
 				text-align: left;
 				line-height: 14px;
+
 				span {
 					display: inline;
 				}
