@@ -37,6 +37,16 @@ gulp.task('build-interface-js', function() {
     .pipe(gulp.dest('public/assets/js'));
 });
 
+gulp.task('build-sounds-js', function() {
+  return gulp.src('source/sounds-js/**/*.js')
+    .pipe(sourcemaps.init())
+      .pipe(concat('sounds-js.js'))
+      //only uglify if gulp is ran with '--type production'
+      .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('public/assets/js'));
+});
+
 gulp.task('build-html', function() {
   return gulp.src('source/views/*.pug')
 			.pipe(plumber())
@@ -53,5 +63,6 @@ gulp.task('watch', function() {
   gulp.watch('source/scss/**/*.scss', ['build-css']);
   gulp.watch('source/js/**/*.js', ['build-js']);
   gulp.watch('source/interface-js/**/*.js', ['build-interface-js']);
+  gulp.watch('source/sounds-js/**/*.js', ['build-sounds-js']);
   gulp.watch('source/views/**/*.pug', ['build-html']);
 });

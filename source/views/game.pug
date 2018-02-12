@@ -14,7 +14,8 @@ div.wrapper
       h2 Achievements
       img(href="assets/img/achievement.png")
     div.page#p1
-      input#title(type='textarea', placeholder='Insert Title Here')
+      input#title(type='textarea', placeholder='Insert Title Here', maxlength="23")
+      input#name(type='textarea', placeholder='Insert name Here', maxlength="23")
   div.spread
     div.page#p2
     div.page#p3
@@ -67,4 +68,5 @@ p#pdf-download download as pdf
 
 
 script(src='assets/js/main.js')
+script(src="assets/js/countdown.js")
 != publication_script
