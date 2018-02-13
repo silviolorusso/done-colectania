@@ -17,6 +17,15 @@ $box-shadow-hover: 6px 6px 0 0 $shadow; // --- Type
 $font: AGaramondPro;
 $font-game: Shlop-Regular;
 
+.perish {
+	color: $red;
+	font-family: $font-game;
+}
+
+.regular {
+	font-family: $font;
+}
+
 .center {
 	text-align: center;
 }
@@ -223,19 +232,29 @@ $timewiggle: $time;
 }
 // --- COUNTDOWN
 
-#countdown {
-	display: none;
+#countdownWrapper {
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 42vh;
 	position: fixed;
-	left: 48vw;
-	top: 43vh;
-	font-size: 78px;
-	color: red;
 	z-index: 9999999999;
-	font-family: $font-game;
-	background-color: $white;
-	padding: 30px;
-	border: 1px $black solid;
-	transform: translateX(-25%) translateY(-25%);
+	text-align: center;
+	width: 100%;
+	opacity: 0;
+	display: none;
+
+	#countdown {
+		top: 20vh;
+		font-size: 78px;
+		font-family: $font;
+		background-color: $white;
+		padding: 30px;
+		border: 1px $black solid;
+		transition: .1s;
+		margin-left: auto;
+		margin-right: auto;
+		display: table;
+	}
 }
 // --- pdf box
 

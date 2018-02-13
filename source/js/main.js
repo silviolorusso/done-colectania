@@ -601,6 +601,22 @@ function animateUp(obj) {
 	    marginTop: "0px",
 	  }, 3000, function() {
 	    // Animation complete.
+	});
+};
 
+function animateUpOut(obj, time) {
+	obj.show();
+	obj.css('margin-top', '20px');
+	obj.animate({
+	    opacity: 1,
+	    marginTop: "0px",
+	  }, time/2, function() {
+	    // Animation complete.
+	});
+	obj.animate({
+	    opacity: 0,
+	    marginTop: "20px",
+	  }, time/2, function() {
+	    // Animation complete.
 	});
 };

@@ -23,31 +23,68 @@ function countdownWrapper() {
 
 	// when page is ready do this
 	$(document).ready(function() {
-		$('#countdown').html('Get ready!').show();
-		// countdown timer
+
+
+		animateUp($('#counter'));
+
+
 		function countdown(startTime) {
+			animateUpOut($('#countdownWrapper'), 2000);
+
+			switch (startTime) {
+				case 4:
+					$('#countdown').html('<span>Prepare your <span class="perish">Assets!</span></span>');
+					break;
+				case 3:
+					$('#countdown').html('<span>Type your <span class="perish">Type!</span></span>');
+					break;
+				case 2:
+					$('#countdown').html('<span>Create your <span class="perish">Layout!</span></span>');
+					break;
+				case 1:
+					$('#countdown').html('<span>Publish or <span class="perish">Perish!</span></span>');
+					break;
+				default:
+			}
+
+			startTime = startTime - 1;
 			if (startTime >= 1) {
-				createjs.Sound.play('printer-short');
-				setTimeout(function() {
-					startTime = startTime - 1;
-					$('#countdown').html(startTime); // set current time in #countdown
-					countdown(startTime); // repeat function
-				}, 1000);
+				setTimeout(function () {
+					console.log(startTime);
+					countdown(startTime);
+				}, 2000);
 			} else {
-				$('#countdown').html('start game!'); // set to start game message
-				setTimeout(function() {
-					// wait a bit
-					$('#countdown').fadeOut(1000); // fade out the #countdown
-					// TODO: start time!
-				}, 200);
-				createjs.Sound.play('ding');
+				return
 			}
 		}
 
 		var startTime = 4;
 		countdown(startTime);
-		$('#countdown').html(startTime);
+
+
 	});
 }
 
 countdownWrapper();
+
+
+
+
+// countdown timer
+// function countdown(startTime) {
+// 	if (startTime >= 1) {
+// 		createjs.Sound.play('printer-short');
+// 		setTimeout(function() {
+// 			$('#countdown').html(startTime); // set current time in #countdown
+// 			countdown(startTime); // repeat function
+// 		}, 1000);
+// 	} else {
+// 		$('#countdown').html('start game!'); // set to start game message
+// 		setTimeout(function() {
+// 			// wait a bit
+// 			$('#countdown').fadeOut(1000); // fade out the #countdown
+// 			// TODO: start time!
+// 		}, 200);
+// 		createjs.Sound.play('ding');
+// 	}
+// }
