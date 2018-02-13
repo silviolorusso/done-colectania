@@ -1,24 +1,7 @@
 // script(src='assets/js/sounds-js.js')
-
-
-console.log('hi guys!');
-
 createjs.Sound.registerSound('assets/audio/beep.mp3', 'beep');
-createjs.Sound.registerSound('assets/audio/ding.mp3', 'ding');
+createjs.Sound.registerSound('assets/audio/background_loop.mp3', 'music');
 
-// printer soundjs
-createjs.Sound.registerSound(
-  'assets/audio/printer/matrix-short.wav',
-  'printer-short'
-);
-createjs.Sound.registerSound(
-  'assets/audio/printer/matrix-long.wav',
-  'printer-long'
-);
-createjs.Sound.registerSound(
-  'assets/audio/printer/load_paper.wav',
-  'load_paper'
-);
 
 document.onkeydown = checkKey;
 $(document).click(function () {
@@ -27,8 +10,30 @@ $(document).click(function () {
 
 
 function checkKey() {
-  console.log('brah');
-  createjs.Sound.play('ding');
+  // createjs.Sound.play('music');
+
 };
 
-//# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNvdW5kLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsImZpbGUiOiJzb3VuZHMtanMuanMiLCJzb3VyY2VzQ29udGVudCI6WyIvLyBzY3JpcHQoc3JjPSdhc3NldHMvanMvc291bmRzLWpzLmpzJylcblxuXG5jb25zb2xlLmxvZygnaGkgZ3V5cyEnKTtcblxuY3JlYXRlanMuU291bmQucmVnaXN0ZXJTb3VuZCgnYXNzZXRzL2F1ZGlvL2JlZXAubXAzJywgJ2JlZXAnKTtcbmNyZWF0ZWpzLlNvdW5kLnJlZ2lzdGVyU291bmQoJ2Fzc2V0cy9hdWRpby9kaW5nLm1wMycsICdkaW5nJyk7XG5cbi8vIHByaW50ZXIgc291bmRqc1xuY3JlYXRlanMuU291bmQucmVnaXN0ZXJTb3VuZChcbiAgJ2Fzc2V0cy9hdWRpby9wcmludGVyL21hdHJpeC1zaG9ydC53YXYnLFxuICAncHJpbnRlci1zaG9ydCdcbik7XG5jcmVhdGVqcy5Tb3VuZC5yZWdpc3RlclNvdW5kKFxuICAnYXNzZXRzL2F1ZGlvL3ByaW50ZXIvbWF0cml4LWxvbmcud2F2JyxcbiAgJ3ByaW50ZXItbG9uZydcbik7XG5jcmVhdGVqcy5Tb3VuZC5yZWdpc3RlclNvdW5kKFxuICAnYXNzZXRzL2F1ZGlvL3ByaW50ZXIvbG9hZF9wYXBlci53YXYnLFxuICAnbG9hZF9wYXBlcidcbik7XG5cbmRvY3VtZW50Lm9ua2V5ZG93biA9IGNoZWNrS2V5O1xuJChkb2N1bWVudCkuY2xpY2soZnVuY3Rpb24gKCkge1xuICBjaGVja0tleSgpO1xufSk7XG5cblxuZnVuY3Rpb24gY2hlY2tLZXkoKSB7XG4gIGNvbnNvbGUubG9nKCdicmFoJyk7XG4gIGNyZWF0ZWpzLlNvdW5kLnBsYXkoJ2RpbmcnKTtcbn07XG4iXX0=
+
+console.log();
+
+$('.sound').click(function () {
+  checkSoundIfMuted();
+
+})
+
+function checkSoundIfMuted() {
+  if ($('.sound').hasClass('mute')) {
+    // true: audio is muted
+    createjs.Sound.stop('music');
+    $('.sound').removeClass('mute');
+    return true
+  } else {
+    // false: audio is not muted
+    createjs.Sound.play('music','.3');
+    $('.sound').addClass('mute');
+    return false
+  }
+}
+
+//# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNvdW5kLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EiLCJmaWxlIjoic291bmRzLWpzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiLy8gc2NyaXB0KHNyYz0nYXNzZXRzL2pzL3NvdW5kcy1qcy5qcycpXG5jcmVhdGVqcy5Tb3VuZC5yZWdpc3RlclNvdW5kKCdhc3NldHMvYXVkaW8vYmVlcC5tcDMnLCAnYmVlcCcpO1xuY3JlYXRlanMuU291bmQucmVnaXN0ZXJTb3VuZCgnYXNzZXRzL2F1ZGlvL2JhY2tncm91bmRfbG9vcC5tcDMnLCAnbXVzaWMnKTtcblxuXG5kb2N1bWVudC5vbmtleWRvd24gPSBjaGVja0tleTtcbiQoZG9jdW1lbnQpLmNsaWNrKGZ1bmN0aW9uICgpIHtcbiAgY2hlY2tLZXkoKTtcbn0pO1xuXG5cbmZ1bmN0aW9uIGNoZWNrS2V5KCkge1xuICAvLyBjcmVhdGVqcy5Tb3VuZC5wbGF5KCdtdXNpYycpO1xuXG59O1xuXG5cbmNvbnNvbGUubG9nKCk7XG5cbiQoJy5zb3VuZCcpLmNsaWNrKGZ1bmN0aW9uICgpIHtcbiAgY2hlY2tTb3VuZElmTXV0ZWQoKTtcblxufSlcblxuZnVuY3Rpb24gY2hlY2tTb3VuZElmTXV0ZWQoKSB7XG4gIGlmICgkKCcuc291bmQnKS5oYXNDbGFzcygnbXV0ZScpKSB7XG4gICAgLy8gdHJ1ZTogYXVkaW8gaXMgbXV0ZWRcbiAgICBjcmVhdGVqcy5Tb3VuZC5zdG9wKCdtdXNpYycpO1xuICAgICQoJy5zb3VuZCcpLnJlbW92ZUNsYXNzKCdtdXRlJyk7XG4gICAgcmV0dXJuIHRydWVcbiAgfSBlbHNlIHtcbiAgICAvLyBmYWxzZTogYXVkaW8gaXMgbm90IG11dGVkXG4gICAgY3JlYXRlanMuU291bmQucGxheSgnbXVzaWMnLCcuMycpO1xuICAgICQoJy5zb3VuZCcpLmFkZENsYXNzKCdtdXRlJyk7XG4gICAgcmV0dXJuIGZhbHNlXG4gIH1cbn1cbiJdfQ==

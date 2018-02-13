@@ -1,0 +1,13 @@
+.sound::after {
+  content: '🔊';
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  font-size: 32px;
+  cursor: pointer;
+  z-index: 9999999999999999;
+}
+
+.mute::after {
+  content: '🔇';
+}

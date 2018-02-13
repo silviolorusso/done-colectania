@@ -1,3 +1,4 @@
+@import "_sound.scss";
 @font-face {
 	font-family: 'Shlop-Regular';
 	src: url('../../assets/fonts/shlop.ttf') format('truetype');
@@ -294,11 +295,20 @@ $timewiggle: $time;
 		margin-top: 10px;
 
 		#loadingbar {
-			width: 80%;
 			height: 20px;
 			background-color: $red;
 			border-right: 1px solid $black;
+			animation: load 10s ease;
 		}
+	}
+}
+@keyframes load {
+	0% {
+		width: 0;
+	}
+
+	100% {
+		width: 100%;
 	}
 }
 

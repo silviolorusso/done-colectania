@@ -1,24 +1,7 @@
 // script(src='assets/js/sounds-js.js')
-
-
-console.log('hi guys!');
-
 createjs.Sound.registerSound('assets/audio/beep.mp3', 'beep');
-createjs.Sound.registerSound('assets/audio/ding.mp3', 'ding');
+createjs.Sound.registerSound('assets/audio/background_loop.mp3', 'music');
 
-// printer soundjs
-createjs.Sound.registerSound(
-  'assets/audio/printer/matrix-short.wav',
-  'printer-short'
-);
-createjs.Sound.registerSound(
-  'assets/audio/printer/matrix-long.wav',
-  'printer-long'
-);
-createjs.Sound.registerSound(
-  'assets/audio/printer/load_paper.wav',
-  'load_paper'
-);
 
 document.onkeydown = checkKey;
 $(document).click(function () {
@@ -27,6 +10,28 @@ $(document).click(function () {
 
 
 function checkKey() {
-  console.log('brah');
-  createjs.Sound.play('ding');
+  // createjs.Sound.play('music');
+
 };
+
+
+console.log();
+
+$('.sound').click(function () {
+  checkSoundIfMuted();
+
+})
+
+function checkSoundIfMuted() {
+  if ($('.sound').hasClass('mute')) {
+    // true: audio is muted
+    createjs.Sound.stop('music');
+    $('.sound').removeClass('mute');
+    return true
+  } else {
+    // false: audio is not muted
+    createjs.Sound.play('music','.3');
+    $('.sound').addClass('mute');
+    return false
+  }
+}
