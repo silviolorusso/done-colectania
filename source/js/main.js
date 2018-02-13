@@ -5,6 +5,10 @@ var criticPopup = $('#critic');
 var dropDelay = 100;
 var pdfReady = false;
 
+
+
+
+
 // --- GENERAL FUNCTIONS
 
 function makeId() {
@@ -32,89 +36,45 @@ var getUrlParameter = function getUrlParameter(sParam) {
   }
 };
 
-function createElement(element) {
+function createElement(element, callback) {
 	if (element.data.includes('data:image')) {
-		var pageElementContent = $('<img>', { src: element.data });
+		fabric.Image.fromURL(element.data, function(myImg, callback) {
+ 			var img = myImg.set({ left: 0, top: 0, width: myImg.width, height: myImg.height});
+ 			if ( img.width > canvases[element.page].width ) {
+ 				img.scaleToWidth(canvases[element.page].width / 100 * 70 ); // 70% of the canvas
+ 			}
+ 			img.on('added', function() {
+ 				callback;
+ 			});
+ 			canvases[element.page].add(img)
+		});
 	} else {
 		var deBasedText = atob(element.data.substring(23));
 		var htmlBrText = deBasedText.replace(/\n/g, '<br/>');
-		console.log(htmlBrText);
-		var pageElementContent = $('<p>').append(htmlBrText); // remove "data:text/plain;base64"
-	}
-	var pageElement = $('<div>', { class: 'page-element draggable' });
-	var pageElementClose = $('<span>', { class: 'close' }).text('x');
-	pageElement.append(pageElementContent, pageElementClose);
-	pageElement.attr('id', element.id);
-	$('#' + element.page).append(pageElement);
-
-	if (element.pos) {
-		// reconstructing saved element
-		setTimeout(function() {
-			modElementPosition(pageElement, element.pos);
-		}, 700);
-	} else {
-		// dropping new file
-		return getElementPosition(pageElement);
+		canvases[element.page].add(new fabric.Text(htmlBrText, { 
+  		fontFamily: 'Arial', 
+  		left: 0, 
+  		top: 0 
+		}));
+		callback;
 	}
 }
 
-function createElementCanvas(element) {
-	if (element.data.indexOf('data:image') >= 0) {
 
-		var canvas = document.createElement('canvas');
-		canvas.style.marginLeft = element.pos[0] + 'px';
-		canvas.style.marginTop = element.pos[1] + 'px';
-		canvas.width = element.pos[2] * 3; // to have crisp images
-		canvas.height = element.pos[3] * 3; // to have crisp images
-		canvas.style.width = element.pos[2] + 'px';
-		canvas.style.height = element.pos[3] + 'px';
-		canvas.style.zIndex = element.pos[4];
-
-		var ctx = canvas.getContext('2d');
-		$('#' + element.page).append(canvas);
-
-		var image = new Image();
-		image.onload = function() {
-			ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-		};
-		image.src = element.data;
-
-	} else {
-
-		var deBasedText = atob(element.data.substring(23));
-		var htmlBrText = deBasedText.replace(/\n/g, '<br/>');
-		console.log(htmlBrText);
-		var pageElementContent = $('<p>').append(htmlBrText); // remove "data:text/plain;base64"
-
-		var pageElement = $('<div>', { class: 'page-element draggable' });
-		var pageElementClose = $('<span>', { class: 'close' }).text('x');
-		pageElement.append(pageElementContent, pageElementClose);
-		pageElement.attr('id', element.id);
-		$('#' + element.page).append(pageElement);
-
-		setTimeout(function() {
-			modElementPosition(pageElement, element.pos);
-		}, 700);
-	}
+// --- initialize canvases
+var canvases = {}
+function initCanvases() {
+	$('canvas').each(function(i) {
+		canvas = new fabric.Canvas(this);
+	  canvas.setWidth( $(this).closest('.page').width() );
+		canvas.setHeight( $(this).closest('.page').height() );
+		canvases['p' + (i + 1)] = canvas;
+	});
 }
 
-function getElementPosition(element) {
-	return (elementPos = [
-		parseFloat(element.css('marginLeft')),
-		parseFloat(element.css('marginTop')),
-		element.width(),
-		element.height(),
-		parseInt(element.css('z-index')) // TODO rotation maybe
-	]);
-}
 
-function modElementPosition(pageElement, newPos) {
-	pageElement.css({ 'margin-left': newPos[0] + 'px' });
-	pageElement.css({ 'margin-top': newPos[1] + 'px' });
-	pageElement.width(newPos[2]);
-	pageElement.height(newPos[3]);
-	pageElement.css({ 'z-index': newPos[4] });
-}
+
+
 
 // --- M-V-C
 
@@ -124,20 +84,26 @@ var Publication = {
 	title: 'TEST PUB',
 	timeLeft: 9000000,
 	expired: false,
-	elements: [],
-	authors: []
+	authors: [],
+	pages: {
+		p1: {},
+		p2: {},
+		p3: {},
+		p4: {},
+		p5: {},
+		p6: {},
+		p7: {},
+		p8: {}
+	}
 };
 
 function controller(Publication, input) {
-	// expired?
-	if (Publication.timeLeft > 0) {
-		// expired
-		showTime(Publication);
+	if (Publication.timeLeft > 0) { // not expired
+		showTime(Publication); // expired
 	} else {
-		// not expired
 		Publication.expired = true;
 		showExpired(Publication);
-		noDrag();
+		lockElements()
 		showSaveModal();
 	}
 
@@ -154,23 +120,28 @@ function controller(Publication, input) {
 			case input.data &&
 				input.data.includes('data:image') &&
 				input.visible == true: // new image
-					// update the Publication
-					Publication.elements.push(input);
-					// drop file
-					dropElement(input.page, input.data, input.id);
-					// add bonus time
-					addtime(1000)
-					// critic speak
-					// critic();
+
+					var publicationUpdate = function(inputPage) { // update canvas
+						setTimeout(function() {
+							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
+						}, 1)
+					}
+					dropElement(input.page, input.data, publicationUpdate(input.page)); // drop element
+					addtime(1000) // add bonus time
+
 					break
 			case input.data &&
 				input.data.includes('data:text/plain') &&
 				input.visible == true: // new text
-					// update the Publication
-					Publication.elements.push(input);
-					// drop file
-					dropElement(input.page, input.data, input.id)
-					addtime(1000)
+
+					var publicationUpdate = function(inputPage) { // update canvas
+						setTimeout(function() {
+							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
+						}, 1)
+					}
+					dropElement(input.page, input.data, publicationUpdate(input.page)); // drop element
+					addtime(1000) // add bonus time
+
 					break
 			case input.data &&
 				!input.data.includes('data:image') &&
@@ -178,14 +149,7 @@ function controller(Publication, input) {
 					Error.notAllowed()
 					break
 			case input.move == true : // moving or scaling an image
-					var movingElement;
-					for (var i = 0; i < Publication.elements.length; i += 1) {
-						// find element by id
-						if (Publication.elements[i].id == input.id) {
-							movingElement = Publication.elements[i]; // read pos and add it to Publication
-						}
-					}
-					movingElement.pos = input.pos;
+					Publication.pages[input.page] = canvases[input.page].toJSON()
 					break
 			case input.hasOwnProperty('title') : // changing title
 					Publication.title = input.title;
@@ -196,10 +160,16 @@ function controller(Publication, input) {
 	}
 }
 
+
+
+
+
 // --- CONTROLLER
 
 var x;
 $(document).ready(function() {
+	initCanvases()
+	onModElement()
 	if (window.location.href.indexOf('saved') < 0) {
 		// if not a saved publication
 		if ( getUrlParameter('time') ) { // difficulty
@@ -210,12 +180,11 @@ $(document).ready(function() {
 			controller(Publication);
 		}, 10);
 
-		mouseCounter();
-	} else {
-		renderPublication(Publication);
-		noDrag();
-		pdfDownload();
-		$('body').addClass('saved');
+		mouseCounter()
+	} else { // saved publication
+		renderPublication(Publication)
+		pdfDownload()
+		$('body').addClass('saved')
 	}
 });
 
@@ -224,8 +193,17 @@ function addtime(bonusTime) {
 	animatetimecounter(bonusTime);
 }
 
-// dropFile
+// modify element
+function onModElement() {
+	for (var pageId in canvases) {
+		canvases[ pageId ].on('object:modified', function(evt) {
+			var parentCanvasId = evt.target.canvas.lowerCanvasEl.id
+			controller(Publication, { move: true, page: parentCanvasId})
+		})
+	}
+}
 
+// drop element
 pages.on('dragover', function(e) {
 	e.preventDefault();
 	$(this).addClass('dragover');
@@ -242,15 +220,12 @@ pages.on('drop', function(e) {
 	var y = 0;
 	for (var i = files.length - 1; i >= 0; i--) {
 		reader = new FileReader();
-		var pageId = $(this).attr('id');
+		var pageId = $(this).find('canvas').attr('id');
 		reader.onload = function(event) {
 			console.log(event.target);
-			// id, data, [pos x, pos y, width, height, z-index, (rotation?)], visible, page
 			setTimeout(function() {
 				controller(Publication, {
-					id: makeId(),
 					data: event.target.result,
-					pos: [0, 0, 0, 0, 0],
 					visible: true,
 					page: pageId
 				});
@@ -301,6 +276,11 @@ $('#title').change(function() {
 	});
 })
 
+
+
+
+
+
 // --- VIEW
 
 var Sound = {
@@ -350,22 +330,17 @@ function showExpired() {
 	clearInterval(x);
 }
 
-
-function dropElement(pageId, data, id) {
-	var element = { id: id, data: data, page: pageId };
-	var elementPos = createElement(element);
-	setTimeout(function() {
-		// timeout to get the actual height :(
-		elementPos[3] = $('#' + id).height();
-		for (var i = 0; i < Publication.elements.length; i += 1) {
-			// find element by id
-			if (Publication.elements[i].id == id) {
-				Publication.elements[i].pos = elementPos; // read pos and add it to Publication
-			}
-		}
-		Sound.ding();
-	}, 1);
+function dropElement(pageId, data, id, callback) {
+	var element = { data: data, page: pageId };
+	var elementPos = createElement(element, callback);
+	Sound.ding();
 }
+
+
+
+
+
+
 
 // errors
 
@@ -384,115 +359,23 @@ var Error = {
 	}
 };
 
-
-function noDrag() {
-	var elems = document.querySelectorAll('.draggable');
-	[].forEach.call(elems, function(el) {
-		el.classList.remove('draggable');
-	});
+// lock elements
+function lockElements() {
+	for (var pageId in canvases) {
+		canvases[pageId].selection = false;
+		for (objectId in canvases[pageId].getObjects() ) {
+			var object = canvases[pageId].item(objectId)
+			object.selectable = false
+			object.hoverCursor = 'default'
+		}
+	}
 }
 
-function critic() {
-	criticPopup.innerHTML = 'Make this image bigger pls!';
-}
-
+// TODO: CONVERT TO FABRIC
 function removeElement(id) {
 	$('#' + id).hide();
 	console.log(id);
 }
-
-interact('.draggable')
-	.draggable({
-		onmove: window.dragMoveListener,
-		restrict: {
-			restriction: 'parent',
-			elementRect: {
-				top: 0,
-				left: 0,
-				bottom: 1,
-				right: 1
-			}
-		}
-	})
-	.resizable({
-		// resize from all edges and corners
-		edges: {
-			left: true,
-			right: true,
-			bottom: true,
-			top: true
-		},
-
-		// keep the edges inside the parent
-		restrictEdges: {
-			outer: 'parent',
-			endOnly: true
-		},
-
-		inertia: true
-	})
-	.on('resizemove', function(event) {
-		var target = event.target,
-			x = parseFloat(target.getAttribute('data-x')) || 0,
-			y = parseFloat(target.getAttribute('data-y')) || 0;
-
-		// update the element's style
-		target.style.width = event.rect.width + 'px';
-		target.style.height = event.rect.height + 'px';
-
-		// translate when resizing from top or left edges
-		x += event.deltaRect.left;
-		y += event.deltaRect.top;
-
-		target.style.marginLeft = x + 'px';
-		target.style.marginTop = y + 'px';
-
-		target.setAttribute('data-x', x);
-		target.setAttribute('data-y', y);
-
-		var pageElementPos = getElementPosition($('#' + target.id));
-		controller(Publication, { id: target.id, pos: pageElementPos, move: true }); // sending element id and position
-	});
-
-function dragMoveListener(event) {
-	var target = event.target,
-		// keep the dragged position in the data-x/data-y attributes
-		x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-		y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-	// translate the element
-	target.style.marginLeft = x + 'px';
-	target.style.marginTop = y + 'px';
-
-	// update the posiion attributes
-	target.setAttribute('data-x', x);
-	target.setAttribute('data-y', y);
-
-	// update z-index
-	var maxzIndex = 0,
-		i = 0;
-	pageElements = $('#' + target.id)
-		.parent()
-		.children();
-	pageElements.each(function() {
-		i += 1;
-		if ($(this).css('z-index') >= maxzIndex) {
-			maxzIndex = parseInt($(this).css('z-index'));
-		}
-		if (i == pageElements.length) {
-			if ((target.style.zIndex != maxzIndex) | (target.style.zIndex == 0)) {
-				target.style.zIndex = maxzIndex + 1;
-			}
-		}
-	});
-	// target.style.zIndex = maxzIndex + 1;
-
-	var pageElementPos = getElementPosition($('#' + target.id));
-	controller(Publication, { id: target.id, pos: pageElementPos, move: true }); // sending element id and position
-}
-
-// this is used later in the resizing and gesture demos
-window.dragMoveListener = dragMoveListener;
 
 // show save modal
 
@@ -533,14 +416,15 @@ function genPdf(id) {
 
 function renderPublication(Publication) {
 	$('#title').val(Publication.title).attr("disabled","disabled");
-	var i;
-	for (i = 0; i < Publication.elements.length; ++i) {
-		if (window.location.href.indexOf('print=true') > 0) { // print pub
-			createElementCanvas(Publication.elements[i]);
-		} else {
-			createElement(Publication.elements[i]); // saved pub
-		}
+
+	for (var pageId in canvases) {
+		var json = JSON.stringify(Publication.pages[pageId]);
+		canvas.loadFromJSON( json, function() {
+			canvas.renderAll.bind(canvas) 
+			lockElements()
+		})
 	}
+
 }
 
 function pdfDownload() {
@@ -551,6 +435,11 @@ function pdfDownload() {
 		checkPdf(Publication.id);
 	});
 }
+
+
+
+
+
 
 // --- BACKEND
 
@@ -579,11 +468,13 @@ function checkPdf(id) {
 	}, 100);
 }
 
+// save to db
 function savetoDb(publication) {
 	$.ajax({
 		url: '/db',
 		type: 'post', // performing a POST request
-		data: publication,
+		data: JSON.stringify(Publication),
+		contentType: 'application/json',
 		dataType: 'json',
 		success: function(publication) {
 			console.log('publication sent to database.');

@@ -11,7 +11,7 @@ filepath=$(dirname "$1")
 
 pdftops -paper match $fname.pdf $fname.ps
 psbook -s8 $fname.ps $fname-2.ps
-psnup -2 -W450 -H636 $fname-2.ps $fname-3.ps
+psnup -2 -PA3 $fname-2.ps $fname-3.ps
 ps2pdf $fname-3.ps $fname-booklet-temp.pdf
 cp $fname-booklet-temp.pdf $fname-booklet.pdf # to be sure the pdf is actually ready
 rm $filepath/*.ps $fname-booklet-temp.pdf
