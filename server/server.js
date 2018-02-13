@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 const pdf = require('./pdf.js')
 const bodyParser = require('body-parser')
 const fs = require('fs')
-const rmdir = require('rimraf')
 const fabric = require('fabric').fabric
 const Rsvg = require('librsvg').Rsvg
 const stream = require('stream')
