@@ -525,7 +525,8 @@ function genPdf(id) {
 			);
 			clearInterval(y);
 		} else {
-			$('#save-modal').html('Your Publication is being generated<span id="loading_dots">...</span><div id="loader"><div id="loadingbar"></div></div>');
+			// $('#save-modal').html('Your Publication is being generated<span id="loading_dots">...</span><div id="loader"><div id="loadingbar"></div></div>');
+			$('#save-modal').html('Your Publication is being generated<span id="loading_dots">...</span><div id="spinner"><div id="animation"></div><img src="assets/img/printer.png"></div>');
 		}
 	}, 100);
 }

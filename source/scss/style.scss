@@ -301,15 +301,69 @@ $timewiggle: $time;
 			animation: load 10s ease;
 		}
 	}
+
+	#spinner {
+		width: 100px;
+		right: 20px;
+
+		img {
+			width: 30px;
+			height: 30px;
+			margin-left: -15px;
+			margin-top: -15px;
+			position: absolute;
+			animation: rotate_printer 5s linear infinite forwards;
+		}
+
+		#animation {
+			animation: load 1s ease-out infinite;
+			background-color: $shadow;
+			height: 10px;
+			border-radius: 100px;
+			position: absolute;
+		}
+	}
 }
+$size: 80px;
 @keyframes load {
 	0% {
 		width: 0;
+		height: 0;
+		opacity: 1;
 	}
 
 	100% {
-		width: 100%;
+		width: $size;
+		height: $size;
+		margin-left: -$size/2;
+		margin-top: -$size/2;
+		opacity: 0;
 	}
+}
+$rotate_printer: 360deg;
+@keyframes rotate_printer {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+
+	100% {
+		-webkit-transform: rotate($rotate_printer);
+		-moz-transform: rotate($rotate_printer);
+		-ms-transform: rotate($rotate_printer);
+		-o-transform: rotate($rotate_printer);
+		transform: rotate($rotate_printer);
+	}
+	// 0% {
+	// 	-webkit-transform: rotate(0deg);
+	// 	-moz-transform: rotate(0deg);
+	// 	-ms-transform: rotate(0deg);
+	// 	-o-transform: rotate(0deg);
+	// 	transform: rotate(0deg);
+	// }
 }
 
 #pdf-download {
