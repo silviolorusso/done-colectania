@@ -60,31 +60,7 @@ function countdownWrapper() {
 
 		var startTime = 4;
 		countdown(startTime);
-
-
 	});
 }
 
 countdownWrapper();
-
-
-
-
-// countdown timer
-// function countdown(startTime) {
-// 	if (startTime >= 1) {
-// 		createjs.Sound.play('printer-short');
-// 		setTimeout(function() {
-// 			$('#countdown').html(startTime); // set current time in #countdown
-// 			countdown(startTime); // repeat function
-// 		}, 1000);
-// 	} else {
-// 		$('#countdown').html('start game!'); // set to start game message
-// 		setTimeout(function() {
-// 			// wait a bit
-// 			$('#countdown').fadeOut(1000); // fade out the #countdown
-// 			// TODO: start time!
-// 		}, 200);
-// 		createjs.Sound.play('ding');
-// 	}
-// }
