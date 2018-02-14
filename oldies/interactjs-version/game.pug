@@ -1,0 +1,39 @@
+include parts/headerLogo.pug
+
+div.counter
+  #animatetimecounter
+  #counter
+div#countdown 3
+// pages
+div.wrapper
+  div.spread
+    // maybe move achievements outside spread
+    div.achievements 
+      p This is a paragraph
+    div.page#p1
+      input#title(type='textarea', placeholder='Insert Title Here')
+  div.spread
+    div.page#p2
+    div.page#p3
+  div.spread
+    div.page#p4
+    div.page#p5
+  div.spread
+    div.page#p6
+    div.page#p7
+  div.spread
+    div.page#p8
+
+div#save-modal
+  p Do you want to save this publication?
+  button#save yes
+
+p#pdf-download download as pdf 
+
+
+// div#critic
+
+
+
+script(src='assets/js/main.js')
+!= publication_script

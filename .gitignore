@@ -59,3 +59,4 @@ npm-debug.log
 ------ 
 
 /public/assets/pdf/*
+/tmp/*
