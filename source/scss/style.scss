@@ -61,6 +61,7 @@ header {
 	width: 100%;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
+	z-index: 10;
 
 	* {
 		font-size: 20px;
@@ -570,10 +571,6 @@ $spread-width: 900px;
 	text-align: center;
 	box-shadow: $box-shadow;
 	transition: .2s;
-
-	&:nth-of-type(2n) {
-		margin-left: 10px;
-	}
 
 	&:hover {
 		box-shadow: $box-shadow-hover;

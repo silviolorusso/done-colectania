@@ -26,6 +26,12 @@
         max-width: 90%;
         line-height: 1.2rem;
       }
+
+      .button {
+        &:nth-of-type(2n) {
+          margin-left: 10px;
+        }
+      }
     }
 
     .last_achievements {
