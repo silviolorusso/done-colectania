@@ -50,11 +50,11 @@ function createElement(element, callback) {
 		});
 	} else {
 		var deBasedText = atob(element.data.substring(23));
-		var htmlBrText = deBasedText.replace(/\n/g, '<br/>');
-		canvases[element.page].add(new fabric.Text(htmlBrText, { 
+		canvases[element.page].add(new fabric.Text(deBasedText, { 
   		fontFamily: 'Arial', 
   		left: 0, 
-  		top: 0 
+  		top: 0,
+  		fontSize: 15 
 		}));
 		callback;
 	}
@@ -70,6 +70,39 @@ function initCanvases() {
 		canvas.setHeight( $(this).closest('.page').height() );
 		canvases['p' + (i + 1)] = canvas;
 	});
+	var insertTitle = new fabric.Textbox('Insert Title Here', {
+	  top: 120,
+	  fontFamily: 'AGaramondPro, serif',
+	  fill: '#777',
+	  lineHeight: 1.1,
+	  fontSize: 30,
+	  fontWeight: 'bold',
+	  textAlign: 'center',
+	  width: canvases['p1'].width,
+	  selectable: false,
+	  hoverCursor: 'default'
+	});
+	canvases['p1'].add(insertTitle)
+	var lineLenght = 250
+	canvases['p1'].add(new fabric.Line([0, 0, lineLenght, 0], {
+		left: ( canvases['p1'].width - lineLenght) / 2,
+	  top: 160,
+	  stroke: '#222',
+	  selectable: false
+	}));
+	var insertAuthors = new fabric.Textbox('Insert Authors Here', {
+	  top: 180,
+	  fontFamily: 'AGaramondPro, serif',
+	  fill: '#777',
+	  lineHeight: 1.1,
+	  fontSize: 20,
+	  textAlign: 'center',
+	  width: canvases['p1'].width,
+	  selectable: false,
+	  hoverCursor: 'default'
+	});
+	canvases['p1'].add(insertAuthors)
+	// TODO: on click, text is deleted 
 }
 
 
@@ -249,7 +282,7 @@ $('body').on('drop', function(e) {
 	Sound.error();
 });
 
-// remove element
+// remove element (TODO: UPDATE FOR FABRIC)
 $(document).on('click', '.close', function() {
 	var pageId = $(this)
 		.closest('.page')
@@ -356,7 +389,7 @@ var Error = {
 	},
 	tooLate: function() {
 		Sound.error();
-			alert('too late bro');
+		alert('too late bro');
 	}
 };
 
@@ -384,9 +417,9 @@ function showSaveModal() {
 	$('#save-modal').show();
 	$('#save').click(function() {
 		savetoDb(Publication);
-		makePdf(Publication.id);
+		// makePdf(Publication.id);
 		genPdf(Publication.id);
-		checkPdf(Publication.id);
+		// checkPdf(Publication.id);
 	});
 }
 
@@ -409,7 +442,7 @@ function genPdf(id) {
 			clearInterval(y);
 		} else {
 			// $('#save-modal').html('Your Publication is being generated<span id="loading_dots">...</span><div id="loader"><div id="loadingbar"></div></div>');
-			$('#save-modal').html('Your Publication is being generated<span id="loading_dots">...</span><div id="spinner"><div id="animation"></div><img src="assets/img/printer.png"></div>');
+			$('#save-modal').html('Your Publication (<a href="http://localhost:3000/pdf?id=' + Publication.id + '" target="_blank">download</a>) is being generated<span id="loading_dots">...</span><div id="spinner"><div id="animation"></div><img src="assets/img/printer.png"></div>');
 		}
 	}, 100);
 }
@@ -417,12 +450,12 @@ function genPdf(id) {
 // --- SAVED
 
 function renderPublication(Publication) {
-	$('#title').val(Publication.title).attr("disabled","disabled");
+	canvases['p1'].clear(); // clear title
 
-	for (var pageId in canvases) {
-		var json = JSON.stringify(Publication.pages[pageId]);
-		canvas.loadFromJSON( json, function() {
-			canvas.renderAll.bind(canvas) 
+	for (var canvasId in canvases) {
+		var json = JSON.stringify(Publication.pages[canvasId]);
+		canvases[canvasId].loadFromJSON( json, function() {
+			canvases[canvasId].renderAll.bind(canvases[canvasId]) 
 			lockElements()
 		})
 	}
@@ -432,9 +465,9 @@ function renderPublication(Publication) {
 function pdfDownload() {
 	$('#pdf-download').show();
 	$('#pdf-download').click(function() {
-		makePdf(Publication.id);
+		// makePdf(Publication.id);
 		genPdf(Publication.id);
-		checkPdf(Publication.id);
+		// checkPdf(Publication.id);
 	});
 }
 
@@ -445,33 +478,36 @@ function pdfDownload() {
 
 // --- BACKEND
 
-// send call to server to make pdf
-function makePdf(id) {
-	$.get('/pdf?id=' + id, function(data) {
-		console.log('Sent call to make PDF.');
-	});
-}
+// // send call to server to make pdf
+// function makePdf(id) {
+// 	$.get('/pdf?id=' + id, function(data) {
+// 		console.log('Sent call to make PDF.');
+// 	});
+// }
 
-// check if pdf exists and redirect to file
-function checkPdf(id) {
-	var y = setInterval(function() {
-		$.ajax({
-			type: 'HEAD',
-			url: 'assets/pdf/' + id + '/' + id + '-booklet.pdf', // check the booklet
-			success: function(msg) {
-				clearInterval(y);
-				pdfReady = true;
-			},
-			error: function(jqXHR, textStatus, error) {
-				console.log(jqXHR);
-				console.log(error);
-			}
-		});
-	}, 100);
-}
+// // check if pdf exists and redirect to file
+// function checkPdf(id) {
+// 	var y = setInterval(function() {
+// 		$.ajax({
+// 			type: 'HEAD',
+// 			url: 'assets/pdf/' + id + '/' + id + '-booklet.pdf', // check the booklet
+// 			success: function(msg) {
+// 				clearInterval(y);
+// 				pdfReady = true;
+// 			},
+// 			error: function(jqXHR, textStatus, error) {
+// 				console.log(jqXHR);
+// 				console.log(error);
+// 			}
+// 		});
+// 	}, 100);
+// }
 
 // save to db
 function savetoDb(publication) {
+	for (var page in Publication.pages) {
+		Publication.pages[page] = canvases[page].toJSON() // update all pages
+	}
 	$.ajax({
 		url: '/db',
 		type: 'post', // performing a POST request
@@ -482,6 +518,7 @@ function savetoDb(publication) {
 			console.log('publication sent to database.');
 		}
 	});
+	console.log('saved?id=' + Publication.id)
 }
 
 function animateUp(obj) {
