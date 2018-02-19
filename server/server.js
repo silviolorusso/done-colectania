@@ -43,9 +43,8 @@ var Publication = mongoose.model('Publication', publicationSchema)
 // --- SERVER STUFF
 
 app.set('view engine', 'pug')
-app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' })); // support encoded bodies
-
+app.use(express.json({limit: '50mb'}))
+app.use(express.urlencoded({ extended: true, limit: '50mb'}));
 // static
 app.use(express.static('public'))
 
@@ -178,6 +177,11 @@ app.get('/pdf', function (req, res) {
           var pages = pub.pages
           if ( pages.hasOwnProperty('p' + i) ) { // if not empty
             canvas.loadFromJSON(pages['p' + i]);
+            texts = canvas.getObjects('textbox') // cause of Cairo bug Assertion failed: (!scaled_font->cache_frozen), function _cairo_scaled_glyph_page_destroy, file cairo-scaled-font.c, line 459.
+            for (text in texts) {
+              canvas.remove( texts[text] );
+            }
+            canvas.backgroundColor="#eee";
           }
           canvases.push(canvas)
         }
@@ -200,7 +204,7 @@ app.get('/pdf', function (req, res) {
               if(err) {
                 console.log(err);
               } else {
-                console.log('pdf part successfully created');
+                console.log('pdf part ' + i + ' successfully created');
               }
             })
             i += 1
@@ -211,7 +215,12 @@ app.get('/pdf', function (req, res) {
           bufferStream.pipe(svg)
 
         });
-        callback(null)
+        var interval = setInterval(function(){
+          if ( fs.existsSync('tmp/' + publication_id + '/' + publication_id + '-8.pdf' ) ) { 
+            callback(null)
+            clearInterval(interval);
+          }  
+        }, 100);
       },
       function mergePdfs(callback) {
         fileName = 'tmp/' + publication_id + '/' + publication_id + '.pdf'

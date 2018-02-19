@@ -14,9 +14,10 @@ div.wrapper
       p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
       h2 Achievements
       img(href="assets/img/achievement.png")
-    div.page#p1
-      input#title(type='textarea', placeholder='Insert Title Here', maxlength="16")
-      input#name(type='textarea', placeholder='Insert name Here', maxlength="32")
+    div.page
+      // input#title(type='textarea', placeholder='Insert Title Here', maxlength="16")
+      // input#name(type='textarea', placeholder='Insert name Here', maxlength="32")
+      canvas#p1
   div.spread
     div.page
       canvas#p2
@@ -80,5 +81,5 @@ p#pdf-download download as pdf
 
 script(src='assets/js/sounds-js.js')
 script(src='assets/js/main.js')
-script(src="assets/js/countdown.js")
+// script(src="assets/js/countdown.js")
 != publication_script
