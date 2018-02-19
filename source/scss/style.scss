@@ -634,6 +634,8 @@ $spread-width: 900px;
 		color: $black;
 		text-align: center;
 		padding: 0 10px;
+		max-width: 80%;
+		margin: auto;
 
 		.monospace {
 			font-family: monospace;

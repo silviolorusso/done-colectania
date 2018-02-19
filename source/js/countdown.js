@@ -50,10 +50,10 @@ function countdownWrapper() {
 			startTime = startTime - 1;
 			if (startTime >= 1) {
 				setTimeout(function () {
-					console.log(startTime);
 					countdown(startTime);
 				}, 2000);
 			} else {
+				$('#countdownWrapper').remove();
 				return
 			}
 		}
