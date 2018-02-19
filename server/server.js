@@ -138,7 +138,7 @@ app.get('/saved', function (req, res) {
     // script to insert the saved model into saved
     var publication_script = '<script>var Publication = ' +  publication_model + ';</script>'
 
-    res.render(__dirname + '/../source/views/game', { print_code: print_code, publication_script: publication_script })
+    res.render(__dirname + '/../source/views/saved', { print_code: print_code, publication_script: publication_script })
   })
   console.log('serving saved publication')
 
@@ -154,7 +154,7 @@ app.get('/pdf', function (req, res) {
   var publication_model
   Publication.findOne({ 'id': publication_id }, function (err, publication) {
     if (err) return console.error(err);
-    
+
     var canvases = []
     var pub = publication
     pdfParts = []
@@ -197,7 +197,7 @@ app.get('/pdf', function (req, res) {
             }).data;
 
             fs.writeFile('tmp/' + publication_id + '/' + publication_id + '-' + i + '.pdf', pdf, function(err) {
-              if(err) { 
+              if(err) {
                 console.log(err);
               } else {
                 console.log('pdf part successfully created');
@@ -227,7 +227,7 @@ app.get('/pdf', function (req, res) {
             //     try {
             //       // rimraf('tmp/' + publication_id, function () { console.log('directory removed'); });
             //     } catch(e) {
-            //       console.log("error removing path"); 
+            //       console.log("error removing path");
             //     }
             //   }
             // });
@@ -236,7 +236,7 @@ app.get('/pdf', function (req, res) {
           }
         })
       },
-      function makeBooklet(callback) { 
+      function makeBooklet(callback) {
         fileName = 'tmp/' + publication_id + '/' + publication_id + '.pdf'
         bookletFileName = 'tmp/' + publication_id + '/' + publication_id + '-booklet.pdf'
         childProcess.execFile( 'server/make-booklet.sh', [ fileName ], function(err, stdout, stderr) {
@@ -251,7 +251,7 @@ app.get('/pdf', function (req, res) {
               try {
                 rimraf('tmp/' + publication_id, function () { console.log('directory removed'); });
               } catch(e) {
-                console.log("error removing path"); 
+                console.log("error removing path");
               }
             }
           });

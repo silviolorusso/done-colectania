@@ -1,0 +1,96 @@
+include parts/headerLogo_notype.pug
+
+// pages
+div.saved_view
+  div.spread
+    // maybe move achievements outside spread
+    div.achievements 
+      h2 Saved view
+      p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
+      a.button(href='difficulty')
+        .stylized
+          span Save 
+          span .PDF
+      a.button(href='difficulty')
+        .stylized
+          span Print 
+          span Publication
+    div.page#p1
+      input#title(type='textarea', placeholder='Insert Title Here', maxlength="16")
+      input#name(type='textarea', placeholder='Insert name Here', maxlength="32")
+  div.spread
+    div.page
+      canvas#p2
+    div.page
+      canvas#p3
+  div.spread
+    div.page
+      canvas#p4
+    div.page
+      canvas#p5
+  div.spread
+    div.page
+      canvas#p6
+    div.page
+      canvas#p7
+  div.spread
+    div.page
+      canvas#p8
+    div.achievements.last_achievements 
+      h2 Saved view
+      p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
+      div.buttons
+        a.button(href='difficulty')
+          .stylized
+            span Save 
+            span .PDF
+        a.button(href='difficulty')
+          .stylized
+            span Print 
+            span Publication
+
+div#save-modal
+  h2 Time has expired!
+  p Do you wish to print this publication?
+  div.collection
+    a(href='saved?id=').tile#full_width
+      div.publication
+        p publication
+        img(src='assets/img/cover.png')
+      div.description
+        title publication
+        div.author
+          span Written by 
+          span publication id
+        div.date
+          span Created on: 
+          span publication id
+        div.assets
+          span Number of assets: 
+          span publication id
+        div.pages
+          span Number of pages:  
+          span publication id
+        div.time
+          span Total time:  
+          span publication id
+        div.awards
+          span Awards won: 
+          span publication id
+  div.button#save Print Publication   ⎙
+  //- div#loader
+  //-   #loadingbar
+  div#spinner
+    div#animation
+    img(src="assets/img/printer.png")
+    
+
+p#pdf-download download as pdf 
+
+
+// div#critic
+
+
+script(src='assets/js/main.js')
+script(src='assets/js/saved.js')
+!= publication_script

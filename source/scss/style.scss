@@ -571,6 +571,10 @@ $spread-width: 900px;
 	box-shadow: $box-shadow;
 	transition: .2s;
 
+	&:nth-of-type(2n) {
+		margin-left: 10px;
+	}
+
 	&:hover {
 		box-shadow: $box-shadow-hover;
 		transition: .2s;
@@ -792,3 +796,4 @@ body.saved {
 		}
 	}
 }
+@import "saved";
