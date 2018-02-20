@@ -74,19 +74,11 @@ function createElement(element, mousePos, callback) {
 		});
 	} else {
 		var deBasedText = atob(element.data.substring(23));
-<<<<<<< HEAD
 		canvases[element.page].add(new fabric.Text(deBasedText, {
   		fontFamily: 'Arial',
-  		left: 0,
-  		top: 0,
-  		fontSize: 15
-=======
-		canvases[element.page].add(new fabric.Text(deBasedText, { 
-  		fontFamily: 'Arial', 
-  		left: mousePos.x, 
+  		left: mousePos.x,
   		top: mousePos.y,
-  		fontSize: 15 
->>>>>>> c5be86da63b722df31281aa2ae5d0efabe45a173
+  		fontSize: 15
 		}));
 		callback;
 	}
@@ -430,14 +422,11 @@ function showExpired() {
 	//setTimeout(function(){
 	//  window.print();
 	//}, 1000);
-<<<<<<< HEAD
 	// animateUp($('#save-modal'));
-	clearInterval(x);
-=======
-	animateUp($('#save-modal'));
+	// clearInterval(x);
+	// animateUp($('#save-modal'));
 	clearInterval(x)
   clearInterval(y)
->>>>>>> c5be86da63b722df31281aa2ae5d0efabe45a173
 }
 
 function dropElement(pageId, data, mousePos, callback) {
@@ -580,7 +569,7 @@ function savetoDb(publication) {
 // --- INTERFACE FX
 
 
-// move these functions to interface part of js? 
+// move these functions to interface part of js?
 function animateUp(obj) {
   obj.show();
   obj.css('margin-top', '20px');
@@ -698,7 +687,7 @@ var Disruption = {
       i += 1
     }
     shuffleArray(toShuffle)
-    var y = 0 
+    var y = 0
     for (canvasId in canvases) {
       if (y > 0) {
         canvases[canvasId].loadFromJSON(toShuffle[y - 1], function() {
@@ -711,10 +700,3 @@ var Disruption = {
     console.log('According to Margreet, the rythm of this publication is a bit weak')
   }
 };
-
-
-
-
-
-
-
