@@ -1,3 +1,9 @@
+// --- OPTIONS
+
+disruptions = true
+
+
+
 // --- GLOBAL
 
 var pages = $('.page');
@@ -34,7 +40,21 @@ var getUrlParameter = function getUrlParameter(sParam) {
         return sParameterName[1] === undefined ? true : sParameterName[1];
     }
   }
-};
+}
+
+function shuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+}
+
+
+
+
+
 
 function createElement(element, mousePos, callback) {
 	var theMousePos = mousePos
@@ -222,10 +242,12 @@ $(document).ready(function() {
 			Publication.timeLeft = Publication.timeLeft - 10;
 			controller(Publication);
 		}, 10)
-    y = setInterval(function() { // launch a random disruption
-      disruptions = Object.keys(Disruption)
-      Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
-    }, 5000)
+    if (disruptions == true) {
+      y = setInterval(function() { // launch a random disruption
+        disruptions = Object.keys(Disruption)
+        Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
+      }, 5000)
+    }
 		mouseCounter()
 	} else { // saved publication
 		renderPublication(Publication)
@@ -451,7 +473,7 @@ function showSaveModal() {
 function genPdf(id) {
 	$('#save-modal').show();
 	$('#save-modal').html('');
-	var y = setInterval(function() {
+	var z = setInterval(function() {
 		if (pdfReady == true) {
 			$('#save-modal').html(
 				'Download your pdf <a href="assets/pdf/' +
@@ -464,7 +486,7 @@ function genPdf(id) {
 					id +
 					'-booklet.pdf?download=true" target="_blank">here</a>.' // add "on click close save modal"
 			);
-			clearInterval(y);
+			clearInterval(z);
 		} else {
 			// $('#save-modal').html('Your Publication is being generated<span id="loading_dots">...</span><div id="loader"><div id="loadingbar"></div></div>');
 			$('#save-modal').html('Your Publication (<a href="http://localhost:3000/pdf?id=' + Publication.id + '" target="_blank">download</a>) is being generated<span id="loading_dots">...</span><div id="spinner"><div id="animation"></div><img src="assets/img/printer.png"></div>');
@@ -525,6 +547,53 @@ function savetoDb(publication) {
 
 
 
+// --- INTERFACE FX
+
+
+// move these functions to interface part of js? 
+function animateUp(obj) {
+  obj.show();
+  obj.css('margin-top', '20px');
+  obj.animate({
+      opacity: 1,
+      marginTop: "0px",
+    }, 3000, function() {
+      // Animation complete.
+  });
+};
+
+function animateUpOut(obj, time) {
+  obj.show();
+  obj.css('margin-top', '20px');
+  obj.animate({
+      opacity: 1,
+      marginTop: "0px",
+    }, time/2, function() {
+      // Animation complete.
+  });
+  obj.animate({
+      opacity: 0,
+      marginTop: "20px",
+    }, time/2, function() {
+      // Animation complete.
+  });
+};
+
+function shake(obj, time) {
+  if (!time) (
+    time = 500
+  )
+  obj.addClass( 'shake shake-constant' )
+  setTimeout(function(){
+    obj.removeClass( 'shake shake-constant' )
+  }, time);
+}
+
+
+
+
+
+
 // --- DISRUPTIONS
 
 function rotateOne(obj) {
@@ -549,6 +618,7 @@ var Disruption = {
 	    for (textbox in textboxes) {
 	      textboxes[textbox].fontFamily = '"Comic Sans MS"'
 	    }
+      shake($('.page'))
 	    canvases[canvasId].renderAll();
     }
     console.log('The commissioner asked to spice the typography a bit!')
@@ -560,6 +630,7 @@ var Disruption = {
 	      rotateOne(imgs[img])
 	    }
     }
+    shake($('.page'))
     console.log('Your friend think the layout is a bit static...')
 	},
 	lockRandPage: function() {
@@ -582,10 +653,33 @@ var Disruption = {
       selectable: false,
       strokeWidth: 4
     }))
+    shake($('.page'))
 		randCanvas.renderAll();
 		// TODO: prevent drop
-    console.log('Page ?? is now locked...')
-	}
+    console.log('Page ?? is now locked...') // TODO
+	},
+  shufflePages: function() {
+    var toShuffle = []
+    var i = 0
+    for (canvasId in canvases) {
+      if (i > 0) { // prevent shuffling first page
+        toShuffle.push( canvases[canvasId].toJSON() )
+      }
+      i += 1
+    }
+    shuffleArray(toShuffle)
+    var y = 0 
+    for (canvasId in canvases) {
+      if (y > 0) {
+        canvases[canvasId].loadFromJSON(toShuffle[y - 1], function() {
+          canvases[canvasId].renderAll.bind(canvases[canvasId])
+        })
+      }
+      y += 1
+    }
+    shake($('.page'))
+    console.log('According to Margreet, the rythm of this publication is a bit weak')
+  }
 };
 
 
@@ -594,33 +688,3 @@ var Disruption = {
 
 
 
-
-
-// move these functions to interface part of js? 
-function animateUp(obj) {
-	obj.show();
-	obj.css('margin-top', '20px');
-	obj.animate({
-	    opacity: 1,
-	    marginTop: "0px",
-	  }, 3000, function() {
-	    // Animation complete.
-	});
-};
-
-function animateUpOut(obj, time) {
-	obj.show();
-	obj.css('margin-top', '20px');
-	obj.animate({
-	    opacity: 1,
-	    marginTop: "0px",
-	  }, time/2, function() {
-	    // Animation complete.
-	});
-	obj.animate({
-	    opacity: 0,
-	    marginTop: "20px",
-	  }, time/2, function() {
-	    // Animation complete.
-	});
-};
