@@ -17,7 +17,8 @@ function criticSays(message, actor) {
     "Stef",
     "Silvio",
     "Obama",
-    "Clippy"
+    "Clippy",
+    "Gutenberg"
   ]
   if (actor === undefined) {
     // choose a random default one

@@ -640,7 +640,7 @@ var Disruption = {
       shake($('.page'))
 	    canvases[canvasId].renderAll();
     }
-    console.log('The commissioner asked to spice the typography a bit!')
+    criticSays('The commissioner asked to spice the typography a bit!', 'Gutenberg')
 	},
 	rotate: function() {
 		for (canvasId in canvases) {
@@ -675,7 +675,7 @@ var Disruption = {
     shake($('.page'))
 		randCanvas.renderAll();
 		// TODO: prevent drop
-    console.log('Page ?? is now locked...') // TODO
+    criticSays('Page ?? is now locked...', 'Gutenberg') // TODO
 	},
   shufflePages: function() {
     var toShuffle = []
@@ -697,6 +697,6 @@ var Disruption = {
       y += 1
     }
     shake($('.page'))
-    console.log('According to Margreet, the rythm of this publication is a bit weak')
+    criticSays('The rythm of this publication is a bit weak. Don\'t you think?', 'Gutenberg')
   }
 };
