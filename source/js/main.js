@@ -1,15 +1,16 @@
 // --- OPTIONS
 
-disruptions = true
+var disruptionsOn = true
+var dropDelay = 100
+
+
+
 
 
 
 // --- GLOBAL
 
-var pages = $('.page');
-var criticPopup = $('#critic');
-var dropDelay = 100;
-var pdfReady = false;
+const pages = $('.page')
 
 
 
@@ -242,7 +243,7 @@ $(document).ready(function() {
 			Publication.timeLeft = Publication.timeLeft - 10;
 			controller(Publication);
 		}, 10)
-    if (disruptions == true) {
+    if (disruptionsOn == true) {
       y = setInterval(function() { // launch a random disruption
         disruptions = Object.keys(Disruption)
         Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
@@ -261,7 +262,7 @@ function addtime(bonusTime) {
 	animatetimecounter(bonusTime);
 }
 
-// modify element
+// modify element listener
 function onModElement() {
 	for (var pageId in canvases) {
 		canvases[ pageId ].on('object:modified', function(evt) {
