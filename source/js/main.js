@@ -161,6 +161,15 @@ function controller(Publication, input) {
 					}
 					dropElement(input.page, input.data, publicationUpdate(input.page)); // drop element
 					addtime(1000) // add bonus time
+					criticSays();
+
+
+					// criticSays('dance dance', 'cat');
+					// or
+					// criticSays('dance dance');
+					// or
+					// criticSays();
+
 
 					break
 			case input.data &&

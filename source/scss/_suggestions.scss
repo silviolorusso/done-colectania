@@ -1,0 +1,40 @@
+.suggestions {
+  position: fixed;
+  padding: 10px;
+  bottom: 0;
+  left: 0;
+  max-width: 60vw;
+
+  .comment {
+    margin-bottom: 0;
+    position: relative;
+    left: 0;
+
+    .message {
+      background-color: $white;
+      padding: 10px;
+      border: 1px solid $black;
+      box-shadow: $box-shadow;
+      border-radius: 10px 10px 10px 0;
+      position: relative;
+      bottom: -40px;
+      left: 60px;
+      display: inline-block;
+    }
+
+    .image {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid $black;
+
+      img {
+        display: inline;
+        margin: 0 auto;
+        height: 100%;
+        width: auto;
+      }
+    }
+  }
+}
