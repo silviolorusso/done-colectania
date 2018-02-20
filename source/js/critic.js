@@ -43,7 +43,7 @@ function criticSays(message, actor) {
           }, 500, function() {
             // Animation complete.
         });
-      }, 5000);
+      }, 6000);
 	});
 }
 
