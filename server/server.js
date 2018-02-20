@@ -127,7 +127,6 @@ app.get('/saved', function (req, res) {
 
     publication_model = publication
     publication_model = JSON.stringify(publication_model)
-    console.log(publication_model)
 
     // code to insert print
     if (print) {
@@ -140,8 +139,6 @@ app.get('/saved', function (req, res) {
     res.render(__dirname + '/../source/views/saved', { print_code: print_code, publication_script: publication_script })
   })
   console.log('serving saved publication')
-
-  console.log(publication_model)
 })
 
 

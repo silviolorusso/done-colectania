@@ -1,9 +1,16 @@
+// --- OPTIONS
+
+var disruptionsOn = true
+var dropDelay = 100
+
+
+
+
+
+
 // --- GLOBAL
 
-var pages = $('.page');
-var criticPopup = $('#critic');
-var dropDelay = 100;
-var pdfReady = false;
+const pages = $('.page')
 
 
 
@@ -34,15 +41,32 @@ var getUrlParameter = function getUrlParameter(sParam) {
         return sParameterName[1] === undefined ? true : sParameterName[1];
     }
   }
-};
+}
 
-function createElement(element, callback) {
+function shuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+}
+
+
+
+
+
+
+function createElement(element, mousePos, callback) {
+	var theMousePos = mousePos
 	if (element.data.includes('data:image')) {
 		fabric.Image.fromURL(element.data, function(myImg, callback) {
  			var img = myImg.set({ left: 0, top: 0, width: myImg.width, height: myImg.height});
  			if ( img.width > canvases[element.page].width ) {
- 				img.scaleToWidth(canvases[element.page].width / 100 * 70 ); // 70% of the canvas
+ 				img.scaleToWidth(canvases[element.page].width / 100 * 50 ); // 70% of the canvas
  			}
+ 			img.left = theMousePos.x
+ 			img.top = theMousePos.y
  			img.on('added', function() {
  				callback;
  			});
@@ -50,11 +74,19 @@ function createElement(element, callback) {
 		});
 	} else {
 		var deBasedText = atob(element.data.substring(23));
+<<<<<<< HEAD
 		canvases[element.page].add(new fabric.Text(deBasedText, {
   		fontFamily: 'Arial',
   		left: 0,
   		top: 0,
   		fontSize: 15
+=======
+		canvases[element.page].add(new fabric.Text(deBasedText, { 
+  		fontFamily: 'Arial', 
+  		left: mousePos.x, 
+  		top: mousePos.y,
+  		fontSize: 15 
+>>>>>>> c5be86da63b722df31281aa2ae5d0efabe45a173
 		}));
 		callback;
 	}
@@ -70,6 +102,7 @@ function initCanvases() {
 		canvas.setHeight( $(this).closest('.page').height() );
 		canvases['p' + (i + 1)] = canvas;
 	});
+	fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center' // origin at the center
 	var insertTitle = new fabric.Textbox('Insert Title Here', {
 	  top: 120,
 	  fontFamily: 'AGaramondPro, serif',
@@ -80,7 +113,9 @@ function initCanvases() {
 	  textAlign: 'center',
 	  width: canvases['p1'].width,
 	  selectable: false,
-	  hoverCursor: 'default'
+	  hoverCursor: 'default',
+	  originX: 'left',
+	  originY: 'top'
 	});
 	canvases['p1'].add(insertTitle)
 	var lineLenght = 250
@@ -88,7 +123,9 @@ function initCanvases() {
 		left: ( canvases['p1'].width - lineLenght) / 2,
 	  top: 160,
 	  stroke: '#222',
-	  selectable: false
+	  selectable: false,
+	 	originX: 'left',
+	  originY: 'top'
 	}));
 	var insertAuthors = new fabric.Textbox('Insert Authors Here', {
 	  top: 180,
@@ -99,7 +136,9 @@ function initCanvases() {
 	  textAlign: 'center',
 	  width: canvases['p1'].width,
 	  selectable: false,
-	  hoverCursor: 'default'
+	  hoverCursor: 'default',
+	  originX: 'left',
+	  originY: 'top'
 	});
 	canvases['p1'].add(insertAuthors)
 	// TODO: on click, text is deleted
@@ -159,7 +198,7 @@ function controller(Publication, input) {
 							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
 						}, 1)
 					}
-					dropElement(input.page, input.data, publicationUpdate(input.page)); // drop element
+					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
 					addtime(1000) // add bonus time
 					criticSays();
 
@@ -181,7 +220,7 @@ function controller(Publication, input) {
 							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
 						}, 1)
 					}
-					dropElement(input.page, input.data, publicationUpdate(input.page)); // drop element
+					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
 					addtime(1000) // add bonus time
 
 					break
@@ -220,8 +259,13 @@ $(document).ready(function() {
 		x = setInterval(function() {
 			Publication.timeLeft = Publication.timeLeft - 10;
 			controller(Publication);
-		}, 10);
-
+		}, 10)
+    if (disruptionsOn == true) {
+      y = setInterval(function() { // launch a random disruption
+        disruptions = Object.keys(Disruption)
+        Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
+      }, 5000)
+    }
 		mouseCounter()
 	} else { // saved publication
 		renderPublication(Publication)
@@ -235,7 +279,7 @@ function addtime(bonusTime) {
 	animatetimecounter(bonusTime);
 }
 
-// modify element
+// modify element listener
 function onModElement() {
 	for (var pageId in canvases) {
 		canvases[ pageId ].on('object:modified', function(evt) {
@@ -245,17 +289,25 @@ function onModElement() {
 	}
 }
 
+// get mouse position on canvas
+function getMousePos(canvas, e) {
+  var pointer = canvas.getPointer(event, e)
+  var posX = pointer.x
+  var posY = pointer.y
+  return {
+    x: posX,
+    y: posY
+  }
+}
+
 // drop element
 pages.on('dragover', function(e) {
 	e.preventDefault();
-	$(this).addClass('dragover');
 });
 pages.on('dragleave', function(e) {
 	e.preventDefault();
-	$(this).removeClass('dragover');
 });
 pages.on('drop', function(e) {
-	$(this).removeClass('dragover');
 	e.preventDefault();
 	console.log(e);
 	var files = e.originalEvent.dataTransfer.files;
@@ -263,13 +315,15 @@ pages.on('drop', function(e) {
 	for (var i = files.length - 1; i >= 0; i--) {
 		reader = new FileReader();
 		var pageId = $(this).find('canvas').attr('id');
+		mousePos = getMousePos(canvases[pageId], e)
 		reader.onload = function(event) {
 			console.log(event.target);
 			setTimeout(function() {
 				controller(Publication, {
 					data: event.target.result,
 					visible: true,
-					page: pageId
+					page: pageId,
+					mousePos: mousePos
 				});
 			}, y * dropDelay);
 			y += 1;
@@ -376,13 +430,20 @@ function showExpired() {
 	//setTimeout(function(){
 	//  window.print();
 	//}, 1000);
+<<<<<<< HEAD
 	// animateUp($('#save-modal'));
 	clearInterval(x);
+=======
+	animateUp($('#save-modal'));
+	clearInterval(x)
+  clearInterval(y)
+>>>>>>> c5be86da63b722df31281aa2ae5d0efabe45a173
 }
 
-function dropElement(pageId, data, id, callback) {
+function dropElement(pageId, data, mousePos, callback) {
+	console.log(mousePos)
 	var element = { data: data, page: pageId };
-	var elementPos = createElement(element, callback);
+	var elementPos = createElement(element, mousePos, callback);
 	Sound.ding();
 }
 
@@ -442,7 +503,7 @@ function showSaveModal() {
 function genPdf(id) {
 	$('#save-modal').show();
 	$('#save-modal').html('');
-	var y = setInterval(function() {
+	var z = setInterval(function() {
 		if (pdfReady == true) {
 			$('#save-modal').html(
 				'Download your pdf <a href="assets/pdf/' +
@@ -455,7 +516,7 @@ function genPdf(id) {
 					id +
 					'-booklet.pdf?download=true" target="_blank">here</a>.' // add "on click close save modal"
 			);
-			clearInterval(y);
+			clearInterval(z);
 		} else {
 			// $('#save-modal').html('Your Publication is being generated<span id="loading_dots">...</span><div id="loader"><div id="loadingbar"></div></div>');
 			$('#save-modal').html('Your Publication (<a href="http://localhost:3000/pdf?id=' + Publication.id + '" target="_blank">download</a>) is being generated<span id="loading_dots">...</span><div id="spinner"><div id="animation"></div><img src="assets/img/printer.png"></div>');
@@ -494,31 +555,6 @@ function pdfDownload() {
 
 // --- BACKEND
 
-// // send call to server to make pdf
-// function makePdf(id) {
-// 	$.get('/pdf?id=' + id, function(data) {
-// 		console.log('Sent call to make PDF.');
-// 	});
-// }
-
-// // check if pdf exists and redirect to file
-// function checkPdf(id) {
-// 	var y = setInterval(function() {
-// 		$.ajax({
-// 			type: 'HEAD',
-// 			url: 'assets/pdf/' + id + '/' + id + '-booklet.pdf', // check the booklet
-// 			success: function(msg) {
-// 				clearInterval(y);
-// 				pdfReady = true;
-// 			},
-// 			error: function(jqXHR, textStatus, error) {
-// 				console.log(jqXHR);
-// 				console.log(error);
-// 			}
-// 		});
-// 	}, 100);
-// }
-
 // save to db
 function savetoDb(publication) {
 	for (var page in Publication.pages) {
@@ -537,30 +573,148 @@ function savetoDb(publication) {
 	console.log('saved?id=' + Publication.id)
 }
 
+
+
+
+
+// --- INTERFACE FX
+
+
+// move these functions to interface part of js? 
 function animateUp(obj) {
-	obj.show();
-	obj.css('margin-top', '20px');
-	obj.animate({
-	    opacity: 1,
-	    marginTop: "0px",
-	  }, 3000, function() {
-	    // Animation complete.
-	});
+  obj.show();
+  obj.css('margin-top', '20px');
+  obj.animate({
+      opacity: 1,
+      marginTop: "0px",
+    }, 3000, function() {
+      // Animation complete.
+  });
 };
 
 function animateUpOut(obj, time) {
-	obj.show();
-	obj.css('margin-top', '20px');
-	obj.animate({
-	    opacity: 1,
-	    marginTop: "0px",
-	  }, time/2, function() {
-	    // Animation complete.
-	});
-	obj.animate({
-	    opacity: 0,
-	    marginTop: "20px",
-	  }, time/2, function() {
-	    // Animation complete.
-	});
+  obj.show();
+  obj.css('margin-top', '20px');
+  obj.animate({
+      opacity: 1,
+      marginTop: "0px",
+    }, time/2, function() {
+      // Animation complete.
+  });
+  obj.animate({
+      opacity: 0,
+      marginTop: "20px",
+    }, time/2, function() {
+      // Animation complete.
+  });
 };
+
+function shake(obj, time) {
+  if (!time) (
+    time = 500
+  )
+  obj.addClass( 'shake shake-constant' )
+  setTimeout(function(){
+    obj.removeClass( 'shake shake-constant' )
+  }, time);
+}
+
+
+
+
+
+
+// --- DISRUPTIONS
+
+function rotateOne(obj) {
+  obj.originX = 'center'
+  obj.originY = 'center'
+  obj.rotate(0).animate({ angle: 360 }, {
+    duration: 3000,
+    onChange: obj.canvas.renderAll.bind(obj.canvas),
+    onComplete: function(){ rotateOne(obj) },
+    easing: function(t, b, c, d) { return c*t/d + b }
+  })
+}
+
+var Disruption = {
+	comic: function() {
+		for (canvasId in canvases) {
+			texts = canvases[canvasId].getObjects('text')
+	    for (text in texts) {
+	      texts[text].fontFamily = '"Comic Sans MS"'
+	    }
+	   	textboxes = canvases[canvasId].getObjects('textbox')
+	    for (textbox in textboxes) {
+	      textboxes[textbox].fontFamily = '"Comic Sans MS"'
+	    }
+      shake($('.page'))
+	    canvases[canvasId].renderAll();
+    }
+    console.log('The commissioner asked to spice the typography a bit!')
+	},
+	rotate: function() {
+		for (canvasId in canvases) {
+			imgs = canvases[canvasId].getObjects('image')
+	    for (img in imgs) {
+	      rotateOne(imgs[img])
+	    }
+    }
+    shake($('.page'))
+    console.log('Your friend think the layout is a bit static...')
+	},
+	lockRandPage: function() {
+    var keys = Object.keys(canvases)
+    randCanvas = canvases[keys[ keys.length * Math.random() << 0]]
+		randCanvas.backgroundColor = 'red'
+		randCanvas.selection = false;
+		for (objectId in randCanvas.getObjects() ) {
+			var object = randCanvas.item(objectId)
+			object.selectable = false
+			object.hoverCursor = 'default'
+		}
+		randCanvas.add(new fabric.Line([0, 0, randCanvas.width, randCanvas.height], {
+	  	stroke: '#fff',
+	  	selectable: false,
+	  	strokeWidth: 4
+		}))
+    randCanvas.add(new fabric.Line([0, randCanvas.height, randCanvas.width, 0], {
+      stroke: '#fff',
+      selectable: false,
+      strokeWidth: 4
+    }))
+    shake($('.page'))
+		randCanvas.renderAll();
+		// TODO: prevent drop
+    console.log('Page ?? is now locked...') // TODO
+	},
+  shufflePages: function() {
+    var toShuffle = []
+    var i = 0
+    for (canvasId in canvases) {
+      if (i > 0) { // prevent shuffling first page
+        toShuffle.push( canvases[canvasId].toJSON() )
+      }
+      i += 1
+    }
+    shuffleArray(toShuffle)
+    var y = 0 
+    for (canvasId in canvases) {
+      if (y > 0) {
+        canvases[canvasId].loadFromJSON(toShuffle[y - 1], function() {
+          canvases[canvasId].renderAll.bind(canvases[canvasId])
+        })
+      }
+      y += 1
+    }
+    shake($('.page'))
+    console.log('According to Margreet, the rythm of this publication is a bit weak')
+  }
+};
+
+
+
+
+
+
+
