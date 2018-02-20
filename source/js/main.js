@@ -50,11 +50,11 @@ function createElement(element, callback) {
 		});
 	} else {
 		var deBasedText = atob(element.data.substring(23));
-		canvases[element.page].add(new fabric.Text(deBasedText, { 
-  		fontFamily: 'Arial', 
-  		left: 0, 
+		canvases[element.page].add(new fabric.Text(deBasedText, {
+  		fontFamily: 'Arial',
+  		left: 0,
   		top: 0,
-  		fontSize: 15 
+  		fontSize: 15
 		}));
 		callback;
 	}
@@ -102,7 +102,7 @@ function initCanvases() {
 	  hoverCursor: 'default'
 	});
 	canvases['p1'].add(insertAuthors)
-	// TODO: on click, text is deleted 
+	// TODO: on click, text is deleted
 }
 
 
@@ -137,7 +137,7 @@ function controller(Publication, input) {
 		Publication.expired = true;
 		showExpired(Publication);
 		lockElements()
-		showSaveModal();
+		// showSaveModal();
 	}
 
 	if (input && Publication.expired == false) {
@@ -357,10 +357,17 @@ function mouseCounter() {
 function showExpired() {
 	document.getElementById('counter').innerHTML = 'expired!';
 	$('body').addClass('expired');
+
+	expiredTime();
+	setTimeout(function () {
+		$('.wrapper').addClass('saved_view');
+		savedState();
+	}, 500);
+	// anchorkey
 	//setTimeout(function(){
 	//  window.print();
 	//}, 1000);
-	animateUp($('#save-modal'));
+	// animateUp($('#save-modal'));
 	clearInterval(x);
 }
 
@@ -455,7 +462,7 @@ function renderPublication(Publication) {
 	for (var canvasId in canvases) {
 		var json = JSON.stringify(Publication.pages[canvasId]);
 		canvases[canvasId].loadFromJSON( json, function() {
-			canvases[canvasId].renderAll.bind(canvases[canvasId]) 
+			canvases[canvasId].renderAll.bind(canvases[canvasId])
 			lockElements()
 		})
 	}

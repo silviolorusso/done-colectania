@@ -11,6 +11,8 @@
     position: absolute;
     left: 0;
     right: 0;
+    outline: none;
+    box-shadow: none;
 
     .achievements {
       width: $spread-width / 2;
@@ -32,6 +34,18 @@
           margin-left: 10px;
         }
       }
+
+      #full_width {
+        width: 90%;
+      }
+    }
+
+    .saved {
+      display: inline-block;
+    }
+
+    .instructions {
+      display: none;
     }
 
     .last_achievements {
@@ -43,8 +57,14 @@
       }
     }
 
-    #p1 {
+    #p1, #page1 {
       transform: skew(0deg, 0deg);
+    }
+
+    &:last-of-type {
+      .page {
+        transform: skew(0deg, 0deg) !important;
+      }
     }
 
     .page {
@@ -72,12 +92,12 @@
 
       &:nth-of-type(1n):hover {
         transition: .2;
-        transform: skew(0deg, 2deg);
+        transform: skew(0deg, 3deg);
       }
 
       &:nth-of-type(2n):hover {
         transition: .2;
-        transform: skew(0deg, -2deg);
+        transform: skew(0deg, -3deg);
       }
 
       &:hover {
@@ -173,5 +193,25 @@
         @extend .page-shadow;
       }
     }
+  }
+}
+
+#overlay_flash {
+  background-color: $red;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  width: 100vw;
+  transition: 1s;
+  display: table;
+  h1 {
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+    color: $white;
+    display: table-cell;
+    font-family: $font-game;
   }
 }
