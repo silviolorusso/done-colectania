@@ -698,5 +698,39 @@ var Disruption = {
     }
     shake($('.page'))
     criticSays('The rythm of this publication is a bit weak. Don\'t you think?', 'Gutenberg')
-  }
+  },
+	ads: function () {
+
+		var keys = Object.keys(canvases)
+    randCanvas = canvases[keys[ keys.length * Math.random() << 0]]
+		randCanvas.add(new fabric.Rect({
+			width: randCanvas.width,
+			height: 30,
+			fill: '#0D213E',
+			lockMovementX: true,
+			lockMovementY: true,
+			lockRotation: true,
+			hasControls: false,
+			left: randCanvas.width/2,
+			top: 15
+		}));
+		fabric.Image.fromURL('/assets/img/kinko.png', function(img){
+				img.hasBorders = false;
+				img.hasControls = false;
+				img.scale(0.2);
+				img.left = randCanvas.width-100;
+				img.top = 50;
+				img.lockMovementX = true;
+				img.lockMovementY = true;
+				img.lockRotation = true;
+				img.setControlsVisibility = false;
+				randCanvas.insertAt(img,3);
+				// TODO: it only works with one image for some reason. running the function multiple times it adds more top bars but just moves all the images to the same place
+		});
+	}
 };
+
+$(window).ready(function () {
+  console.log('ready');
+  Disruption.ads()
+})
