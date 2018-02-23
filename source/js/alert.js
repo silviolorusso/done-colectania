@@ -1,12 +1,6 @@
 function alertMessage(message) {
   var messageArray = [
-    "So dope dude. so dope.",
-    "Wow... a book filled with screenshots, that looks like modern art",
-    "What if this image was roated 5 degrees",
-    "👌  Great job",
-    "It took you a while",
-    "Here have a picture of Trump",
-    "I think it would be better to change the font to our company font 'Comic Sans'"
+    "default alert message",
   ]
   if (message === undefined) {
     // if no message choose a random default one
