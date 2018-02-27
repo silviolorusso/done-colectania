@@ -434,6 +434,7 @@ function dropElement(pageId, data, mousePos, callback) {
 	var element = { data: data, page: pageId };
 	var elementPos = createElement(element, mousePos, callback);
 	Sound.ding();
+	// achievement(200, 'Your mom bought 12 copies');
 }
 
 

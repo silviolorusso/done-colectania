@@ -13,7 +13,7 @@ div.wrapper
       h2 Instructions
       p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
       h2 Achievements
-      img(href="assets/img/achievement.png")
+      div.badges
     div.achievements.saved 
       h2 Your time has Expired
       p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
@@ -161,14 +161,7 @@ p#pdf-download download as pdf
 
 
 div.suggestions
-  //- div.comment
-  //-   div.message Client: Would it be possible to move that image a little bit to the right?
-  //-   div.image
-  //-     img(src="assets/img/cat.jpg")
-  //- div.comment
-  //-   div.message Client: So dope dude. so dope
-  //-   div.image
-  //-     img(src="assets/img/cat.jpg")
+div.coin
 
 
 script(src='assets/js/sounds-js.js')
@@ -178,4 +171,5 @@ script(src='assets/js/saved.js')
 script(src='assets/js/animate_timecounter.js')
 script(src='assets/js/critic.js')
 script(src='assets/js/alert.js')
+script(src='assets/js/coin.js')
 != publication_script
