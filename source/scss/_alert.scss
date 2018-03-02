@@ -1,0 +1,96 @@
+.alert {
+  position: fixed;
+  top: 200px;
+  left: 0;
+  right: 0;
+  width: 350px;
+  background-color: $white;
+  box-shadow: $box-shadow;
+  border: 1px solid $black;
+  padding: 0 0 20px;
+
+  .topbar {
+    background-color: $black;
+    color: $white;
+    border-bottom: 1px solid $black;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    height: 20px;
+
+    img {
+      width: 20px;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+
+    .title {
+      padding-left: 20px;
+      padding-right: 20px;
+      vertical-align: middle;
+    }
+  }
+
+  .close {
+    background-color: $white;
+    color: $black;
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 8px;
+    border: 1px solid $black;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    transition: .2s;
+
+    &:hover {
+      transition: .2s;
+      color: $white;
+      background-color: $black;
+      border: 1px solid $white;
+      cursor: pointer;
+    }
+  }
+
+  .alertTitle {
+    margin-top: 0;
+    padding-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .alertMessage {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .buttons {
+    padding-left: 20px;
+    padding-right: 20px;
+
+    .button {
+      font-size: 16px;
+      box-shadow: none;
+      margin-right: 10px;
+      padding: 10px;
+      cursor: pointer;
+    }
+  }
+
+  .draggable {
+    position: absolute;
+    z-index: 100;
+  }
+
+  .draggable-handler {
+    cursor: pointer;
+  }
+
+  .dragging {
+    cursor: move;
+    z-index: 200 !important;
+    box-shadow: $box-shadow-hover;
+  }
+}

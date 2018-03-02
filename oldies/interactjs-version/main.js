@@ -372,15 +372,15 @@ function dropElement(pageId, data, id) {
 var Error = {
 	notAllowed: function() {
 		Sound.error()
-		alert('The file you dropped is not allowed!')
+		alertMessage('The file you dropped is not allowed!')
 	},
 	tooBig: function() {
 		Sound.error();
-		alert('The file you dropped is too big!'); 
+		alertMessage('The file you dropped is too big!');
 	},
 	tooLate: function() {
 		Sound.error();
-			alert('too late bro'); 
+			alertMessage('too late bro'); 
 	}
 };
 
