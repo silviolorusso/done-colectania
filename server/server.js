@@ -86,11 +86,11 @@ app.get('/game', function (req, res) {
 app.get('/archive', function (req, res) {
 
   // find all publications
-  Publication.find(function (err, publications) {
+  Publication.find(function (err, _publications) {
     if (err) return console.error(err);
 
     res.render(__dirname + '/../source/views/archive', {
-      publications: publications
+      publications: _publications
     })
 
     console.log('serving archive')

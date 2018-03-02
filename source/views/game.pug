@@ -43,11 +43,11 @@ div.wrapper
             div.awards
               span Awards won: 
               span publication id
-      a.button(href='difficulty')
+      a.button(onclick='savetoDb(Publication);')
         .stylized
           span Save 
           span PDF
-      div.button#save
+      a.button#save(onclick='window.location.href = "http://localhost:3000/pdf?id=" + Publication.id;')
         .stylized
           span Print 
           span Publication
@@ -103,11 +103,11 @@ div.wrapper
               div.awards
                 span Awards won: 
                 span publication id
-        a.button(href='difficulty')
+        a.button(onclick='savetoDb(Publication);')
           .stylized
             span Save 
             span PDF
-        div.button#save
+        a.button#save(onclick='window.location.href = "http://localhost:3000/pdf?id=" + Publication.id;')
           .stylized
             span Print 
             span Publication
