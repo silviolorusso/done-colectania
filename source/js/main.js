@@ -63,7 +63,7 @@ function createElement(element, mousePos, callback) {
 		fabric.Image.fromURL(element.data, function(myImg, callback) {
  			var img = myImg.set({ left: 0, top: 0, width: myImg.width, height: myImg.height});
  			if ( img.width > canvases[element.page].width ) {
- 				img.scaleToWidth(canvases[element.page].width / 100 * 50 ); // 70% of the canvas
+ 				img.scaleToWidth(canvases[element.page].width / 100 * 50 ); // 50% of the canvas
  			}
  			img.left = theMousePos.x
  			img.top = theMousePos.y
@@ -74,11 +74,13 @@ function createElement(element, mousePos, callback) {
 		});
 	} else {
 		var deBasedText = atob(element.data.substring(23));
-		canvases[element.page].add(new fabric.Text(deBasedText, {
+		canvases[element.page].add(new fabric.Textbox(deBasedText, {
   		fontFamily: 'Arial',
   		left: mousePos.x,
   		top: mousePos.y,
-  		fontSize: 15
+  		fontSize: 15,
+      width: canvases[element.page].width / 100 * 90,
+      breakWords: true
 		}));
 		callback;
 	}
@@ -730,8 +732,3 @@ var Disruption = {
 		});
 	}
 };
-
-$(window).ready(function () {
-  console.log('ready');
-  Disruption.ads()
-})

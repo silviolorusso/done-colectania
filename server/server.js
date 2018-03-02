@@ -1,15 +1,14 @@
 const mongoose = require('mongoose')
-const pdf = require('./pdf.js')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const fabric = require('fabric').fabric
-const Rsvg = require('librsvg').Rsvg
 const stream = require('stream')
-const merge = require('easy-pdf-merge')
 const path = require('path')
 const async = require('async')
 const rimraf = require('rimraf')
 const childProcess = require('child_process')
+const PDFDocument = require('pdfkit')
+const SVGtoPDF = require('svg-to-pdfkit')
 
 const express = require('express')
 const app = express()
@@ -98,12 +97,6 @@ app.get('/archive', function (req, res) {
 
 })
 
-// test for print
-app.get('/print-test', function (req, res) {
-  res.render(__dirname + '/../source/views/game-test-pdf.pug')
-  console.log('serving print-test')
-})
-
 // save to db
 app.post('/db', function(req, res) {
     var publication = new Publication( req.body )
@@ -118,7 +111,6 @@ app.post('/db', function(req, res) {
 // show saved
 app.get('/saved', function (req, res) {
   var publication_id = req.param('id'); // e.g. http://localhost:3000/saved?id=R1516627472029
-  var print = req.param('print');
 
   // find publication
   var publication_model
@@ -128,15 +120,10 @@ app.get('/saved', function (req, res) {
     publication_model = publication
     publication_model = JSON.stringify(publication_model)
 
-    // code to insert print
-    if (print) {
-      var print_code = '<link rel="stylesheet" href="assets/css/pdf.css"/>'
-    }
-
     // script to insert the saved model into saved
     var publication_script = '<script>var Publication = ' +  publication_model + ';</script>'
 
-    res.render(__dirname + '/../source/views/saved', { print_code: print_code, publication_script: publication_script })
+    res.render(__dirname + '/../source/views/saved', { publication_script: publication_script })
   })
   console.log('serving saved publication')
 })
@@ -144,7 +131,13 @@ app.get('/saved', function (req, res) {
 
 // serve pdf
 app.get('/pdf', function (req, res) {
-  var publication_id = req.param('id'); // e.g. http://localhost:3000/pdf?id=P1518452006750
+  var publication_id = req.param('id'); // e.g. http://localhost:3000/pdf?id=I1519673917344
+  var booklet = req.param('booklet'); // e.g. http://localhost:3000/pdf?id=I15196739173440&booklet=true
+
+  const canvasWidth = 450
+  const canvasHeight = 636
+  const pageWidth = canvasWidth/1.34
+  const pageHeight = canvasHeight/1.34
 
   // find publication
   var publication_model
@@ -169,100 +162,86 @@ app.get('/pdf', function (req, res) {
       function makeCanvases(callback) {
         for (var i = 1; i < 9; i++) {
           var canvas = new fabric.StaticCanvas('c') // random name
-          canvas.setWidth(450)
-          canvas.setHeight(636)
+          canvas.setWidth(canvasWidth)
+          canvas.setHeight(canvasHeight)
           var pages = pub.pages
           if ( pages.hasOwnProperty('p' + i) ) { // if not empty
             canvas.loadFromJSON(pages['p' + i]);
-            texts = canvas.getObjects('textbox') // cause of Cairo bug Assertion failed: (!scaled_font->cache_frozen), function _cairo_scaled_glyph_page_destroy, file cairo-scaled-font.c, line 459.
-            for (text in texts) {
-              canvas.remove( texts[text] );
-            }
-            canvas.backgroundColor="#eee";
           }
           canvases.push(canvas)
         }
+        
         callback(null)
       },
-      function makeSvg(callback) {
-        var i = 1
-        canvases.forEach(function(canvas) {
+      function makePdf(callback) {
 
-          var svg = new Rsvg();
-          svg.on('finish', function() {
+        if (booklet != 'true') {
 
-            var pdf = svg.render({
-              format: 'pdf',
-              width: 450,
-              height: 636
-            }).data;
+          doc = new PDFDocument({size:[pageWidth, pageHeight]})
 
-            fs.writeFile('tmp/' + publication_id + '/' + publication_id + '-' + i + '.pdf', pdf, function(err) {
-              if(err) {
-                console.log(err);
-              } else {
-                console.log('pdf part ' + i + ' successfully created');
-              }
-            })
-            i += 1
+          var i = 0
+          canvases.forEach(function(canvas) {
+            SVGtoPDF(doc, canvas.toSVG(), 0, 0) // TODO: preserve fonts
+            if (i != canvases.length - 1) {
+              doc.addPage()
+            }
+            i++
           })
 
-          var bufferStream = new stream.PassThrough();
-          bufferStream.end(new Buffer( canvas.toSVG() ));
-          bufferStream.pipe(svg)
-
-        });
-        var interval = setInterval(function(){
-          if ( fs.existsSync('tmp/' + publication_id + '/' + publication_id + '-8.pdf' ) ) { 
-            callback(null)
-            clearInterval(interval);
-          }  
-        }, 100);
-      },
-      function mergePdfs(callback) {
-        fileName = 'tmp/' + publication_id + '/' + publication_id + '.pdf'
-        merge(pdfParts, fileName, function(err){ // merge pdf
-          if(err) {
-            return console.log(err);
-          } else {
-            var fullPdfPath = path.resolve(fileName)
-            // res.sendFile(fullPdfPath, function (err) { // send file
-            //   if (err) {
-            //     throw err;
-            //   } else {
-            //     try {
-            //       // rimraf('tmp/' + publication_id, function () { console.log('directory removed'); });
-            //     } catch(e) {
-            //       console.log("error removing path");
-            //     }
-            //   }
-            // });
-            console.log('full pdf successfully created')
-            callback(null)
-          }
-        })
-      },
-      function makeBooklet(callback) {
-        fileName = 'tmp/' + publication_id + '/' + publication_id + '.pdf'
-        bookletFileName = 'tmp/' + publication_id + '/' + publication_id + '-booklet.pdf'
-        childProcess.execFile( 'server/make-booklet.sh', [ fileName ], function(err, stdout, stderr) {
-          console.log(err)
-          console.log(stdout)
-          console.log('successfully created booklet')
-          var fullBookletPath = path.resolve(bookletFileName)
-          res.sendFile(fullBookletPath, function (err) {
-            if (err) {
-              throw err;
-            } else {
-              try {
-                rimraf('tmp/' + publication_id, function () { console.log('directory removed'); });
-              } catch(e) {
-                console.log("error removing path");
+          var pdfFileName = 'tmp/' + publication_id + '/' + publication_id + '.pdf'
+          doc.pipe(fs.createWriteStream(pdfFileName).on('finish', function() {
+            console.log('single page pdf was successfully created')
+            var fullPdfPath = path.resolve(pdfFileName)
+            res.sendFile(fullPdfPath, function (err) {
+              if (err) {
+                console.log(err)
+              } else {
+                try {
+                  rimraf('tmp/' + publication_id, function () { console.log('directory removed') })
+                } catch(e) {
+                  console.log("error removing path")
+                }
               }
-            }
-          });
-          callback(null)
-        })
+            })
+          }))
+          doc.end()
+
+        } else {
+
+          doc = new PDFDocument({size:[pageWidth*2, pageHeight]})
+          
+          // all the -1 to have a normal page number
+          SVGtoPDF(doc, canvases[8-1].toSVG(), 0, 0); 
+          SVGtoPDF(doc, canvases[1-1].toSVG(), pageWidth, 0);
+          doc.addPage()
+          SVGtoPDF(doc, canvases[2-1].toSVG(), 0, 0);
+          SVGtoPDF(doc, canvases[7-1].toSVG(), pageWidth, 0);
+          doc.addPage()
+          SVGtoPDF(doc, canvases[6-1].toSVG(), 0, 0);
+          SVGtoPDF(doc, canvases[3-1].toSVG(), pageWidth, 0);
+          doc.addPage()
+          SVGtoPDF(doc, canvases[4-1].toSVG(), 0, 0);
+          SVGtoPDF(doc, canvases[5-1].toSVG(), pageWidth, 0);       
+          
+          var bookletFileName = 'tmp/' + publication_id + '/' + publication_id + '-booklet.pdf'
+          doc.pipe(fs.createWriteStream(bookletFileName).on('finish', function() {
+            console.log('booklet was successfully created')
+            var fullBookletPath = path.resolve(bookletFileName)
+            res.sendFile(fullBookletPath, function (err) {
+              if (err) {
+                console.log(err)
+              } else {
+                try {
+                  rimraf('tmp/' + publication_id, function () { console.log('directory removed') })
+                } catch(e) {
+                  console.log("error removing path")
+                }
+              }
+            })
+          }))
+          doc.end()
+
+        }
       }
     ]
 
