@@ -1,16 +1,11 @@
 // --- OPTIONS
 
-var disruptionsOn = true
+var disruptionsOn = false
 var dropDelay = 100
-
-
-
-
-
-
-// --- GLOBAL
-
-const pages = $('.page')
+var disruptionInterval = 5000
+var bonusTime = 1000
+var textChunksLength = 1500
+var fontSize = 15
 
 
 
@@ -58,6 +53,9 @@ function shuffleArray(array) {
 
 
 function createElement(element, mousePos, callback) {
+  function chunkString(str, length) {
+    return str.match(new RegExp('{.1,' + length + '}', 'g'));
+  }
 	var theMousePos = mousePos
 	if (element.data.includes('data:image')) {
 		fabric.Image.fromURL(element.data, function(myImg, callback) {
@@ -74,14 +72,22 @@ function createElement(element, mousePos, callback) {
 		});
 	} else {
 		var deBasedText = atob(element.data.substring(23));
-		canvases[element.page].add(new fabric.Textbox(deBasedText, {
-  		fontFamily: 'Arial',
-  		left: mousePos.x,
-  		top: mousePos.y,
-  		fontSize: 15,
-      width: canvases[element.page].width / 100 * 90,
-      breakWords: true
-		}));
+    chunks = deBasedText.match(new RegExp('(.|[\r\n]){1,' + textChunksLength + '}', 'g'))
+    var currPage = parseInt( element.page.substr(element.page.length - 1) )
+    for (var i = 0; i < chunks.length; i++) {
+      if (canvases['p' + (currPage + i)]) {
+        canvases['p' + (currPage + i)].add(new fabric.Textbox(chunks[i] + '-', {
+          fontFamily: 'Arial',
+          left: 20,
+          top: 20,
+          fontSize: fontSize,
+          width: 410,
+          breakWords: true,
+          originX: 'left',
+          originY: 'top'
+        }))
+      }
+    }
 		callback;
 	}
 }
@@ -193,8 +199,8 @@ function controller(Publication, input) {
 						}, 1)
 					}
 					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
-					addtime(1000) // add bonus time
-					criticSays();
+					addtime(bonusTime) // add bonus time
+					criticSays()
 
 
 					// criticSays('dance dance', 'cat');
@@ -258,7 +264,7 @@ $(document).ready(function() {
       y = setInterval(function() { // launch a random disruption
         disruptions = Object.keys(Disruption)
         Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
-      }, 5000)
+      }, disruptionInterval)
     }
 		mouseCounter()
 	} else { // saved publication
@@ -294,6 +300,7 @@ function getMousePos(canvas, e) {
   }
 }
 
+const pages = $('.page')
 // drop element
 pages.on('dragover', function(e) {
 	e.preventDefault();
@@ -359,7 +366,7 @@ $(document).on('click', '.close', function() {
 	});
 });
 
-// changing title
+// changing title // TODO Update
 $('#title').change(function() {
 	controller(Publication, {
 		title: $(this).val()
@@ -384,7 +391,7 @@ var Sound = {
 	}
 };
 
-// merge these two
+// TODO: merge these two
 function showTime(Publication) {
 	seconds = Publication.timeLeft / 1000;
 	$('#counter').show();
