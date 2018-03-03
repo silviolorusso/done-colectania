@@ -1,3 +1,5 @@
+!='<script> if (localStorage.getItem("firstTime") != "true"){ localStorage.setItem("firstTime","true"); window.location.href = "/splash" } </script>' // redirect to splash if it's first visit
+
 include parts/headerLogo.pug
 
 div.wrapper.intro
@@ -42,3 +44,5 @@ div.wrapper.intro
             span= publication.id
 
   a.button(href='archive') Show more
+
+  // script(src="assets/js/splash_check.js")

@@ -1,6 +1,6 @@
 // --- OPTIONS
 
-var disruptionsOn = false
+var disruptionsOn = true
 var dropDelay = 100
 var disruptionInterval = 5000
 var bonusTime = 1000
