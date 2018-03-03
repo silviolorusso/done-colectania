@@ -6,6 +6,8 @@ var disruptionInterval = 5000
 var bonusTime = 1000
 var textChunksLength = 1500
 var fontSize = 15
+var scaleFont = 1.5
+var scaleImgs = 0.7
 
 
 
@@ -264,6 +266,7 @@ $(document).ready(function() {
       y = setInterval(function() { // launch a random disruption
         disruptions = Object.keys(Disruption)
         Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
+        shake(pages)
       }, disruptionInterval)
     }
 		mouseCounter()
@@ -625,16 +628,34 @@ function shake(obj, time) {
 
 // --- DISRUPTIONS
 
-function rotateOne(obj) {
-  obj.originX = 'center'
-  obj.originY = 'center'
-  obj.rotate(0).animate({ angle: 360 }, {
-    duration: 3000,
-    onChange: obj.canvas.renderAll.bind(obj.canvas),
-    onComplete: function(){ rotateOne(obj) },
-    easing: function(t, b, c, d) { return c*t/d + b }
-  })
+
+function allElements(type) {
+  var objs = []
+  for (canvas in canvases) {
+    canvasObjs = canvases[canvas].getObjects(type)
+    for (var i = canvasObjs.length - 1; i >= 0; i--) {
+      objs.push( canvasObjs[i] )
+    }
+  }
+  return objs
 }
+
+function renderAllCanvases() {
+  for (canvasId in canvases) {
+    canvases[canvasId].renderAll()
+  }
+}
+
+
+
+function filterImgs(objs, filter) {
+  for (var i = objs.length - 1; i >= 0; i--) {
+    objs[i].filters.push(filter)
+    objs[i].applyFilters()
+  }
+  renderAllCanvases()
+}
+
 
 var Disruption = {
 	comic: function() {
@@ -647,25 +668,30 @@ var Disruption = {
 	    for (textbox in textboxes) {
 	      textboxes[textbox].fontFamily = '"Comic Sans MS"'
 	    }
-      shake($('.page'))
+
 	    canvases[canvasId].renderAll();
     }
     criticSays('The commissioner asked to spice the typography a bit!', 'Gutenberg')
 	},
-	rotate: function() {
-		for (canvasId in canvases) {
-			imgs = canvases[canvasId].getObjects('image')
-	    for (img in imgs) {
-	      rotateOne(imgs[img])
-	    }
+	rotateImgsNostop: function() {
+    function _rotateImgsNostop(objs) {
+      for (var i = objs.length - 1; i >= 0; i--) {
+        objs[i].originX = 'center'
+        objs[i].originY = 'center'
+        objs[i].rotate(0).animate({ angle: 360 }, {
+          duration: 3000,
+          onChange: objs[i].canvas.renderAll.bind(objs[i].canvas),
+          onComplete: function(){ rotateOne(objs[i]) },
+          easing: function(t, b, c, d) { return c*t/d + b }
+        })
+      }
     }
-    shake($('.page'))
+    _rotateImgsNostop(allElements('image'))
     console.log('Your friend think the layout is a bit static...')
 	},
 	lockRandPage: function() {
     var keys = Object.keys(canvases)
     randCanvas = canvases[keys[ keys.length * Math.random() << 0]]
-		randCanvas.backgroundColor = 'red'
 		randCanvas.selection = false;
 		for (objectId in randCanvas.getObjects() ) {
 			var object = randCanvas.item(objectId)
@@ -673,16 +699,10 @@ var Disruption = {
 			object.hoverCursor = 'default'
 		}
 		randCanvas.add(new fabric.Line([0, 0, randCanvas.width, randCanvas.height], {
-	  	stroke: '#fff',
+	  	stroke: 'red',
 	  	selectable: false,
-	  	strokeWidth: 4
+	  	strokeWidth: 2
 		}))
-    randCanvas.add(new fabric.Line([0, randCanvas.height, randCanvas.width, 0], {
-      stroke: '#fff',
-      selectable: false,
-      strokeWidth: 4
-    }))
-    shake($('.page'))
 		randCanvas.renderAll();
 		// TODO: prevent drop
     criticSays('Page ?? is now locked...', 'Gutenberg') // TODO
@@ -706,11 +726,9 @@ var Disruption = {
       }
       y += 1
     }
-    shake($('.page'))
     criticSays('The rythm of this publication is a bit weak. Don\'t you think?', 'Gutenberg')
   },
 	ads: function () {
-
 		var keys = Object.keys(canvases)
     randCanvas = canvases[keys[ keys.length * Math.random() << 0]]
 		randCanvas.add(new fabric.Rect({
@@ -722,7 +740,8 @@ var Disruption = {
 			lockRotation: true,
 			hasControls: false,
 			left: randCanvas.width/2,
-			top: 15
+			top: 15,
+      selectable: false
 		}));
 		fabric.Image.fromURL('/assets/img/kinko.png', function(img){
 				img.hasBorders = false;
@@ -737,5 +756,71 @@ var Disruption = {
 				randCanvas.insertAt(img,3);
 				// TODO: it only works with one image for some reason. running the function multiple times it adds more top bars but just moves all the images to the same place
 		});
-	}
+
+    // insert critic
+	},
+  halfTime: function () {
+    Publication.timeLeft = Publication.timeLeft / 2
+    criticSays('This is taking too long...', 'Gutenberg')
+  },
+  doubleTime: function () {
+    Publication.timeLeft = Publication.timeLeft * 2
+    criticSays('Take your time...', 'Gutenberg')
+  },
+  greyscaleImgs: function() {
+    filterImgs(allElements('image'), new fabric.Image.filters.Grayscale() )
+    criticSays('Shall we make it look classic?', 'Gutenberg')
+  },
+  invertImgs: function() {
+    filterImgs(allElements('image'), new fabric.Image.filters.Invert() )
+    criticSays('The visuals need some edgy colors', 'Gutenberg')
+  },
+  sepiaImgs: function() {
+    filterImgs(allElements('image'), new fabric.Image.filters.Sepia() )
+    criticSays('Ever heard of Instagram?', 'Gutenberg')
+  },
+  blackwhiteImgs: function() {
+    filterImgs(allElements('image'), new fabric.Image.filters.BlackWhite() )
+    criticSays('This should look like a zine!', 'Gutenberg')
+  },
+  pixelateImgs: function() {
+    filterImgs(allElements('image'), new fabric.Image.filters.Pixelate({blocksize: 20}) )
+    criticSays('Isn\'t this a videogame after all?', 'Gutenberg')
+  },
+  noiseImgs: function() {
+    filterImgs(allElements('image'), new fabric.Image.filters.Noise({noise: 200}) )
+    criticSays('MAKE SOME NOOISE!!', 'Gutenberg')
+  },
+  fontSizeBigger: function() {
+    function _fontSizeBigger(elements) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].set('fontSize', elements[i].fontSize * scaleFont);
+      }
+    }
+    _fontSizeBigger(allElements('textbox'))
+    renderAllCanvases()
+    criticSays('Can\'t read anything :(', 'Gutenberg')
+  },
+  fontSizeSmaller: function() {
+    function _fontSizeBigger(elements) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].set('fontSize', elements[i].fontSize / scaleFont);
+      }
+    }
+    _fontSizeBigger(allElements('textbox'))
+    renderAllCanvases()
+    criticSays('I\'m not blind!', 'Gutenberg')
+  },
+  biggerImgs: function() {
+    function _biggerImgs(elements) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].set({
+          scaleY: scaleImgs,
+          scaleX: scaleImgs
+        });
+      }
+    }
+    _biggerImgs(allElements('image'))
+    renderAllCanvases()
+  }
 };
