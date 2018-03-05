@@ -47,6 +47,7 @@ gulp.task('build-sounds-js', function() {
     .pipe(gulp.dest('public/assets/js'));
 });
 
+// no need for this
 gulp.task('build-html', function() {
   return gulp.src('source/views/*.pug')
 			.pipe(plumber())
@@ -64,5 +65,5 @@ gulp.task('watch', function() {
   gulp.watch('source/js/**/*.js', ['build-js']);
   gulp.watch('source/interface-js/**/*.js', ['build-interface-js']);
   gulp.watch('source/sounds-js/**/*.js', ['build-sounds-js']);
-  gulp.watch('source/views/**/*.pug', ['build-html']);
+  // gulp.watch('source/views/**/*.pug', ['build-html']);
 });

@@ -6,10 +6,10 @@ div.wrapper.intro
     each publication in publications
       a(href='saved?id=' + publication.id).tile
         div.publication
-          p= publication.title
+          p= publication.id
           img(src='assets/img/cover.png')
         div.description
-          title= publication.title
+          title= publication.id
           div.author
             span Written by 
             span= publication.id
@@ -28,3 +28,6 @@ div.wrapper.intro
           div.awards
             span Awards won: 
             span= publication.id
+
+
+

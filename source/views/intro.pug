@@ -1,3 +1,5 @@
+!='<script> if (localStorage.getItem("firstTime") != "true"){ localStorage.setItem("firstTime","true"); window.location.href = "/splash" } </script>' // redirect to splash if it's first visit
+
 include parts/headerLogo.pug
 
 div.wrapper.intro
@@ -13,14 +15,15 @@ div.wrapper.intro
         
   h2 Last Publications
   
+  
   div.collection
     each publication in publications
       a(href='saved?id=' + publication.id).tile
         div.publication
-          p= publication.title
+          p= publication.id
           img(src='assets/img/cover.png')
         div.description
-          title= publication.title
+          title= publication.id
           div.author
             span Written by 
             span= publication.id
@@ -41,3 +44,5 @@ div.wrapper.intro
             span= publication.id
 
   a.button(href='archive') Show more
+
+  // script(src="assets/js/splash_check.js")

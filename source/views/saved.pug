@@ -7,11 +7,11 @@ div.saved_view
     div.achievements.saved 
       h2 Saved view
       p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
-      a.button(href='difficulty')
-        .stylized
-          span Save 
-          span PDF
-      a.button(href='difficulty')
+      //- a.button(onclick='savetoDb(Publication);')
+      //-   .stylized
+      //-     span Save 
+      //-     span PDF
+      a.button#save(onclick='window.location.href = "http://localhost:3000/pdf?id=" + Publication.id;')
         .stylized
           span Print 
           span Publication
@@ -40,11 +40,11 @@ div.saved_view
       h2 Saved view
       p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
       div.buttons
-        a.button(href='difficulty')
-          .stylized
-            span Save 
-            span .PDF
-        a.button(href='difficulty')
+        //- a.button(onclick='savetoDb(Publication);')
+        //-   .stylized
+        //-     span Save 
+        //-     span PDF
+        a.button#save(onclick='window.location.href = "http://localhost:3000/pdf?id=" + Publication.id;')
           .stylized
             span Print 
             span Publication    

@@ -43,11 +43,19 @@ div.wrapper
             div.awards
               span Awards won: 
               span publication id
+<<<<<<< HEAD
       div.button#save
         .stylized
           span Save 
           span PDF
       div.button
+=======
+      a.button(onclick='savetoDb(Publication);')
+        .stylized
+          span Save 
+          span PDF
+      a.button#save(onclick='window.location.href = "http://localhost:3000/pdf?id=" + Publication.id;')
+>>>>>>> 1632f5684a3bb99aa655f96506b8af4c9a1515a1
         .stylized
           span Print 
           span Publication
@@ -104,11 +112,19 @@ div.wrapper
               div.awards
                 span Awards won: 
                 span publication id
+<<<<<<< HEAD
         div.button
           .stylized
             span Save 
             span PDF
         div.button
+=======
+        a.button(onclick='savetoDb(Publication);')
+          .stylized
+            span Save 
+            span PDF
+        a.button#save(onclick='window.location.href = "http://localhost:3000/pdf?id=" + Publication.id;')
+>>>>>>> 1632f5684a3bb99aa655f96506b8af4c9a1515a1
           .stylized
             span Print 
             span Publication
@@ -167,6 +183,16 @@ div.coin
 
 script(src='assets/js/sounds-js.js')
 script(src='assets/js/main.js')
+<<<<<<< HEAD
 
 script(src='assets/js/game-elements.js')
+=======
+script(src="assets/js/countdown.js")
+script(src='assets/js/saved.js')
+script(src='assets/js/animate_timecounter.js')
+script(src='assets/js/critic.js')
+script(src='assets/js/alert.js')
+script(src='assets/js/coin.js')
+script(src="assets/js/time_follow_mouse.js")   
+>>>>>>> 1632f5684a3bb99aa655f96506b8af4c9a1515a1
 != publication_script
