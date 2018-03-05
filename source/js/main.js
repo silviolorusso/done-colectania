@@ -196,8 +196,8 @@ function controller(Publication, input) {
 		showTime(Publication); // expired
 	} else {
 		Publication.expired = true
+    lockElements(allElements())
 		showExpired(Publication)
-		lockElements(allElements())
     for (canvas in canvases) {
       canvases[canvas].selection = false
     }
@@ -458,7 +458,9 @@ function showExpired() {
 	// clearInterval(x);
 	// animateUp($('#save-modal'));
 	clearInterval(x)
-  clearInterval(y)
+  if (y) { // if disruptions
+    clearInterval(y)
+  }
 }
 
 function dropElement(pageId, data, mousePos, callback) {
