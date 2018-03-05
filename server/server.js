@@ -16,11 +16,9 @@ const port = 3000
 
 
 
-
-
 // --- DB STUFF
 
-mongoose.connect('mongodb://localhost/test', { useMongoClient: true })
+mongoose.connect('mongodb://admin:donecolectania2018@ds135820.mlab.com:35820/done-colectania', { useMongoClient: true })
 const db = mongoose.connection;
 
 // how to avoid declaring the publication schema here?
@@ -170,7 +168,7 @@ app.get('/pdf', function (req, res) {
           }
           canvases.push(canvas)
         }
-        
+
         callback(null)
       },
       function makePdf(callback) {
@@ -209,9 +207,9 @@ app.get('/pdf', function (req, res) {
         } else {
 
           doc = new PDFDocument({size:[pageWidth*2, pageHeight]})
-          
+
           // all the -1 to have a normal page number
-          SVGtoPDF(doc, canvases[8-1].toSVG(), 0, 0); 
+          SVGtoPDF(doc, canvases[8-1].toSVG(), 0, 0);
           SVGtoPDF(doc, canvases[1-1].toSVG(), pageWidth, 0);
           doc.addPage()
           SVGtoPDF(doc, canvases[2-1].toSVG(), 0, 0);
@@ -221,8 +219,8 @@ app.get('/pdf', function (req, res) {
           SVGtoPDF(doc, canvases[3-1].toSVG(), pageWidth, 0);
           doc.addPage()
           SVGtoPDF(doc, canvases[4-1].toSVG(), 0, 0);
-          SVGtoPDF(doc, canvases[5-1].toSVG(), pageWidth, 0);       
-          
+          SVGtoPDF(doc, canvases[5-1].toSVG(), pageWidth, 0);
+
           var bookletFileName = 'tmp/' + publication_id + '/' + publication_id + '-booklet.pdf'
           doc.pipe(fs.createWriteStream(bookletFileName).on('finish', function() {
             console.log('booklet was successfully created')
@@ -265,11 +263,15 @@ app.get('/overview', function (req, res) {
   })
 })
 
-// listen
-app.listen(port, (err) => {
+// ------------------------------------------
+// set the port of our application
+// process.env.PORT lets the port be set by Heroku
+var portset = process.env.PORT || port;
+
+app.listen(portset, (err) => {
   if (err) {
     return console.log('something bad happened', err)
   }
 
-  console.log(`server is listening on ${port}`)
-})
+	console.log('server is listening on http://localhost:' + portset);
+});

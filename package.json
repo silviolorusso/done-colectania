@@ -42,6 +42,7 @@
     "node-gyp": "^3.6.2",
     "node-sass": "^4.7.2",
     "opentype.js": "^0.7.3",
+    "pdfkit": "^0.8.3",
     "phantomjs-prebuilt": "^2.1.16",
     "rebuild": "^0.1.2",
     "svg-to-pdfkit": "^0.1.7"

@@ -39,3 +39,39 @@ So, why not making publishing challenging by defining some obstacles, limitation
 3) `mongod`
 4) `gulp`
 5) `npm start or [nodemon](https://nodemon.io/)`
+
+
+### Code examples
+
+## Critic
+the user name should correspond directly to the filename in `assets/img/critic/*.jpg`
+`criticSays(message, user);`
+like
+`criticSays('dance dance', 'cat');`
+or
+`criticSays('dance dance');`
+or
+`criticSays();`
+
+## Alert
+`alertMessage('The file you dropped is not allowed!')`
+
+## Achievement animation + badges
+`achievement(time, message);`
+like
+`achievement(200, 'Your mom bought 12 copies');`
+
+## Timecounter Animation
+
+`animatetimecounter(bonusTime)`
+like
+`animatetimecounter(200)`
+
+## Countdown
+turn on countdown on pageload/ready with this function:
+`countdownWrapper()`
+
+### mlab
+
+admin
+donecolectania2018
