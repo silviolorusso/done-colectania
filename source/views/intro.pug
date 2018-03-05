@@ -12,37 +12,9 @@ div.wrapper.intro
     .stylized
       span Start 
       span Game
-        
-  h2 Last Publications
-  
-  
-  div.collection
-    each publication in publications
-      a(href='saved?id=' + publication.id).tile
-        div.publication
-          p= publication.id
-          img(src='assets/img/cover.png')
-        div.description
-          title= publication.id
-          div.author
-            span Written by 
-            span= publication.id
-          div.date
-            span Created on: 
-            span= publication.id
-          div.assets
-            span Number of assets: 
-            span= publication.id
-          div.pages
-            span Number of pages:  
-            span= publication.id
-          div.time
-            span Total time:  
-            span= publication.id
-          div.awards
-            span Awards won: 
-            span= publication.id
 
-  a.button(href='archive') Show more
+  br
+
+  a.button(href='archive') Show Last Publications
 
   // script(src="assets/js/splash_check.js")

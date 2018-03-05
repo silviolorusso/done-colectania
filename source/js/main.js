@@ -105,7 +105,7 @@ function initCanvases() {
 		canvases['p' + (i + 1)] = canvas;
 	});
 	fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center' // origin at the center
-	var insertTitle = new fabric.Textbox('Insert Title Here', {
+	var title = new fabric.Textbox('Insert Title Here', {
 	  top: 120,
 	  fontFamily: 'AGaramondPro, serif',
 	  fill: '#777',
@@ -117,9 +117,10 @@ function initCanvases() {
 	  selectable: false,
 	  hoverCursor: 'default',
 	  originX: 'left',
-	  originY: 'top'
+	  originY: 'top',
+    id: 'lock'
 	});
-	canvases['p1'].add(insertTitle)
+	canvases['p1'].add(title)
 	var lineLenght = 250
 	canvases['p1'].add(new fabric.Line([0, 0, lineLenght, 0], {
 		left: ( canvases['p1'].width - lineLenght) / 2,
@@ -129,7 +130,7 @@ function initCanvases() {
 	 	originX: 'left',
 	  originY: 'top'
 	}));
-	var insertAuthors = new fabric.Textbox('Insert Authors Here', {
+	var authors = new fabric.Textbox('Insert Authors Here', {
 	  top: 180,
 	  fontFamily: 'AGaramondPro, serif',
 	  fill: '#777',
@@ -140,9 +141,10 @@ function initCanvases() {
 	  selectable: false,
 	  hoverCursor: 'default',
 	  originX: 'left',
-	  originY: 'top'
+	  originY: 'top',
+    id: 'lock'
 	});
-	canvases['p1'].add(insertAuthors)
+	canvases['p1'].add(authors)
 	// TODO: on click, text is deleted
 }
 
@@ -155,10 +157,10 @@ function initCanvases() {
 var Publication = {
 	// all our states
 	id: makeId(),
-	title: 'TEST PUB',
+	title: 'Untitled',
 	timeLeft: 9000000,
 	expired: false,
-	authors: '',
+	authors: 'Anonymous',
 	pages: {
 		p1: {},
 		p2: {},
@@ -262,7 +264,7 @@ $(document).ready(function() {
 			Publication.timeLeft = Publication.timeLeft - 10;
 			controller(Publication);
 		}, 10)
-    if (disruptionsOn == true) {
+    if ( getUrlParameter('disruptions') != 'false' && disruptionsOn == true) {
       y = setInterval(function() { // launch a random disruption
         disruptions = Object.keys(Disruption)
         Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
@@ -634,7 +636,9 @@ function allElements(type) {
   for (canvas in canvases) {
     canvasObjs = canvases[canvas].getObjects(type)
     for (var i = canvasObjs.length - 1; i >= 0; i--) {
-      objs.push( canvasObjs[i] )
+      if (canvasObjs[i].id != 'lock') { // use this to lock 
+        objs.push( canvasObjs[i] )
+      }
     }
   }
   return objs
@@ -659,18 +663,14 @@ function filterImgs(objs, filter) {
 
 var Disruption = {
 	comic: function() {
-		for (canvasId in canvases) {
-			texts = canvases[canvasId].getObjects('text')
-	    for (text in texts) {
-	      texts[text].fontFamily = '"Comic Sans MS"'
-	    }
-	   	textboxes = canvases[canvasId].getObjects('textbox')
-	    for (textbox in textboxes) {
-	      textboxes[textbox].fontFamily = '"Comic Sans MS"'
-	    }
-
-	    canvases[canvasId].renderAll();
+    function _comic(objs) {
+      for (var i = objs.length - 1; i >= 0; i--) {
+        objs[i].fontFamily = '"Comic Sans MS"'
+      }
     }
+    _comic( allElements('text') )
+    _comic( allElements('textbox') )
+    renderAllCanvases()
     criticSays('The commissioner asked to spice the typography a bit!', 'Gutenberg')
 	},
 	rotateImgsNostop: function() {
@@ -681,7 +681,7 @@ var Disruption = {
         objs[i].rotate(0).animate({ angle: 360 }, {
           duration: 3000,
           onChange: objs[i].canvas.renderAll.bind(objs[i].canvas),
-          onComplete: function(){ rotateOne(objs[i]) },
+          onComplete: function(){ _rotateImgsNostop(objs[i]) },
           easing: function(t, b, c, d) { return c*t/d + b }
         })
       }
@@ -701,7 +701,8 @@ var Disruption = {
 		randCanvas.add(new fabric.Line([0, 0, randCanvas.width, randCanvas.height], {
 	  	stroke: 'red',
 	  	selectable: false,
-	  	strokeWidth: 2
+	  	strokeWidth: 2,
+      id: 'lock'
 		}))
 		randCanvas.renderAll();
 		// TODO: prevent drop
@@ -739,13 +740,16 @@ var Disruption = {
 			lockMovementY: true,
 			lockRotation: true,
 			hasControls: false,
+      selectable: false,
 			left: randCanvas.width/2,
 			top: 15,
-      selectable: false
+      selectable: false,
+      id: 'lock'
 		}));
 		fabric.Image.fromURL('/assets/img/kinko.png', function(img){
 				img.hasBorders = false;
 				img.hasControls = false;
+        img.selectable = false;
 				img.scale(0.2);
 				img.left = randCanvas.width-100;
 				img.top = 50;
@@ -754,6 +758,7 @@ var Disruption = {
 				img.lockRotation = true;
 				img.setControlsVisibility = false;
 				randCanvas.insertAt(img,3);
+        img.id = 'lock'
 				// TODO: it only works with one image for some reason. running the function multiple times it adds more top bars but just moves all the images to the same place
 		});
 

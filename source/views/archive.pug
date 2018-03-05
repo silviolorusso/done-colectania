@@ -5,14 +5,13 @@ div.wrapper.intro
   div.collection
     each publication in publications
       a(href='saved?id=' + publication.id).tile
-        div.publication
-          p= publication.id
-          img(src='assets/img/cover.png')
+        div.cover-wrapper
+          object.cover(data='cover?id=' + publication.id, type="image/svg+xml")
         div.description
-          title= publication.id
+          title= publication.title
           div.author
             span Written by 
-            span= publication.id
+            span= publication.authors
           div.date
             span Created on: 
             span= publication.id

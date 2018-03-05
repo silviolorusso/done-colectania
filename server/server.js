@@ -76,6 +76,25 @@ app.get('/game', function (req, res) {
   console.log('serving game')
 })
 
+// cover
+app.get('/cover', function (req, res) {
+  var publication_id = req.param('id'); // e.g. http://localhost:3000/saved?id=R1516627472029
+
+  Publication.findOne({ 'id': publication_id }, function (err, publication) {
+    if (err) return console.error(err)
+
+    const coverWidth = 450
+    const coverHeight = 636
+    const cover = new fabric.StaticCanvas('c')
+    cover.setWidth(coverWidth)
+    cover.setHeight(coverHeight)
+    cover.loadFromJSON(publication.pages.p1)
+    coverImg = cover.toSVG()
+
+    res.send(cover.toSVG())
+  })
+})
+
 // archive
 app.get('/archive', function (req, res) {
 
@@ -158,13 +177,42 @@ app.get('/pdf', function (req, res) {
       },
       function makePdf(callback) {
 
+        fonts = function(family, bold, italic, fontOptions) { // remember to choose fonts and change them
+          if (family.match(/(?:^|,)\s*serif\s*$/)) {
+            if (bold && italic) {return 'Times-BoldItalic';}
+            if (bold && !italic) {return 'Times-Bold';}
+            if (!bold && italic) {return 'Times-Italic';}
+            if (!bold && !italic) {return 'Times-Roman';}
+          } else if (family.match(/(?:^|,)\s*monospace\s*$/)) {
+            if (bold && italic) {return 'Courier-BoldOblique';}
+            if (bold && !italic) {return 'Courier-Bold';}
+            if (!bold && italic) {return 'Courier-Oblique';}
+            if (!bold && !italic) {return 'Courier';}
+          } else if (family.match(/(?:^|,)\s*Comic Sans MS\s*$/)) {
+            if (bold && italic) {return '"Comic Sans MS"';}
+            if (bold && !italic) {return '"Comic Sans MS-bold"';}
+            if (!bold && italic) {return '"Comic Sans MS"';}
+            if (!bold && !italic) {return '"Comic Sans MS"';}
+          } else if (family.match(/(?:^|,)\s*sans-serif\s*$/) || true) {
+            if (bold && italic) {return 'Helvetica-BoldOblique';}
+            if (bold && !italic) {return 'Helvetica-Bold';}
+            if (!bold && italic) {return 'Helvetica-Oblique';}
+            if (!bold && !italic) {return 'Helvetica';}
+          } 
+        }
+
         if (booklet != 'true') {
 
           doc = new PDFDocument({size:[pageWidth, pageHeight]})
+          doc.registerFont('"Comic Sans MS"', __dirname + '/../public/assets/fonts/comic.ttf')
+          doc.registerFont('"Comic Sans MS-bold"', __dirname + '/../public/assets/fonts/comic-bold.ttf')
+          doc.registerFont('"Comic Sans MS-italic"', __dirname + '/../public/assets/fonts/comic-italic.ttf')
+          doc.registerFont('"Comic Sans MS-bolditalic"', __dirname + '/../public/assets/fonts/comic-bolditalic.ttf')
 
           var i = 0
+
           canvases.forEach(function(canvas) {
-            SVGtoPDF(doc, canvas.toSVG(), 0, 0) // TODO: preserve fonts
+            SVGtoPDF(doc, canvas.toSVG(), 0, 0, {fontCallback: fonts }) // TODO: preserve fonts
             if (i != canvases.length - 1) {
               doc.addPage()
             }
@@ -186,6 +234,10 @@ app.get('/pdf', function (req, res) {
         } else {
 
           doc = new PDFDocument({size:[pageWidth*2, pageHeight]})
+          doc.registerFont('"Comic Sans MS"', __dirname + '/../public/assets/fonts/comic.ttf')
+          doc.registerFont('"Comic Sans MS-bold"', __dirname + '/../public/assets/fonts/comic-bold.ttf')
+          doc.registerFont('"Comic Sans MS-italic"', __dirname + '/../public/assets/fonts/comic-italic.ttf')
+          doc.registerFont('"Comic Sans MS-bolditalic"', __dirname + '/../public/assets/fonts/comic-bolditalic.ttf')
 
           // all the -1 to have a normal page number
           SVGtoPDF(doc, canvases[8-1].toSVG(), 0, 0);

@@ -767,15 +767,27 @@ body.saved {
 			}
 		}
 
-		.publication {
+		.cover-wrapper {
 			float: left;
 			width: 100px;
 			height: 140px;
-			background: $white;
 			border: 1px solid $black;
 			box-shadow: $box-shadow;
 			transition: .2s;
 			display: inline-block;
+			position:relative;
+			background-color $white;
+
+  	.cover {
+  		overflow: hidden;
+  		background-color: $white;
+  		transform-origin: top left;
+			transform: scale(0.19);
+			position: absolute;
+			left:0;
+			width: 473px;
+  		height: 652px;
+  	}
 
 			p {
 				padding: 10px 5px;
