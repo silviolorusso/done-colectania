@@ -1,3 +1,178 @@
+function savedState() {
+  var s = document.getElementsByClassName('spread');
+  $('.spread').hide();
+  $('.spread').first().show()
+
+  var count = 0;
+  $('.spread').click(function () {
+  });
+
+  $('.page').click(function (e) {
+    var num = $('.page').index(this);
+    if (num%2 === 0) {
+      s[count].style.display = 'none';
+      count++;
+      s[count].style.display = 'block';
+    } else {
+      s[count].style.display = 'none';
+      count--;
+      s[count].style.display = 'block';
+    }
+  });
+}
+
+// load only when div has saved_view class
+if ($('div').hasClass('saved_view')) {
+  savedState()
+}
+
+function expiredTime() {
+  $('body').append('<div id="overlay_flash"><h1>Time has Expired</h1></div>');
+  $('#overlay_flash').height($(window).height());
+  setTimeout(function () {
+    $('#overlay_flash').css('top','unset');
+    $('#overlay_flash').css('bottom','0');
+    $('#overlay_flash').height(0);
+  }, 1000);
+}
+
+function updateMouseCounter(e) {
+  $('.counter').css('opacity', '1');
+  if (e.clientX >= 200) { // ($(document).width()/2)
+    // if mouse of right side of client
+    $('.counter').addClass('mouse_right');
+    $('.counter').css({
+      left:  e.clientX - 20 - $('.counter').width(),
+      top:   e.clientY - 50
+    });
+  } else {
+    // if mouse of left side of client
+    $('.counter').removeClass('mouse_right');
+    $('.counter').css({
+      left:  e.clientX + 20,
+      top:   e.clientY - 50
+    });
+  }
+}
+
+$(document).bind('mousemove', function(e){
+  updateMouseCounter(e);
+});
+
+$(document).bind("dragover", function(e){
+    updateMouseCounter(e);
+});
+
+
+function criticSays(message, actor) {
+	var messageArray = [
+    "So dope dude. so dope.",
+    "Wow... a book filled with screenshots, that looks like modern art",
+    "What if this image was roated 5 degrees",
+    "👌  Great job",
+    "It took you a while",
+    "Here have a picture of Trump",
+    "I think it would be better to change the font to our company font 'Comic Sans'"
+  ]
+	if (message === undefined) {
+		// choose a random default one
+		var message = messageArray[randomNum(messageArray.length)]
+	}
+
+	var actorArray = [
+    "Stef",
+    "Silvio",
+    "Obama",
+    "Clippy",
+    "Gutenberg"
+  ]
+	if (actor === undefined) {
+		// choose a random default one
+		var actor = actorArray[randomNum(actorArray.length)]
+	}
+
+
+	var messageHTML = $('<div class="comment"><div class="message">' + actor + ': ' + message + '</div><div class="image"><img src="assets/img/critic/' + actor + '.jpg"></div></div>');
+	messageHTML.css('opacity', '0');
+	messageHTML.hide();
+	$('.suggestions').append(messageHTML)
+	messageHTML.show();
+	messageHTML.css('left', '-100px');
+	messageHTML.animate({
+		opacity: 1,
+		left: "0px",
+	}, 500, function() {
+		// Animation complete.
+		setTimeout(function() {
+			messageHTML.animate({
+				opacity: 0,
+				left: "-100px",
+			}, 500, function() {
+				// Animation complete.
+				messageHTML.remove()
+			});
+		}, 6000);
+	});
+}
+
+function randomNum(max) {
+	max = max - 1;
+	var num = Math.round(Math.random() * (max - 0) + 0);
+	return num
+	// TODO: Not allowing duplicate messages
+}
+
+
+function alertMessage(message) {
+  var messageArray = [
+    "default alert message",
+  ]
+  if (message === undefined) {
+    // if no message choose a random default one
+    var message = messageArray[randomNum(messageArray.length)]
+  }
+
+  var messageHTML = $('<div class="alert draggable"><div class="topbar draggable-handler"><span class="title"><img src="/assets/img/favicon/favicon-20x20.png" />Alert Message</span></div><span class="close closeAlert">𝗫</span><h2 class="alertTitle">Alert</h2><div class="alertMessage">' + message + '</div><div class="buttons"><div class="button closeAlert">Continue</div><div class="button closeAlert">Cancel</div></div></div>');
+  $('body').append(messageHTML)
+  messageHTML.show();
+  // createjs.Sound.play("beep")
+	messageHTML.css('left', randomNum(window.innerWidth-300)+'px');
+  messageHTML.css('top', randomNum(window.innerHeight-150)+'px');
+}
+
+var zindex = 100;
+$(document).on('mousedown', ".draggable-handler", function(e) {
+  drag = $(this).closest('.draggable')
+  drag.addClass('dragging')
+  drag.css('z-index', zindex)
+  zindex++
+  drag.css('left', e.clientX-$(this).width()/2)
+  drag.css('top', e.clientY-$(this).height()/2 - 10)
+  $(this).on('mousemove', function(e){
+    drag.css('left', e.clientX-$(this).width()/2)
+    drag.css('top', e.clientY-$(this).height()/2 - 10)
+    window.getSelection().removeAllRanges()
+  })
+});
+
+$(document).on('mouseleave', ".draggable-handler", function(e) {
+  stopDragging();
+});
+
+$(document).on('mouseup', ".draggable-handler", function(e) {
+  stopDragging();
+});
+
+function stopDragging(){
+  drag = $(this).closest('.draggable')
+  drag.removeClass('dragging')
+  $(this).off('mousemove')
+}
+
+$(document).on('click', ".closeAlert", function() {
+    $(this).closest('.alert').remove();
+});
+
 function achievement(time_added, txt) {
 
   // TODO: add actual time to counter
@@ -10,4 +185,86 @@ function achievement(time_added, txt) {
 	$('.badges').append(badge);
 }
 
-// achievement(200, 'Your mom bought 12 copies');
+function animatetimecounter(bonusTime) {
+	console.log(bonusTime);
+	$('#animatetimecounter').prepend(
+		"<span id='bonusTime'>" + bonusTime + '</span>'
+	);
+	// $('#animatetimecounter').show().fadeOut(1000);
+
+	// add
+	$('#animatetimecounter').addClass('fadeinout');
+	$('#counter').addClass('wiggle');
+	console.log('add');
+	setTimeout(function() {
+		// remove
+		console.log('remove');
+		$('#animatetimecounter').removeClass('fadeinout');
+		$('#counter').removeClass('wiggle');
+	}, 1000);
+}
+
+function countdownWrapper() {
+	function loadSound() {
+		console.log('load sound!');
+		createjs.Sound.registerSound('assets/audio/beep.mp3', 'beep');
+		createjs.Sound.registerSound('assets/audio/ding.mp3', 'ding');
+
+		// printer soundjs
+		createjs.Sound.registerSound(
+			'assets/audio/printer/matrix-short.wav',
+			'printer-short'
+		);
+		createjs.Sound.registerSound(
+			'assets/audio/printer/matrix-long.wav',
+			'printer-long'
+		);
+		createjs.Sound.registerSound(
+			'assets/audio/printer/load_paper.wav',
+			'load_paper'
+		);
+	}
+
+	loadSound();
+
+	// when page is ready do this
+	$(document).ready(function() {
+
+
+		animateUp($('#counter'));
+
+
+		function countdown(startTime) {
+			animateUpOut($('#countdownWrapper'), 2000);
+
+			switch (startTime) {
+				case 4:
+					$('#countdown').html('<span>Prepare your <span class="perish">Assets!</span></span>');
+					break;
+				case 3:
+					$('#countdown').html('<span>Type your <span class="perish">Type!</span></span>');
+					break;
+				case 2:
+					$('#countdown').html('<span>Create your <span class="perish">Layout!</span></span>');
+					break;
+				case 1:
+					$('#countdown').html('<span>Publish or <span class="perish">Perish!</span></span>');
+					break;
+				default:
+			}
+
+			startTime = startTime - 1;
+			if (startTime >= 1) {
+				setTimeout(function () {
+					countdown(startTime);
+				}, 2000);
+			} else {
+				$('#countdownWrapper').remove();
+				return
+			}
+		}
+
+		var startTime = 4;
+		countdown(startTime);
+	});
+}
