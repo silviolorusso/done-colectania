@@ -143,26 +143,14 @@ app.get('/pdf', function (req, res) {
     if (err) return console.error(err);
 
     var canvases = []
-    var pub = publication
-    pdfParts = []
-    for (var i = 1; i < 9; i++) {
-      pdfParts.push('tmp/' + publication_id + '/' + publication_id + '-' + i + '.pdf')
-    }
 
     const tasks = [
-      function makeDir(callback) {
-        dir = 'tmp/' + publication_id
-        if (!fs.existsSync(dir)){
-          fs.mkdirSync(dir);
-        }
-        callback(null)
-      },
       function makeCanvases(callback) {
         for (var i = 1; i < 9; i++) {
           var canvas = new fabric.StaticCanvas('c') // random name
           canvas.setWidth(canvasWidth)
           canvas.setHeight(canvasHeight)
-          var pages = pub.pages
+          var pages = publication.pages
           if ( pages.hasOwnProperty('p' + i) ) { // if not empty
             canvas.loadFromJSON(pages['p' + i]);
           }
@@ -186,22 +174,16 @@ app.get('/pdf', function (req, res) {
             i++
           })
 
-          var pdfFileName = 'tmp/' + publication_id + '/' + publication_id + '.pdf'
-          doc.pipe(fs.createWriteStream(pdfFileName).on('finish', function() {
+          res.writeHead(200, {
+            'Content-Type': 'application/pdf',
+            'Access-Control-Allow-Origin': '*',
+            'Content-Disposition': 'filename=' + publication_id + '.pdf'
+          });
+
+          doc.pipe(res).on('finish', function() {
             console.log('single page pdf was successfully created')
-            var fullPdfPath = path.resolve(pdfFileName)
-            res.sendFile(fullPdfPath, function (err) {
-              if (err) {
-                console.log(err)
-              } else {
-                try {
-                  rimraf('tmp/' + publication_id, function () { console.log('directory removed') })
-                } catch(e) {
-                  console.log("error removing path")
-                }
-              }
-            })
-          }))
+          })
+
           doc.end()
 
         } else {
@@ -221,22 +203,10 @@ app.get('/pdf', function (req, res) {
           SVGtoPDF(doc, canvases[4-1].toSVG(), 0, 0);
           SVGtoPDF(doc, canvases[5-1].toSVG(), pageWidth, 0);
 
-          var bookletFileName = 'tmp/' + publication_id + '/' + publication_id + '-booklet.pdf'
-          doc.pipe(fs.createWriteStream(bookletFileName).on('finish', function() {
-            console.log('booklet was successfully created')
-            var fullBookletPath = path.resolve(bookletFileName)
-            res.sendFile(fullBookletPath, function (err) {
-              if (err) {
-                console.log(err)
-              } else {
-                try {
-                  rimraf('tmp/' + publication_id, function () { console.log('directory removed') })
-                } catch(e) {
-                  console.log("error removing path")
-                }
-              }
-            })
-          }))
+          doc.pipe(res).on('finish', function() {
+            console.log('booklet pdf was successfully created')
+          })
+
           doc.end()
 
         }
