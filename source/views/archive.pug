@@ -5,8 +5,7 @@ div.wrapper.intro
   div.collection
     each publication in publications
       a(href='saved?id=' + publication.id).tile
-        div.cover-wrapper
-          object.cover(data='cover?id=' + publication.id, type="image/svg+xml")
+        img.cover(src='cover?id=' + publication.id)
         div.description
           title= publication.title
           div.author

@@ -7,6 +7,7 @@ const path = require('path')
 const async = require('async')
 const PDFDocument = require('pdfkit')
 const SVGtoPDF = require('svg-to-pdfkit')
+const svg2img = require('svg2img')
 
 const express = require('express')
 const app = express()
@@ -78,7 +79,7 @@ app.get('/game', function (req, res) {
 
 // cover
 app.get('/cover', function (req, res) {
-  var publication_id = req.param('id'); // e.g. http://localhost:3000/saved?id=R1516627472029
+  var publication_id = req.param('id'); // e.g. http://localhost:3000/cover?id=R1520262399067
 
   Publication.findOne({ 'id': publication_id }, function (err, publication) {
     if (err) return console.error(err)
@@ -91,7 +92,15 @@ app.get('/cover', function (req, res) {
     cover.loadFromJSON(publication.pages.p1)
     coverImg = cover.toSVG()
 
-    res.send(cover.toSVG())
+    svg2img(cover.toSVG(), function(error, buffer) {
+      res.writeHead(200, {
+        'Content-Type': 'image/png',
+        'Content-disposition': 'filename=' + publication_id,
+      });
+      res.end(buffer)
+    })
+
+    //res.send(cover.toSVG())
   })
 })
 
