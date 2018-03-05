@@ -5,8 +5,6 @@ const fabric = require('fabric').fabric
 const stream = require('stream')
 const path = require('path')
 const async = require('async')
-const rimraf = require('rimraf')
-const childProcess = require('child_process')
 const PDFDocument = require('pdfkit')
 const SVGtoPDF = require('svg-to-pdfkit')
 
@@ -27,7 +25,6 @@ var publicationSchema = mongoose.Schema({
   title: String,
   date: Number,
   expired: Boolean,
-  elements: Array, // remove this after fabric works
   pages: Object
 })
 

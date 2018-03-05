@@ -158,7 +158,7 @@ var Publication = {
 	title: 'TEST PUB',
 	timeLeft: 9000000,
 	expired: false,
-	authors: [],
+	authors: '',
 	pages: {
 		p1: {},
 		p2: {},
