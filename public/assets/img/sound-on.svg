@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="44px" height="51px" viewBox="0 0 44 51" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>sound-on</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M44,0 L44,35.0847458 C44,38.0333847 41.6181549,40.4237288 38.68,40.4237288 C35.7418451,40.4237288 33.36,38.0333847 33.36,35.0847458 C33.36,32.1361068 35.7418451,29.7457627 38.68,29.7457627 C39.4959339,29.7457627 40.2689659,29.9301033 40.96,30.2595492 L40.96,12.0664928 L17.4,16.916558 L17.4,39.6610169 C17.4,42.6096559 14.8480231,45 11.7,45 C8.55197693,45 6,42.6096559 6,39.6610169 C6,36.712378 8.55197693,34.3220339 11.7,34.3220339 C12.66071,34.3220339 13.5659078,34.5446565 14.3600008,34.9378302 L14.36,6.10169492 L44,0 Z" id="path-1"></path>
+        <filter x="-6.6%" y="-5.8%" width="123.7%" height="120.3%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="0.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="4" dy="4" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feComposite in="shadowOffsetOuter1" in2="SourceAlpha" operator="out" result="shadowOffsetOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0.537388393   0 0 0 0 0.537388393   0 0 0 0 0.537388393  0 0 0 0.476987092 0" type="matrix" in="shadowOffsetOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="music-icon" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="About" transform="translate(-554.000000, -680.000000)">
+            <g id="sound-on" transform="translate(549.000000, 681.000000)">
+                <rect id="Rectangle-5" x="0" y="0" width="50" height="50"></rect>
+                <g id="Combined-Shape">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use stroke="#000000" stroke-width="1" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

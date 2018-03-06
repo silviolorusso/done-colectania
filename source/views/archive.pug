@@ -1,7 +1,8 @@
 include parts/headerLogo.pug
 
 div.wrapper.intro 
-  h1 archive
+  h1.center Archive
+  p.center This is an complete collection of publications created by the Publish or Perish software. 
   div.collection
     each publication in publications
       a(href='saved?id=' + publication.id).tile
@@ -31,3 +32,4 @@ div.wrapper.intro
 
 
 
+script(src='assets/js/interface.js')

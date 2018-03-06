@@ -143,6 +143,27 @@ function initCanvases() {
 	  originY: 'top'
 	});
 	canvases['p1'].add(insertAuthors)
+
+	// pagenumbers in canvas
+	// for (var i = 0; i < Object.keys(canvases).length; i++) {
+	// 	var key = "p"+(i+1);
+	// 	console.log(key);
+	// 	var num = (i+1).toString();
+	// 	var insertPagenumbers = new fabric.Text(num, {
+	// 		top: canvases['p1'].height - 30,
+	// 		left: ( canvases['p1'].width) / 2,
+	// 		fontFamily: 'AGaramondPro, serif',
+	// 		fill: '#000',
+	// 		lineHeight: 1,
+	// 		fontSize: 16,
+	// 		textAlign: 'center',
+	// 		width: canvases['p1'].width,
+	// 		selectable: false,
+	// 		originX: 'left',
+	// 		originY: 'top'
+	// 	});
+	// 	canvases[key].add(insertPagenumbers)
+	// }
 	// TODO: on click, text is deleted
 }
 

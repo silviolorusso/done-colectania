@@ -12,14 +12,34 @@ $gray: #f4f4f4;
 $red: #cd1602;
 $accent: #00ff00;
 $shadow: rgba(137, 137, 137, 0.48);
+$gradient: linear-gradient(-180deg, #FF0017 0%, #9A0118 100%);
 $box-shadow: 4px 4px 0 0 $shadow;
 $box-shadow-hover: 6px 6px 0 0 $shadow; // --- Type
-$font: AGaramondPro;
-$font-game: Shlop-Regular;
+$font: AGaramondPro; // $font-game: Shlop-Regular;
+$font-game: IM_FELL_DW_Pica_Roman;
+
+body {
+	display: none;
+}
+
+a {
+	color: $black;
+
+	&:hover {
+		color: $red;
+	}
+}
 
 .perish {
 	color: $red;
 	font-family: $font-game;
+	box-shadow: inset 0 1px 3px 0 rgba(0,0,0,0.55);
+	border: 1px solid #3D3D3D;
+	background-image: $gradient;
+	-webkit-text-fill-color: transparent;
+	color: transparent;
+	-webkit-background-clip: text;
+	background-clip: text;
 }
 
 .regular {
@@ -40,7 +60,7 @@ body {
 	padding: 0;
 	font-family: $font;
 	color: $black;
-	background: $gray;
+	background-color: $gray;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
@@ -88,9 +108,12 @@ header {
 			font-size: 16px;
 			color: $black;
 		}
+	}
 
+	a {
 		img {
-			width: 40px;
+			max-width: 40px;
+			max-height: 40px;
 		}
 	}
 
@@ -106,6 +129,17 @@ header {
 			text-decoration: underline;
 		}
 	}
+}
+
+#archive {
+	position: fixed;
+	bottom: 20px;
+	left: 20px;
+	display: block;
+	margin-top: 13px;
+	font-size: 16px;
+	color: $black;
+	text-decoration: none;
 }
 // --- TIME COUNTER
 
@@ -465,6 +499,35 @@ $spread-width: 900px;
 			position: relative;
 			@extend .page-shadow;
 
+			#first {
+				text-align: right;
+			}
+
+			.pageNumber {
+				display: block;
+				padding-top: 10px;
+			}
+
+			&:nth-of-type(even) {
+				.pageNumber {
+					text-align: left;
+				}
+			}
+
+			&:nth-of-type(odd) {
+				.pageNumber {
+					text-align: left;
+				}
+			}
+
+			&:nth-of-type(even) {
+				.pageNumber {
+					text-align: right;
+					display: block;
+					padding-top: 5px;
+				}
+			}
+
 			input {
 				margin: auto;
 				display: block;
@@ -557,24 +620,150 @@ $spread-width: 900px;
 // --- intro
 
 .intro {
-	width: 650px;
+	max-width: 1100px;
 	margin: auto;
 	font-size: 22px;
 	color: $black;
 	line-height: 30px;
 
-	.menu {
-		background: $white;
-		border: 1px solid $black;
-		box-shadow: $box-shadow;
-		padding: 30px;
-		margin-top: 40px;
+	h1,
+	p {
+		max-width: 600px;
+		padding-bottom: 30px;
+		margin: auto;
+	}
 
-		.button {
-			width: 320px;
-			font-size: 24px;
-			display: block;
+	.menu {
+		padding: 0;
+		display: flex;
+		flex-wrap: nowrap;
+
+		.wrap {
+			flex-grow: 1;
+			margin-top: 20px;
+			text-align: center;
+
+			.button {
+				height: 200px;
+				font-size: 24px;
+				display: inline-block;
+				position: relative;
+				margin-bottom: 5px !important;
+
+				&:hover {
+					background-color: $gray;
+					color: $black;
+				}
+
+				img {
+					padding-top: 30px;
+					width: 100px;
+					display: block;
+					margin: auto;
+					transition: .2s;
+				}
+
+				span {
+					display: inline-block;
+					vertical-align: bottom;
+					position: absolute;
+					bottom: 10px;
+					left: 0;
+					right: 0;
+				}
+			}
+
+			p {
+				text-align: center;
+				font-size: 16px;
+			}
+
+			&:hover {
+				img {
+					animation-duration: .1s;
+					animation-direction: alternate-reverse;
+					animation-iteration-count: infinite;
+					transition: .2s;
+					padding-top: 27px;
+				}
+			}
+
+			&:nth-of-type(1) {
+				&:hover {
+					img {
+						animation-name: jiggle1;
+					}
+				}
+			}
+
+			&:nth-of-type(2) {
+				&:hover {
+					img {
+						animation-name: jiggle2;
+					}
+				}
+			}
+
+			&:nth-of-type(3) {
+				&:hover {
+					img {
+						animation-name: jiggle3;
+					}
+				}
+			}
+
+			&:nth-of-type(4) {
+				&:hover {
+					img {
+						animation-name: jiggle4;
+					}
+				}
+			}
 		}
+	}
+}
+@keyframes jiggle1 {
+	0% {
+		transform: rotate(-1deg);
+		animation-timing-function: ease-in;
+	}
+
+	50% {
+		transform: rotate(1.5deg);
+		animation-timing-function: ease-out;
+	}
+}
+@keyframes jiggle2 {
+	0% {
+		transform: rotate(-2deg);
+		animation-timing-function: ease-in;
+	}
+
+	50% {
+		transform: rotate(2.5deg);
+		animation-timing-function: ease-out;
+	}
+}
+@keyframes jiggle3 {
+	0% {
+		transform: rotate(-3deg);
+		animation-timing-function: ease-in;
+	}
+
+	50% {
+		transform: rotate(3.5deg);
+		animation-timing-function: ease-out;
+	}
+}
+@keyframes jiggle4 {
+	0% {
+		transform: rotate(-6deg);
+		animation-timing-function: ease-in;
+	}
+
+	50% {
+		transform: rotate(6.5deg);
+		animation-timing-function: ease-out;
 	}
 }
 
@@ -638,7 +827,8 @@ $spread-width: 900px;
 
 		#or {
 			font-size: 48px;
-			padding-left: 110px;
+			padding-left: 100px;
+			padding-right: 7px;
 		}
 
 		#perish {
@@ -646,11 +836,16 @@ $spread-width: 900px;
 			color: $red;
 			font-size: 110px;
 			line-height: 60px;
+			background-image: $gradient;
+			-webkit-text-fill-color: transparent;
+			color: transparent;
+			-webkit-background-clip: text;
+			background-clip: text;
 		}
 	}
 
 	.copyright {
-		font-size: 12px;
+		font-size: 14px;
 		color: $black;
 		text-align: center;
 		padding: 0 10px;
@@ -674,36 +869,46 @@ $spread-width: 900px;
 	left: 0;
 	right: 0;
 	filter: drop-shadow(4px 4px 0px rgba(137, 137, 137, 0.48));
+	top: 80px;
+	pointer-events: none;
 }
 
-.loadingbar {
-	margin-top: 10px;
-	margin-left: auto;
-	margin-right: auto;
-	display: block;
+.loadingwrapper {
 	position: relative;
-	text-align: center;
-	width: 200px;
-	height: 10px;
-	border: 1px solid $black;
-	border-radius: 100px;
 
-	#loader {
-		height: 10px;
-		width: 0;
-		border-radius: 100px;
-		background-color: $red;
+	.loadingbar {
+		margin-top: 10px;
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
+		position: absolute;
+		left: 0;
+		right: 0;
+		text-align: center;
+		width: 200px;
+		height: 25px;
+		border: 1px solid $black;
+		background-color: $white;
+
+		#loader {
+			height: 25px;
+			width: 0;
+			background-image: $gradient;
+		}
 	}
-}
 
-#text {
-	font-size: 12px;
-	padding-top: 5px;
-	margin-left: auto;
-	margin-right: auto;
-	display: block;
-	position: relative;
-	text-align: center;
+	#text {
+		font-size: 14px;
+		padding-top: 15px;
+		font-weight: bold;
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
+		position: absolute;
+		left: 0;
+		right: 0;
+		text-align: center;
+	}
 }
 
 .blink {
@@ -748,13 +953,16 @@ body.saved {
 }
 
 .collection {
+	padding-top: 40px;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
 
 	.tile {
-		width: 49%;
-		margin-bottom: 10px;
+		flex-grow: 1;
+		justify-content: space-between;
+		min-width: 320px;
+		margin-bottom: 20px;
 		font-size: 24px;
 		color: $black;
 		display: block;

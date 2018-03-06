@@ -121,7 +121,7 @@ function loadgame() {
         paddingTop: "100px",
       }, 1000, function() {
         // send page to game
-        $(location).attr('href', '/');
+        $(location).attr('href', '/difficulty');
     });
 
   }, 12000);

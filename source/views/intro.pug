@@ -2,47 +2,16 @@
 
 include parts/headerLogo.pug
 
-div.wrapper.intro
+div.wrapper.intro.center
 
-  p Why making another publishing tool that mimics the functions of the already simple and effective tools available? We have already plenty of  generalist tools and workflows, and they work just fine. 
-  
-  p So, why not making publishing challenging by defining some obstacles, limitations, etc that need to be overcome by the publisher/user? What if publishing had obstacles? What if some friction in the publishing process make the publication more rewarding? What if we apply the IKEA principle to publishing?
+  img(src='assets/img/logo.svg').center
 
-  a.button(href='difficulty')
+  p.center A experiment in making publishing challenging again 
+
+  a.button(href='difficulty').center
     .stylized
       span Start 
       span Game
-        
-  h2 Last Publications
-  
-  
-  div.collection
-    each publication in publications
-      a(href='saved?id=' + publication.id).tile
-        div.publication
-          p= publication.id
-          img(src='assets/img/cover.png')
-        div.description
-          title= publication.id
-          div.author
-            span Written by 
-            span= publication.id
-          div.date
-            span Created on: 
-            span= publication.id
-          div.assets
-            span Number of assets: 
-            span= publication.id
-          div.pages
-            span Number of pages:  
-            span= publication.id
-          div.time
-            span Total time:  
-            span= publication.id
-          div.awards
-            span Awards won: 
-            span= publication.id
-
-  a.button(href='archive') Show more
-
-  // script(src="assets/js/splash_check.js")
+      
+      
+script(src='assets/js/interface.js')

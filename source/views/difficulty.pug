@@ -3,8 +3,28 @@ include parts/headerLogo.pug
 div.wrapper.intro
 
   h1.center Choose your Goal
+  p.center Every writer has dream and now it’s time make them happen. First you to set your goals. Then you play the game. <br /> It’s now or ever. Publish or Perish
   
   .menu
-    a.button(href='game?time=15000') Self-publishing
-    a.button(href='game?time=20000') Publish on Kickstarter 
-    a.button(href='game?time=50000') Get published in Nature
+    div.wrap
+      a.button(href='/game?time=15000')#test
+        img(src="assets/img/logo_demo.svg")
+        span Demo
+      p ∞ time & no distruptions
+    div.wrap
+      a.button(href='/game?time=1500000') 
+        img(src="assets/img/word.png")
+        span Easy
+      p 15min
+    div.wrap
+      a.button(href='/game?time=20000') 
+        img(src="assets/img/kickstarter.png")
+        span Medium
+      p 10min
+    div.wrap
+      a.button(href='/game?time=50000') 
+        img(src="assets/img/nature.jpg")
+        span Hard
+      p 5min
+
+script(src='assets/js/interface.js')

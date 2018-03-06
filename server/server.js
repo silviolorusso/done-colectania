@@ -95,6 +95,12 @@ app.get('/archive', function (req, res) {
 
 })
 
+// splash
+app.get('/about', function (req, res) {
+  res.render(__dirname + '/../source/views/about')
+  console.log('serving about')
+})
+
 // save to db
 app.post('/db', function(req, res) {
     var publication = new Publication( req.body )
