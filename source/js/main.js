@@ -102,69 +102,68 @@ function initCanvases() {
 		canvas = new fabric.Canvas(this);
 	  canvas.setWidth( $(this).closest('.page').width() );
 		canvas.setHeight( $(this).closest('.page').height() );
+    canvas.backgroundColor = 'white';
 		canvases['p' + (i + 1)] = canvas;
+    if (window.location.href.indexOf('saved') >= 0) { // if  saved
+      canvas.selection = false
+    }
 	});
 	fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center' // origin at the center
-	var insertTitle = new fabric.Textbox('Insert Title Here', {
-	  top: 120,
-	  fontFamily: 'AGaramondPro, serif',
-	  fill: '#777',
-	  lineHeight: 1.1,
-	  fontSize: 30,
-	  fontWeight: 'bold',
-	  textAlign: 'center',
-	  width: canvases['p1'].width,
-	  selectable: false,
-	  hoverCursor: 'default',
-	  originX: 'left',
-	  originY: 'top'
-	});
-	canvases['p1'].add(insertTitle)
-	var lineLenght = 250
-	canvases['p1'].add(new fabric.Line([0, 0, lineLenght, 0], {
-		left: ( canvases['p1'].width - lineLenght) / 2,
-	  top: 160,
-	  stroke: '#222',
-	  selectable: false,
-	 	originX: 'left',
-	  originY: 'top'
-	}));
-	var insertAuthors = new fabric.Textbox('Insert Authors Here', {
-	  top: 180,
-	  fontFamily: 'AGaramondPro, serif',
-	  fill: '#777',
-	  lineHeight: 1.1,
-	  fontSize: 20,
-	  textAlign: 'center',
-	  width: canvases['p1'].width,
-	  selectable: false,
-	  hoverCursor: 'default',
-	  originX: 'left',
-	  originY: 'top'
-	});
-	canvases['p1'].add(insertAuthors)
-
-	// pagenumbers in canvas
-	// for (var i = 0; i < Object.keys(canvases).length; i++) {
-	// 	var key = "p"+(i+1);
-	// 	console.log(key);
-	// 	var num = (i+1).toString();
-	// 	var insertPagenumbers = new fabric.Text(num, {
-	// 		top: canvases['p1'].height - 30,
-	// 		left: ( canvases['p1'].width) / 2,
-	// 		fontFamily: 'AGaramondPro, serif',
-	// 		fill: '#000',
-	// 		lineHeight: 1,
-	// 		fontSize: 16,
-	// 		textAlign: 'center',
-	// 		width: canvases['p1'].width,
-	// 		selectable: false,
-	// 		originX: 'left',
-	// 		originY: 'top'
-	// 	});
-	// 	canvases[key].add(insertPagenumbers)
-	// }
-	// TODO: on click, text is deleted
+  if (window.location.href.indexOf('saved') < 0) { // if not saved
+  	var title = new fabric.Textbox('Insert Title', {
+  	  top: 120,
+  	  fontFamily: 'AGaramondPro, serif',
+  	  fill: '#777',
+  	  lineHeight: 1.1,
+  	  fontSize: 30,
+  	  fontWeight: 'bold',
+  	  textAlign: 'center',
+  	  width: canvases['p1'].width,
+  	  selectable: false,
+      hasControls: false,
+  	  hoverCursor: 'default',
+  	  originX: 'left',
+  	  originY: 'top',
+      id: 'lock',
+      cache: false
+  	}).on('editing:entered', function(e) {
+      if (this.text = 'Insert Title') {
+        this.text = ''
+        this.hiddenTextarea.value = ''
+      }
+    })
+  	canvases['p1'].add(title)
+  	var lineLenght = 250
+  	canvases['p1'].add(new fabric.Line([0, 0, lineLenght, 0], {
+  		left: ( canvases['p1'].width - lineLenght) / 2,
+  	  top: 160,
+  	  stroke: '#222',
+  	  selectable: false,
+  	 	originX: 'left',
+  	  originY: 'top'
+  	}));
+  	var authors = new fabric.Textbox('Insert Authors', {
+  	  top: 180,
+  	  fontFamily: 'AGaramondPro, serif',
+  	  fill: '#777',
+  	  lineHeight: 1.1,
+  	  fontSize: 20,
+  	  textAlign: 'center',
+  	  width: canvases['p1'].width,
+  	  selectable: false,
+      hasControls: false,
+  	  hoverCursor: 'default',
+  	  originX: 'left',
+  	  originY: 'top',
+      id: 'lock'
+  	}).on('editing:entered', function(e) {
+      if (this.text = 'Insert Authors') {
+        this.text = ''
+        this.hiddenTextarea.value = ''
+      }
+    })
+  	canvases['p1'].add(authors)
+  }
 }
 
 
@@ -176,10 +175,10 @@ function initCanvases() {
 var Publication = {
 	// all our states
 	id: makeId(),
-	title: 'TEST PUB',
+	title: 'Untitled',
 	timeLeft: 9000000,
 	expired: false,
-	authors: [],
+	authors: 'Anonymous',
 	pages: {
 		p1: {},
 		p2: {},
@@ -196,10 +195,12 @@ function controller(Publication, input) {
 	if (Publication.timeLeft > 0) { // not expired
 		showTime(Publication); // expired
 	} else {
-		Publication.expired = true;
-		showExpired(Publication);
-		lockElements()
-		// showSaveModal();
+		Publication.expired = true
+    lockElements(allElements())
+		showExpired(Publication)
+    for (canvas in canvases) {
+      canvases[canvas].selection = false
+    }
 	}
 
 	if (input && Publication.expired == false) {
@@ -283,7 +284,7 @@ $(document).ready(function() {
 			Publication.timeLeft = Publication.timeLeft - 10;
 			controller(Publication);
 		}, 10)
-    if (disruptionsOn == true) {
+    if ( getUrlParameter('disruptions') != 'false' && disruptionsOn == true) {
       y = setInterval(function() { // launch a random disruption
         disruptions = Object.keys(Disruption)
         Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
@@ -293,8 +294,6 @@ $(document).ready(function() {
 		mouseCounter()
 	} else { // saved publication
 		renderPublication(Publication)
-		pdfDownload()
-		$('body').addClass('saved')
 	}
 });
 
@@ -459,7 +458,9 @@ function showExpired() {
 	// clearInterval(x);
 	// animateUp($('#save-modal'));
 	clearInterval(x)
-  clearInterval(y)
+  if (y) { // if disruptions
+    clearInterval(y)
+  }
 }
 
 function dropElement(pageId, data, mousePos, callback) {
@@ -493,17 +494,7 @@ var Error = {
 	}
 };
 
-// lock elements
-function lockElements() {
-	for (var pageId in canvases) {
-		canvases[pageId].selection = false;
-		for (objectId in canvases[pageId].getObjects() ) {
-			var object = canvases[pageId].item(objectId)
-			object.selectable = false
-			object.hoverCursor = 'default'
-		}
-	}
-}
+
 
 // TODO: CONVERT TO FABRIC
 function removeElement(id) {
@@ -511,67 +502,20 @@ function removeElement(id) {
 	console.log(id);
 }
 
-// show save modal
-
-function showSaveModal() {
-	$('#save-modal').show();
-	$('#save').click(function() {
-		savetoDb(Publication);
-		// makePdf(Publication.id);
-		genPdf(Publication.id);
-		// checkPdf(Publication.id);
-	});
-}
-
-function genPdf(id) {
-	$('#save-modal').show();
-	$('#save-modal').html('');
-	var z = setInterval(function() {
-		if (pdfReady == true) {
-			$('#save-modal').html(
-				'Download your pdf <a href="assets/pdf/' +
-					id +
-					'/' +
-					id +
-					'.pdf?download=true" target="_blank">here</a> and printable pdf booklet <a href="assets/pdf/' +
-					id +
-					'/' +
-					id +
-					'-booklet.pdf?download=true" target="_blank">here</a>.' // add "on click close save modal"
-			);
-			clearInterval(z);
-		} else {
-			// $('#save-modal').html('Your Publication is being generated<span id="loading_dots">...</span><div id="loader"><div id="loadingbar"></div></div>');
-			$('#save-modal').html('Your Publication (<a href="http://localhost:3000/pdf?id=' + Publication.id + '" target="_blank">download</a>) is being generated<span id="loading_dots">...</span><div id="spinner"><div id="animation"></div><img src="assets/img/printer.png"></div>');
-		}
-	}, 100);
-}
-
 // --- SAVED
 
 function renderPublication(Publication) {
-	canvases['p1'].clear(); // clear title
+  // TODO update title and authors
 
 	for (var canvasId in canvases) {
 		var json = JSON.stringify(Publication.pages[canvasId]);
 		canvases[canvasId].loadFromJSON( json, function() {
+      lockElements(allElements())
 			canvases[canvasId].renderAll.bind(canvases[canvasId])
-			lockElements()
 		})
 	}
 
 }
-
-function pdfDownload() {
-	$('#pdf-download').show();
-	$('#pdf-download').click(function() {
-		// makePdf(Publication.id);
-		genPdf(Publication.id);
-		// checkPdf(Publication.id);
-	});
-}
-
-
 
 
 
@@ -653,12 +597,27 @@ function shake(obj, time) {
 function allElements(type) {
   var objs = []
   for (canvas in canvases) {
-    canvasObjs = canvases[canvas].getObjects(type)
+    if (type) {
+      canvasObjs = canvases[canvas].getObjects(type)
+    } else {
+      canvasObjs = canvases[canvas].getObjects()
+    }
     for (var i = canvasObjs.length - 1; i >= 0; i--) {
-      objs.push( canvasObjs[i] )
+      if (canvasObjs[i].id != 'lock') { // use this to lock
+        objs.push( canvasObjs[i] )
+      }
     }
   }
   return objs
+}
+
+// lock elements
+function lockElements(objs) {
+  for (var i = objs.length - 1; i >= 0; i--) {
+    objs[i].selectable = false
+    objs[i].hasControls = false
+    objs[i].hoverCursor = 'default'
+  }
 }
 
 function renderAllCanvases() {
@@ -666,8 +625,6 @@ function renderAllCanvases() {
     canvases[canvasId].renderAll()
   }
 }
-
-
 
 function filterImgs(objs, filter) {
   for (var i = objs.length - 1; i >= 0; i--) {
@@ -677,22 +634,17 @@ function filterImgs(objs, filter) {
   renderAllCanvases()
 }
 
-
 var Disruption = {
 	comic: function() {
-		for (canvasId in canvases) {
-			texts = canvases[canvasId].getObjects('text')
-	    for (text in texts) {
-	      texts[text].fontFamily = '"Comic Sans MS"'
-	    }
-	   	textboxes = canvases[canvasId].getObjects('textbox')
-	    for (textbox in textboxes) {
-	      textboxes[textbox].fontFamily = '"Comic Sans MS"'
-	    }
-
-	    canvases[canvasId].renderAll();
+    function _comic(objs) {
+      for (var i = objs.length - 1; i >= 0; i--) {
+        objs[i].fontFamily = '"Comic Sans MS"'
+      }
     }
-    criticSays('The commissioner asked to spice the typography a bit!', 'Gutenberg')
+    _comic( allElements('text') )
+    _comic( allElements('textbox') )
+    renderAllCanvases()
+    criticSays('Can\'t you spice the typography a bit?', 'Gutenberg')
 	},
 	rotateImgsNostop: function() {
     function _rotateImgsNostop(objs) {
@@ -702,13 +654,13 @@ var Disruption = {
         objs[i].rotate(0).animate({ angle: 360 }, {
           duration: 3000,
           onChange: objs[i].canvas.renderAll.bind(objs[i].canvas),
-          onComplete: function(){ rotateOne(objs[i]) },
+          onComplete: function(){ _rotateImgsNostop(objs) },
           easing: function(t, b, c, d) { return c*t/d + b }
         })
       }
     }
     _rotateImgsNostop(allElements('image'))
-    console.log('Your friend think the layout is a bit static...')
+    criticSays('I find this layout a bit static...', 'Gutenberg')
 	},
 	lockRandPage: function() {
     var keys = Object.keys(canvases)
@@ -722,11 +674,12 @@ var Disruption = {
 		randCanvas.add(new fabric.Line([0, 0, randCanvas.width, randCanvas.height], {
 	  	stroke: 'red',
 	  	selectable: false,
-	  	strokeWidth: 2
+	  	strokeWidth: 2,
+      id: 'lock'
 		}))
 		randCanvas.renderAll();
 		// TODO: prevent drop
-    criticSays('Page ?? is now locked...', 'Gutenberg') // TODO
+    criticSays('Page ' + randCanvas.id + ' is now locked...', 'Gutenberg') // TODO
 	},
   shufflePages: function() {
     var toShuffle = []
@@ -760,13 +713,16 @@ var Disruption = {
 			lockMovementY: true,
 			lockRotation: true,
 			hasControls: false,
+      selectable: false,
 			left: randCanvas.width/2,
 			top: 15,
-      selectable: false
+      selectable: false,
+      id: 'lock'
 		}));
 		fabric.Image.fromURL('/assets/img/kinko.png', function(img){
 				img.hasBorders = false;
 				img.hasControls = false;
+        img.selectable = false;
 				img.scale(0.2);
 				img.left = randCanvas.width-100;
 				img.top = 50;
@@ -774,11 +730,12 @@ var Disruption = {
 				img.lockMovementY = true;
 				img.lockRotation = true;
 				img.setControlsVisibility = false;
+        img.id = 'lock'
 				randCanvas.insertAt(img,3);
 				// TODO: it only works with one image for some reason. running the function multiple times it adds more top bars but just moves all the images to the same place
 		});
 
-    // insert critic
+    criticSays('I found a sponsor!', 'Gutenberg')
 	},
   halfTime: function () {
     Publication.timeLeft = Publication.timeLeft / 2
@@ -843,5 +800,37 @@ var Disruption = {
     }
     _biggerImgs(allElements('image'))
     renderAllCanvases()
+    criticSays('BLOW UP!', 'Gutenberg')
+  },
+  lockAllElements: function() {
+    lockElements(allElements())
+    criticSays('Things are perfect as they are.', 'Gutenberg')
+  },
+  skewAllElements: function() {
+    function _skewAllElements(elements) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].set({
+          scaleY: scaleImgs,
+          scaleX: scaleImgs,
+          transformMatrix: [1, .50, 0, 1, 0, 0]
+        })
+      }
+    }
+    _skewAllElements(allElements('image'))
+    renderAllCanvases()
+    criticSays('Stretch those images, come on!', 'Gutenberg')
+  },
+  flipAllElements: function() {
+    function _flipAllElements(elements) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].set({
+          angle: '-180',
+          flipY: true
+        })
+      }
+    }
+    _flipAllElements(allElements('image'))
+    renderAllCanvases()
+    criticSays('Stretch those images, come on!', 'Gutenberg')
   }
 };

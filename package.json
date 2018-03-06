@@ -35,7 +35,8 @@
     "path": "^0.12.7",
     "pug": "^2.0.0-rc.4",
     "rimraf": "^2.6.2",
-    "stream": "0.0.2"
+    "stream": "0.0.2",
+    "svg2img": "^0.2.8"
   },
   "dependencies": {
     "gulp-run-command": "0.0.9",

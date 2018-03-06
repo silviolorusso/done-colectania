@@ -975,47 +975,48 @@ body.saved {
 			}
 		}
 
-		.publication {
+		.cover {
 			float: left;
 			width: 100px;
 			height: 140px;
-			background: $white;
 			border: 1px solid $black;
 			box-shadow: $box-shadow;
 			transition: .2s;
 			display: inline-block;
-
-			p {
-				padding: 10px 5px;
-				margin: 0;
-				font-size: 16px;
-				line-height: 16px;
-				font-weight: bold;
-				text-align: center;
-				word-wrap: break-word;
-				position: absolute;
-				width: 90px;
-			}
-
-			img {
-				width: 100%;
-			}
+			position:relative;
+			background-color: $white;
 		}
 
-		.description {
-			display: inline-block;
-			float: left;
-			padding: 10px 15px;
+		p {
+			padding: 10px 5px;
+			margin: 0;
+			font-size: 16px;
+			line-height: 16px;
+			font-weight: bold;
+			text-align: center;
+			word-wrap: break-word;
+			position: absolute;
+			width: 90px;
+		}
 
-			div {
-				display: block;
-				font-size: 12px;
-				text-align: left;
-				line-height: 14px;
+		img {
+			width: 100%;
+		}
+	}
 
-				span {
-					display: inline;
-				}
+	.description {
+		display: inline-block;
+		float: left;
+		padding: 10px 15px;
+
+		div {
+			display: block;
+			font-size: 12px;
+			text-align: left;
+			line-height: 14px;
+
+			span {
+				display: inline;
 			}
 		}
 	}
