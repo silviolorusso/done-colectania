@@ -730,8 +730,8 @@ var Disruption = {
 				img.lockMovementY = true;
 				img.lockRotation = true;
 				img.setControlsVisibility = false;
-				randCanvas.insertAt(img,3);
         img.id = 'lock'
+				randCanvas.insertAt(img,3);
 				// TODO: it only works with one image for some reason. running the function multiple times it adds more top bars but just moves all the images to the same place
 		});
 
@@ -805,6 +805,32 @@ var Disruption = {
   lockAllElements: function() {
     lockElements(allElements())
     criticSays('Things are perfect as they are.', 'Gutenberg')    
-  }
-
+  },
+  skewAllElements: function() {
+    function _skewAllElements(elements) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].set({
+          scaleY: scaleImgs,
+          scaleX: scaleImgs,
+          transformMatrix: [1, .50, 0, 1, 0, 0]
+        })
+      }
+    }
+    _skewAllElements(allElements('image'))
+    renderAllCanvases()
+    criticSays('Stretch those images, come on!', 'Gutenberg')    
+  },
+  flipAllElements: function() {
+    function _flipAllElements(elements) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].set({
+          angle: '-180',
+          flipY: true
+        })
+      }
+    }
+    _flipAllElements(allElements('image'))
+    renderAllCanvases()
+    criticSays('Stretch those images, come on!', 'Gutenberg') 
+  } 
 };
