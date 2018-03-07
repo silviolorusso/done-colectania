@@ -1,4 +1,4 @@
-// --- OPTIONS
+// --- DEFAULTS
 
 var disruptionsOn = true
 var dropDelay = 100
@@ -8,7 +8,7 @@ var textChunksLength = 1500
 var fontSize = 15
 var scaleFont = 1.5
 var scaleImgs = 0.7
-
+var achievementSpan = 3
 
 
 
@@ -49,7 +49,15 @@ function shuffleArray(array) {
   }
 }
 
-
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = months[a.getMonth()];
+  var date = a.getDate();
+  var time = date + ' ' + month + ' ' + year;
+  return time;
+}
 
 
 
@@ -103,10 +111,14 @@ function initCanvases() {
 	  canvas.setWidth( $(this).closest('.page').width() );
 		canvas.setHeight( $(this).closest('.page').height() );
     canvas.backgroundColor = 'white';
+    canvas.id = 'p' + (i+1);
+
 		canvases['p' + (i + 1)] = canvas;
+
     if (window.location.href.indexOf('saved') >= 0) { // if  saved
       canvas.selection = false
     }
+
 	});
 	fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center' // origin at the center
   if (window.location.href.indexOf('saved') < 0) { // if not saved
@@ -131,6 +143,10 @@ function initCanvases() {
         this.text = ''
         this.hiddenTextarea.value = ''
       }
+    }).on('editing:exited', function(e) {
+      Publication.title = this.text
+      this.selectable = false
+      this.hasControls = false
     })
   	canvases['p1'].add(title)
   	var lineLenght = 250
@@ -161,12 +177,55 @@ function initCanvases() {
         this.text = ''
         this.hiddenTextarea.value = ''
       }
+    }).on('editing:exited', function(e) {
+      Publication.authors = this.text
+      this.selectable = false
+      this.hasControls = false
     })
   	canvases['p1'].add(authors)
+    var date = new fabric.Text( timeConverter(Publication.date), {
+      top: 600,
+      left: canvases['p8'].width/2,
+      fontFamily: 'AGaramondPro, serif',
+      fill: '#777',
+      lineHeight: 1.1,
+      fontSize: 14,
+      textAlign: 'center',
+      // width: canvases['p1'].width,
+      selectable: false,
+      hasControls: false,
+      hoverCursor: 'default',
+      originX: 'center',
+      originY: 'top',
+      id: 'lock'
+    })
+    canvases['p8'].add(date);
+    fabric.Image.fromURL('/assets/img/fotocolectania-logo.png', function(img){
+      img.hasBorders = false;
+      img.hasControls = false;
+      img.selectable = false;
+      img.scale(0.12);
+      img.left = canvases['p8'].width/2;
+      img.top = 530;
+      img.lockMovementX = true;
+      img.lockMovementY = true;
+      img.lockRotation = true;
+      img.setControlsVisibility = false;
+      img.hoverCursor = 'default';
+      img.id = 'lock';
+      canvases['p8'].insertAt(img);
+    })
   }
 }
-
-
+$(document).keydown(function(e) { // del or backspace to delete
+  if( e.which == 8 || e.which == 46) {
+    for (canvas in canvases) {
+      if (canvases[canvas].getActiveObject()) {
+        canvases[canvas].remove(canvases[canvas].getActiveObject());
+      }
+    }
+  }
+})
 
 
 
@@ -179,6 +238,11 @@ var Publication = {
 	timeLeft: 9000000,
 	expired: false,
 	authors: 'Anonymous',
+  date: Date.now(),
+  imagesAmount: 0,
+  textAmount: 0,
+  timeElapsed: 0, // TODO set this when time expires
+  achievementsAmount: 0,
 	pages: {
 		p1: {},
 		p2: {},
@@ -193,8 +257,9 @@ var Publication = {
 
 function controller(Publication, input) {
 	if (Publication.timeLeft > 0) { // not expired
-		showTime(Publication); // expired
-	} else {
+		showTime(Publication)
+	} else {  // expired
+    Publication.timeElapsed = timeSet - Publication.timeLeft
 		Publication.expired = true
     lockElements(allElements())
 		showExpired(Publication)
@@ -223,16 +288,15 @@ function controller(Publication, input) {
 						}, 1)
 					}
 					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
-					addtime(bonusTime) // add bonus time
+					
+
+          Publication.imagesAmount += 1 // achievement every x imgs
+          if (Publication.imagesAmount%achievementSpan == 0) {
+            achievement(100 * Publication.imagesAmount, Publication.imagesAmount + ' images added!')
+          }
+
+          addtime(bonusTime)
 					criticSays()
-
-
-					// criticSays('dance dance', 'cat');
-					// or
-					// criticSays('dance dance');
-					// or
-					// criticSays();
-
 
 					break
 			case input.data &&
@@ -245,7 +309,14 @@ function controller(Publication, input) {
 						}, 1)
 					}
 					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
-					addtime(1000) // add bonus time
+
+          Publication.textAmount += input.data.length
+          if (Publication.textAmount >= 500) {
+            achievement(500, 'More than 500 characters added')
+          }
+
+					addtime(bonusTime * 2)
+          criticSays('This is gonna be a goood read')
 
 					break
 			case input.data &&
@@ -278,7 +349,7 @@ $(document).ready(function() {
 	if (window.location.href.indexOf('saved') < 0) {
 		// if not a saved publication
 		if ( getUrlParameter('time') ) { // difficulty
-			Publication.timeLeft = getUrlParameter('time');
+			Publication.timeLeft = timeSet = getUrlParameter('time')
 		}
 		x = setInterval(function() {
 			Publication.timeLeft = Publication.timeLeft - 10;
@@ -443,32 +514,23 @@ function mouseCounter() {
 
 function showExpired() {
 	document.getElementById('counter').innerHTML = 'expired!';
-	$('body').addClass('expired');
-
-	expiredTime();
+	$('body').addClass('expired')
+	expiredTime()
 	setTimeout(function () {
 		$('.wrapper').addClass('saved_view');
-		savedState();
-	}, 500);
-	// anchorkey
-	//setTimeout(function(){
-	//  window.print();
-	//}, 1000);
-	// animateUp($('#save-modal'));
-	// clearInterval(x);
-	// animateUp($('#save-modal'));
+		savedState()
+	}, 500)
 	clearInterval(x)
-  if (y) { // if disruptions
+  if (typeof y !== 'undefined') { // if disruptions
     clearInterval(y)
   }
 }
 
 function dropElement(pageId, data, mousePos, callback) {
 	console.log(mousePos)
-	var element = { data: data, page: pageId };
-	var elementPos = createElement(element, mousePos, callback);
-	Sound.ding();
-	// achievement(200, 'Your mom bought 12 copies');
+	var element = { data: data, page: pageId }
+	var elementPos = createElement(element, mousePos, callback)
+	Sound.ding()
 }
 
 
@@ -675,6 +737,7 @@ var Disruption = {
 	  	stroke: 'red',
 	  	selectable: false,
 	  	strokeWidth: 2,
+      hoverCursor:'default',
       id: 'lock'
 		}))
 		randCanvas.renderAll();

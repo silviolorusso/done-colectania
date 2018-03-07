@@ -83,11 +83,17 @@
       &:nth-of-type(1n) {
         transition: .2;
         transform: skew(0deg, 1deg);
+        canvas {
+          cursor: w-resize !important;
+        }
       }
 
       &:nth-of-type(2n) {
         transition: .2;
         transform: skew(0deg, -1deg);
+        canvas {
+          cursor: e-resize !important;
+        }
       }
 
       &:nth-of-type(1n):hover {

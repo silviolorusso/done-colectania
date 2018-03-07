@@ -628,6 +628,7 @@ $spread-width: 900px;
 
 	h1,
 	p {
+		font-weight: normal;
 		max-width: 600px;
 		padding-bottom: 30px;
 		margin: auto;
@@ -644,7 +645,7 @@ $spread-width: 900px;
 			text-align: center;
 
 			.button {
-				height: 200px;
+				height: 215px;
 				font-size: 24px;
 				display: inline-block;
 				position: relative;
@@ -1014,7 +1015,9 @@ body.saved {
 			font-size: 12px;
 			text-align: left;
 			line-height: 14px;
-
+			&.title {
+				font-weight: bold;
+			}
 			span {
 				display: inline;
 			}

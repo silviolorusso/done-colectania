@@ -2,29 +2,29 @@ include parts/headerLogo.pug
 
 div.wrapper.intro
 
-  h1.center Choose your Goal
-  p.center Every writer has dream and now it’s time make them happen. First you to set your goals. Then you play the game. <br /> It’s now or ever. Publish or Perish
+  h1.center Set Your Goal
+  p.center It’s time to realize your publishing dreams. Set your goal first and then start publishing. It’s now or never. <b>Publish or Perish!</b>
   
   .menu
     div.wrap
       a.button(href='/game?time=99999999999999&disruptions=false')#test
-        img(src="assets/img/logo_demo.svg")
+        img(src="assets/img/notebook-with-pencil.jpg")
         span Demo
       p ∞ time & no distruptions
     div.wrap
-      a.button(href='/game?time=600000') 
-        img(src="assets/img/word.png")
-        span Easy
-      p 10min
+      a.button(href='/game?time=120000') 
+        img(src="assets/img/metro.jpg")
+        span Fast
+      p 2 min
     div.wrap
       a.button(href='/game?time=300000') 
-        img(src="assets/img/kickstarter.png")
+        img(src="assets/img/new-yorker.jpg")
         span Medium
-      p 5min
+      p 5 min
     div.wrap
-      a.button(href='/game?time=120000') 
+      a.button(href='/game?time=600000') 
         img(src="assets/img/nature.jpg")
-        span Hard
-      p 2min
+        span Slow
+      p 10 min
 
 script(src='assets/js/interface.js')
