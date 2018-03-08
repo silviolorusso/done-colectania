@@ -259,13 +259,7 @@ function controller(Publication, input) {
 	if (Publication.timeLeft > 0) { // not expired
 		showTime(Publication)
 	} else {  // expired
-    Publication.timeElapsed = timeSet - Publication.timeLeft
-		Publication.expired = true
-    lockElements(allElements())
-		showExpired(Publication)
-    for (canvas in canvases) {
-      canvases[canvas].selection = false
-    }
+		showExpired()
 	}
 
 	if (input && Publication.expired == false) {
@@ -293,6 +287,17 @@ function controller(Publication, input) {
           Publication.imagesAmount += 1 // achievement every x imgs
           if (Publication.imagesAmount%achievementSpan == 0) {
             achievement(100 * Publication.imagesAmount, Publication.imagesAmount + ' images added!')
+          }
+          // start disruptions after first image
+          if (  Publication.imagesAmount == 1 && 
+                getUrlParameter('disruptions') != 'false' && 
+                disruptionsOn == true &&
+                typeof y === 'undefined') { 
+            y = setInterval(function() { // launch a random disruption
+              disruptions = Object.keys(Disruption)
+              Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
+              shake(pages)
+            }, disruptionInterval)
           }
 
           addtime(bonusTime)
@@ -355,13 +360,6 @@ $(document).ready(function() {
 			Publication.timeLeft = Publication.timeLeft - 10;
 			controller(Publication);
 		}, 10)
-    if ( getUrlParameter('disruptions') != 'false' && disruptionsOn == true) {
-      y = setInterval(function() { // launch a random disruption
-        disruptions = Object.keys(Disruption)
-        Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
-        shake(pages)
-      }, disruptionInterval)
-    }
 		mouseCounter()
 	} else { // saved publication
 		renderPublication(Publication)
@@ -513,16 +511,27 @@ function mouseCounter() {
 }
 
 function showExpired() {
-	document.getElementById('counter').innerHTML = 'expired!';
-	$('body').addClass('expired')
-	expiredTime()
-	setTimeout(function () {
-		$('.wrapper').addClass('saved_view');
-		savedState()
-	}, 500)
-	clearInterval(x)
-  if (typeof y !== 'undefined') { // if disruptions
-    clearInterval(y)
+  if (Publication.expired != true) {
+    Publication.timeElapsed = timeSet - Publication.timeLeft
+    Publication.expired = true
+    lockElements(allElements())
+    setTimeout(function(){
+      $('.suggestions').hide()
+    }, 800)
+  	document.getElementById('counter').innerHTML = 'expired!';
+  	$('body').addClass('expired')
+  	expiredTime()
+    for (canvas in canvases) {
+      canvases[canvas].selection = false
+    }
+  	setTimeout(function () {
+  		$('.wrapper').addClass('saved_view');
+  		savedState()
+  	}, 500)
+  	clearInterval(x)
+    if (typeof y !== 'undefined') { // if disruptions
+      clearInterval(y)
+    }
   }
 }
 
@@ -552,7 +561,7 @@ var Error = {
 	},
 	tooLate: function() {
 		Sound.error();
-		alertMessage('too late bro');
+		alertMessage('Too late amigo');
 	}
 };
 
@@ -708,20 +717,19 @@ var Disruption = {
     renderAllCanvases()
     criticSays('Can\'t you spice the typography a bit?', 'Gutenberg')
 	},
-	rotateImgsNostop: function() {
-    function _rotateImgsNostop(objs) {
+	rotateImgsRand: function() {
+    function _rotateImgsRand(objs) {
       for (var i = objs.length - 1; i >= 0; i--) {
         objs[i].originX = 'center'
         objs[i].originY = 'center'
-        objs[i].rotate(0).animate({ angle: 360 }, {
-          duration: 3000,
+        objs[i].animate({ angle: Math.floor(Math.random() * 360) }, {
+          duration: 1000,
           onChange: objs[i].canvas.renderAll.bind(objs[i].canvas),
-          onComplete: function(){ _rotateImgsNostop(objs) },
           easing: function(t, b, c, d) { return c*t/d + b }
         })
       }
     }
-    _rotateImgsNostop(allElements('image'))
+    _rotateImgsRand(allElements('image'))
     criticSays('I find this layout a bit static...', 'Gutenberg')
 	},
 	lockRandPage: function() {
@@ -848,7 +856,7 @@ var Disruption = {
         elements[i].set('fontSize', elements[i].fontSize / scaleFont);
       }
     }
-    _fontSizeBigger(allElements('textbox'))
+    _fontSizeSmaller(allElements('textbox'))
     renderAllCanvases()
     criticSays('I\'m not blind!', 'Gutenberg')
   },
@@ -897,3 +905,11 @@ var Disruption = {
     criticSays('Stretch those images, come on!', 'Gutenberg')
   }
 };
+
+
+// --- INTERFACE BUTTONS
+
+$('.button.save').click(function() {
+  $('.button.save').hide()
+  $('.button.pdf, .button.booklet').css('display','inline-block')
+})

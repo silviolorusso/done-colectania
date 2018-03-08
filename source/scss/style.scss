@@ -773,6 +773,7 @@ $spread-width: 900px;
 	border: 1px solid $black;
 	font-size: 24px;
 	color: $black;
+	cursor: pointer;
 	display: inline-block;
 	padding: 10px 30px;
 	margin: 20px auto;
@@ -784,6 +785,10 @@ $spread-width: 900px;
 	&:hover {
 		box-shadow: $box-shadow-hover;
 		transition: .2s;
+	}
+
+	&.pdf, &.booklet {
+		display: none;
 	}
 
 	.stylized {
