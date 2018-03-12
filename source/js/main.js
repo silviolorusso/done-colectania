@@ -282,7 +282,7 @@ function controller(Publication, input) {
 						}, 1)
 					}
 					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
-					
+
 
           Publication.imagesAmount += 1 // achievement every x imgs
           if (Publication.imagesAmount%achievementSpan == 0) {
@@ -293,10 +293,10 @@ function controller(Publication, input) {
             criticSays('You can now save your publication!')
           }
           // start disruptions after first image
-          if (  Publication.imagesAmount == 1 && 
-                getUrlParameter('disruptions') != 'false' && 
+          if (  Publication.imagesAmount == 1 &&
+                getUrlParameter('disruptions') != 'false' &&
                 disruptionsOn == true &&
-                typeof y === 'undefined') { 
+                typeof y === 'undefined') {
             y = setInterval(function() { // launch a random disruption
               disruptions = Object.keys(Disruption)
               Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
@@ -522,7 +522,7 @@ function showExpired() {
     setTimeout(function(){
       $('.suggestions').hide()
     }, 800)
-  	document.getElementById('counter').innerHTML = 'expired!';
+  	document.getElementById('counter').style.display = 'none';
   	$('body').addClass('expired')
   	expiredTime()
     for (canvas in canvases) {

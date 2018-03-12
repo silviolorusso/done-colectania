@@ -3,25 +3,31 @@ $('.loadingbar').css('opacity', '0');
 $('#message').addClass('blink');
 
 var allowed = true;
-$( ".wrapper" ).delay(3000).animate({
-    opacity: 1,
-    paddingTop: "80px",
-  }, 3000, function() {
-    // Animation complete.
-    $('#message').html('press ENTER to start');
-    document.onkeydown = checkKey;
-    $(document).click(function () {
-      checkKey();
-    })
+
+if($('#archive').css('display') == 'none') {
+  // console.log('invisible');
+} else {
+  $( ".wrapper" ).delay(3000).animate({
+      opacity: 1,
+      paddingTop: "80px",
+    }, 3000, function() {
+      // Animation complete.
+      $('#message').html('press ENTER to start');
+      document.onkeydown = checkKey;
+      $(document).click(function () {
+        checkKey();
+      })
 
 
-    function checkKey() {
-      if (allowed) {
-        loadgame()
-        allowed = false;
+      function checkKey() {
+        if (allowed) {
+          loadgame()
+          allowed = false;
+        }
       }
-    }
-});
+  });
+}
+
 
 
 function loadgame() {

@@ -6,7 +6,8 @@
   max-width: 60vw;
 
   .comment {
-    margin-bottom: 0;
+    margin-bottom: 10px;
+    padding-top: 10px;
     position: relative;
     left: 0;
 
@@ -17,7 +18,6 @@
       box-shadow: $box-shadow;
       border-radius: 10px 10px 10px 0;
       position: relative;
-      bottom: -40px;
       left: 60px;
       display: inline-block;
     }
@@ -28,6 +28,9 @@
       border-radius: 50%;
       overflow: hidden;
       border: 1px solid $black;
+      display: inline-block;
+      position: absolute;
+      left: 0;
 
       img {
         display: inline;

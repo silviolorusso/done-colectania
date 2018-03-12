@@ -4,7 +4,7 @@ $element-border: #588ac5;
 $black: #191919;
 $white: #ffffff;
 $gray: #f4f4f4;
-$gradient: linear-gradient(90deg, red 0%, yellow 20%, green 40%, cyan 60%, blue 80%, violet 100%);
+$gradient: linear-gradient(90deg, #EE3131 0%, #FFE500 30%, #90CC2D 50%, #2EE2E2 60%, #4986FC 80%, #FD14FF 100%);
 $red: $gradient;
 $accent: #00ff00;
 $shadow: rgba(137, 137, 137, 0.48);
@@ -12,6 +12,10 @@ $box-shadow: 4px 4px 0 0 $shadow;
 $box-shadow-hover: 6px 6px 0 0 $shadow; // --- Type
 $font: AGaramondPro;
 $font-game: Choc;
+
+.mobile {
+	display: none;
+}
 
 body {
 	display: none;
@@ -1041,3 +1045,4 @@ body.saved {
 @import "suggestions";
 @import "alert";
 @import "coin";
+@import "mobile";

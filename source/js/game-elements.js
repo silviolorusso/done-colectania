@@ -132,12 +132,12 @@ function alertMessage(message) {
     var message = messageArray[randomNum(messageArray.length)]
   }
 
-  var messageHTML = $('<div class="alert draggable"><div class="topbar draggable-handler"><span class="title"><img src="/assets/img/favicon/favicon-20x20.png" />Alert Message</span></div><span class="close closeAlert">𝗫</span><h2 class="alertTitle">Alert</h2><div class="alertMessage">' + message + '</div><div class="buttons"><div class="button closeAlert">Continue</div><div class="button closeAlert">Cancel</div></div></div>');
+  var messageHTML = $('<div class="alert draggable"><div class="topbar draggable-handler"><span class="title"><img src="/assets/img/favicon/favicon-20x20.png" />Alert Message</span></div><span class="close closeAlert">𝗫</span><h2 class="alertTitle">Alert</h2><div class="alertMessage">' + message + '</div><div class="buttons"><div class="button closeAlert">Continue</div></div></div>');
   $('body').append(messageHTML)
   messageHTML.show();
   // createjs.Sound.play("beep")
-	messageHTML.css('left', randomNum(window.innerWidth-300)+'px');
-  messageHTML.css('top', randomNum(window.innerHeight-150)+'px');
+	messageHTML.css('left', ((window.innerWidth/2) - (350/2)) +'px');
+  messageHTML.css('top', (window.innerHeight/2-150) +'px');
 }
 
 var zindex = 100;
