@@ -1,0 +1,22 @@
+@media screen and (max-width: 991px) {
+  #archive,
+  .hidemobile,
+  .wrapper,
+  header {
+    display: none;
+  }
+
+  .mobile {
+    display: block;
+    position: fixed;
+    top: 30vh;
+    left: 0;
+    right: 0;
+    margin: auto;
+    background-color: $white;
+    border: 1px solid $black;
+    box-shadow: $box-shadow;
+    max-width: 70vw;
+    padding: 10px;
+  }
+}
