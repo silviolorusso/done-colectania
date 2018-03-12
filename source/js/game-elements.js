@@ -136,8 +136,8 @@ function alertMessage(message) {
   $('body').append(messageHTML)
   messageHTML.show();
   // createjs.Sound.play("beep")
-	messageHTML.css('left', randomNum(window.innerWidth-300)+'px');
-  messageHTML.css('top', randomNum(window.innerHeight-150)+'px');
+	messageHTML.css('left', ((window.innerWidth/2) - (350/2)) +'px');
+  messageHTML.css('top', (window.innerHeight/2-150) +'px');
 }
 
 var zindex = 100;
