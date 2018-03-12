@@ -970,12 +970,12 @@ body.saved {
 	padding-top: 40px;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-between;
+	justify-content: center;
+	align-content: flex-start;
 
 	.tile {
-		flex-grow: 1;
-		justify-content: space-between;
-		min-width: 320px;
+		// flex-grow: 1;
+		width: 320px;
 		margin-bottom: 20px;
 		font-size: 24px;
 		color: $black;
