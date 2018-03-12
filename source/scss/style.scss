@@ -1,22 +1,17 @@
 @import "_sound.scss";
-@font-face {
-	font-family: 'Shlop-Regular';
-	src: url('../../assets/fonts/shlop.ttf') format('truetype');
-	/* Safari, Android, iOS */
-}
-// --- COLORS
+@import "fonts"; // --- COLORS
 $element-border: #588ac5;
 $black: #191919;
 $white: #ffffff;
 $gray: #f4f4f4;
-$red: #cd1602;
+$gradient: linear-gradient(90deg, red 0%, yellow 20%, green 40%, cyan 60%, blue 80%, violet 100%);
+$red: $gradient;
 $accent: #00ff00;
 $shadow: rgba(137, 137, 137, 0.48);
-$gradient: linear-gradient(-180deg, #FF0017 0%, #9A0118 100%);
 $box-shadow: 4px 4px 0 0 $shadow;
 $box-shadow-hover: 6px 6px 0 0 $shadow; // --- Type
-$font: AGaramondPro; // $font-game: Shlop-Regular;
-$font-game: IM_FELL_DW_Pica_Roman;
+$font: AGaramondPro;
+$font-game: Choc;
 
 body {
 	display: none;
@@ -33,8 +28,6 @@ a {
 .perish {
 	color: $red;
 	font-family: $font-game;
-	box-shadow: inset 0 1px 3px 0 rgba(0,0,0,0.55);
-	border: 1px solid #3D3D3D;
 	background-image: $gradient;
 	-webkit-text-fill-color: transparent;
 	color: transparent;
@@ -817,30 +810,35 @@ $spread-width: 900px;
 		margin-left: auto;
 		margin-right: auto;
 		text-align: center;
+		padding-top: 50px;
 		padding-bottom: 80px;
+		line-height: 30px;
 
 		#publish {
 			font-size: 80px;
-			display: block;
-			padding-right: 130px;
+			display: inline-block;
+			padding-right: 10px;
 		}
 
 		#or {
 			font-size: 48px;
-			padding-left: 100px;
-			padding-right: 7px;
+			display: inline;
+			padding-right: 100px;
+			opacity: .7;
 		}
 
 		#perish {
 			font-family: $font-game;
 			color: $red;
 			font-size: 110px;
-			line-height: 60px;
+			line-height: normal;
 			background-image: $gradient;
 			-webkit-text-fill-color: transparent;
 			color: transparent;
 			-webkit-background-clip: text;
 			background-clip: text;
+			display: block;
+			padding-left: 140px;
 		}
 	}
 
@@ -983,7 +981,7 @@ body.saved {
 			box-shadow: $box-shadow;
 			transition: .2s;
 			display: inline-block;
-			position:relative;
+			position: relative;
 			background-color: $white;
 		}
 
