@@ -13,6 +13,7 @@
     right: 0;
     outline: none;
     box-shadow: none;
+    padding-bottom: 100px;
 
     .achievements {
       width: $spread-width / 2;
@@ -87,6 +88,7 @@
       &:nth-of-type(1n) {
         transition: .2;
         transform: skew(0deg, 1deg);
+        transform-origin: bottom right;
 
         canvas {
           cursor: w-resize !important;
@@ -96,6 +98,39 @@
       &:nth-of-type(2n) {
         transition: .2;
         transform: skew(0deg, -1deg);
+        transform-origin: bottom left;
+
+        &:after {
+          content: ' ';
+          background-color: #868686;
+          position: absolute;
+          top: 90px;
+          left: -3px;
+          width: 3px;
+          height: 50px;
+          border-radius: 10px;
+          z-index: 20;
+          background-image: linear-gradient(0deg, #969595 0%, #CED0CE 52%, #9B9A9A 100%);
+          border: 2px solid #FFFFFF;
+          border: 1px solid #BEBEBE;
+          border-radius: 3px;
+        }
+
+        &:before {
+          content: ' ';
+          background-color: #868686;
+          position: absolute;
+          bottom: 90px;
+          left: -3px;
+          width: 3px;
+          height: 50px;
+          border-radius: 10px;
+          z-index: 20;
+          background-image: linear-gradient(0deg, #969595 0%, #CED0CE 52%, #9B9A9A 100%);
+          border: 2px solid #FFFFFF;
+          border: 1px solid #BEBEBE;
+          border-radius: 3px;
+        }
 
         canvas {
           cursor: e-resize !important;
@@ -105,16 +140,17 @@
       &:nth-of-type(1n):hover {
         transition: .2;
         transform: skew(0deg, 3deg);
+        transform-origin: bottom right;
       }
 
       &:nth-of-type(2n):hover {
         transition: .2;
         transform: skew(0deg, -3deg);
+        transform-origin: bottom left;
       }
 
       &:hover {
         -webkit-transition-duration: .2s;
-        top: -5px;
         box-shadow: 8px 8px 0 0 rgba(137, 137, 137, 0.48);
       }
 
