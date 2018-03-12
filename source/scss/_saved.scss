@@ -57,7 +57,8 @@
       }
     }
 
-    #p1, #page1 {
+    #p1,
+    #page1 {
       transform: skew(0deg, 0deg);
     }
 
@@ -83,6 +84,7 @@
       &:nth-of-type(1n) {
         transition: .2;
         transform: skew(0deg, 1deg);
+
         canvas {
           cursor: w-resize !important;
         }
@@ -91,6 +93,7 @@
       &:nth-of-type(2n) {
         transition: .2;
         transform: skew(0deg, -1deg);
+
         canvas {
           cursor: e-resize !important;
         }
@@ -203,7 +206,7 @@
 }
 
 #overlay_flash {
-  background-color: $red;
+  background: $red;
   position: fixed;
   top: 0;
   left: 0;
@@ -212,6 +215,7 @@
   width: 100vw;
   transition: 1s;
   display: table;
+
   h1 {
     margin: auto;
     text-align: center;
@@ -219,5 +223,6 @@
     color: $white;
     display: table-cell;
     font-family: $font-game;
+    padding: 10px;
   }
 }

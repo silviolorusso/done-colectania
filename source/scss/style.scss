@@ -780,7 +780,8 @@ $spread-width: 900px;
 		transition: .2s;
 	}
 
-	&.pdf, &.booklet {
+	&.booklet,
+	&.pdf {
 		display: none;
 	}
 
@@ -796,8 +797,13 @@ $spread-width: 900px;
 	}
 
 	&:hover {
-		background-color: $black;
-		color: $white;
+		.stylized {
+			background-image: $gradient;
+			-webkit-text-fill-color: transparent;
+			color: transparent;
+			-webkit-background-clip: text;
+			background-clip: text;
+		}
 	}
 }
 // --- splash screen
@@ -1018,9 +1024,11 @@ body.saved {
 			font-size: 12px;
 			text-align: left;
 			line-height: 14px;
+
 			&.title {
 				font-weight: bold;
 			}
+
 			span {
 				display: inline;
 			}
