@@ -123,8 +123,15 @@ app.get('/archive', function (req, res) {
     return time;
   }
 
+  var perPage = 15
+  pageParam = req.param('page')
+  if (pageParam == null) {
+    pageParam = 0
+  }
+  var page = Math.max(0, pageParam)
+
   // find all publications
-  Publication.find(function (err, _publications) {
+  Publication.find().limit(15).skip(perPage * page).sort('-date').exec(function (err, _publications) {
     if (err) return console.error(err);
 
 
@@ -133,7 +140,8 @@ app.get('/archive', function (req, res) {
     }
 
     res.render(__dirname + '/../source/views/archive', {
-      publications: _publications
+      publications: _publications,
+      nextPage: page + 1
     })
 
     console.log('serving archive')
@@ -165,15 +173,20 @@ app.get('/saved', function (req, res) {
   // find publication
   var publication_model
   Publication.findOne({ 'id': publication_id }, function (err, publication) {
-    if (err) return console.error(err);
+    if (err) return console.error(err)
 
     publication_model = publication
+
+    if (publication_model) { // publication found
+
     publication_model = JSON.stringify(publication_model)
-
-    // script to insert the saved model into saved
-    var publication_script = '<script>var Publication = ' +  publication_model + ';</script>'
-
+    var publication_script = '<script>var Publication = ' +  publication_model + ';</script>'     // script to insert the saved model into saved
     res.render(__dirname + '/../source/views/saved', { publication_script: publication_script })
+
+    } else { // publication not found
+      res.writeHead(301, {Location: '/'});
+      res.end();
+    }
   })
   console.log('serving saved publication')
 })

@@ -622,6 +622,7 @@ $spread-width: 900px;
 	font-size: 22px;
 	color: $black;
 	line-height: 30px;
+	padding-bottom: 100px;
 
 	h1,
 	p {
@@ -784,6 +785,7 @@ $spread-width: 900px;
 		transition: .2s;
 	}
 
+	&#done,
 	&.booklet,
 	&.pdf {
 		display: none;

@@ -288,6 +288,10 @@ function controller(Publication, input) {
           if (Publication.imagesAmount%achievementSpan == 0) {
             achievement(100 * Publication.imagesAmount, Publication.imagesAmount + ' images added!')
           }
+          if (Publication.imagesAmount == 3) {
+            $('#done').css('display','inline-block')
+            criticSays('You can now save your publication!')
+          }
           // start disruptions after first image
           if (  Publication.imagesAmount == 1 &&
                 getUrlParameter('disruptions') != 'false' &&
