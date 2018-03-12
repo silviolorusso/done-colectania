@@ -2,31 +2,32 @@ include parts/headerLogo.pug
 
 div.wrapper.intro 
   h1.center Archive
-  p.center This is an complete collection of publications created by the Publish or Perish software. 
+  p.center Browse the collection of publications created with <b>Publish or Perish!</b> or  <a href="/">Publish or Perish!</a> yourself.
   div.collection
     each publication in publications
       a(href='saved?id=' + publication.id).tile
         img.cover(src='cover?id=' + publication.id)
         div.description
-          title= publication.title
+          div.title
+            span= publication.title
           div.author
             span Written by 
             span= publication.authors
           div.date
             span Created on: 
-            span= publication.id
-          div.assets
-            span Number of assets: 
-            span= publication.id
+            span= publication.date
+          div.images
+            span Number of images: 
+            span= publication.imagesAmount
           div.pages
-            span Number of pages:  
-            span= publication.id
+            span Amount of text:  
+            span= publication.textAmount + ' chars'
           div.time
-            span Total time:  
-            span= publication.id
+            span Elapsed time:  
+            span= publication.timeElapsed
           div.awards
-            span Awards won: 
-            span= publication.id
+            span Obtained achievements: 
+            span= publication.achievementsAmount
 
 
 

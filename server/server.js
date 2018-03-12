@@ -24,8 +24,13 @@ const db = mongoose.connection;
 var publicationSchema = mongoose.Schema({
   id: String,
   title: String,
-  date: Number,
   expired: Boolean,
+  authors: String,
+  date: String,
+  imagesAmount: Number,
+  textAmount: Number,
+  timeElapsed: Number,
+  achievementsAmount: Number,
   pages: Object
 })
 
@@ -104,12 +109,28 @@ app.get('/cover', function (req, res) {
   })
 })
 
+
 // archive
 app.get('/archive', function (req, res) {
+
+  function timeConverter(UNIX_timestamp){
+    var a = new Date(UNIX_timestamp);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var time = date + ' ' + month + ' ' + year;
+    return time;
+  }
 
   // find all publications
   Publication.find(function (err, _publications) {
     if (err) return console.error(err);
+
+
+    for (id in _publications) { // convert date to text
+      _publications[id].date = timeConverter( Number(_publications[id].date) )
+    }
 
     res.render(__dirname + '/../source/views/archive', {
       publications: _publications

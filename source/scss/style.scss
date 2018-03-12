@@ -621,6 +621,7 @@ $spread-width: 900px;
 
 	h1,
 	p {
+		font-weight: normal;
 		max-width: 600px;
 		padding-bottom: 30px;
 		margin: auto;
@@ -637,7 +638,7 @@ $spread-width: 900px;
 			text-align: center;
 
 			.button {
-				height: 200px;
+				height: 215px;
 				font-size: 24px;
 				display: inline-block;
 				position: relative;
@@ -765,6 +766,7 @@ $spread-width: 900px;
 	border: 1px solid $black;
 	font-size: 24px;
 	color: $black;
+	cursor: pointer;
 	display: inline-block;
 	padding: 10px 30px;
 	margin: 20px auto;
@@ -776,6 +778,10 @@ $spread-width: 900px;
 	&:hover {
 		box-shadow: $box-shadow-hover;
 		transition: .2s;
+	}
+
+	&.pdf, &.booklet {
+		display: none;
 	}
 
 	.stylized {
@@ -1012,7 +1018,9 @@ body.saved {
 			font-size: 12px;
 			text-align: left;
 			line-height: 14px;
-
+			&.title {
+				font-weight: bold;
+			}
 			span {
 				display: inline;
 			}

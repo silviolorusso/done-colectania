@@ -195,10 +195,7 @@ function animatetimecounter(bonusTime) {
 	// add
 	$('#animatetimecounter').addClass('fadeinout');
 	$('#counter').addClass('wiggle');
-	console.log('add');
 	setTimeout(function() {
-		// remove
-		console.log('remove');
 		$('#animatetimecounter').removeClass('fadeinout');
 		$('#counter').removeClass('wiggle');
 	}, 1000);

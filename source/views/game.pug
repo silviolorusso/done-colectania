@@ -12,6 +12,12 @@ div.wrapper
     div.achievements.instructions
       h2 Instructions
       p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
+
+      div.button#done(onclick='showExpired()') 
+        .stylized
+          span Publication 
+          span Ready
+
       h2 Achievements
       div.badges
     div.achievements.saved 
@@ -19,38 +25,42 @@ div.wrapper
       p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
       p Your Publication data:
       div.collection
-        a(href='saved?id=').tile#full_width
-          div.publication
-            p publication
-            // img(src='assets/img/cover.png')
-          div.description
-            title publication
-            div.author
-              span Written by 
-              span publication id
-            div.date
-              span Created on: 
-              span publication id
-            div.assets
-              span Number of assets: 
-              span publication id
-            div.pages
-              span Number of pages:  
-              span publication id
-            div.time
-              span Total time:  
-              span publication id
-            div.awards
-              span Awards won: 
-              span publication id
-      a.button(onclick='savetoDb(Publication);')
+        //- a(href='saved?id=').tile#full_width
+        //-   div.publication
+        //-     p publication
+        //-     // img(src='assets/img/cover.png')
+        //-   div.description
+        //-     title publication
+        //-     div.author
+        //-       span Written by 
+        //-       span publication id
+        //-     div.date
+        //-       span Created on: 
+        //-       span publication id
+        //-     div.assets
+        //-       span Number of assets: 
+        //-       span publication id
+        //-     div.pages
+        //-       span Number of pages:  
+        //-       span publication id
+        //-     div.time
+        //-       span Total time:  
+        //-       span publication id
+        //-     div.awards
+        //-       span Achievements obtained: 
+        //-       span publication id
+      div.button.save(onclick='savetoDb(Publication);')
         .stylized
           span Save 
+          span Publication
+      div.button.pdf(onclick='window.location.href = "/pdf?id=" + Publication.id;')
+        .stylized
+          span Download 
           span PDF
-      a.button#save(onclick='window.location.href = "/pdf?id=" + Publication.id;')
+      div.button.booklet(onclick='window.location.href = "/pdf?id=" + Publication.id + "&booklet=true";')
         .stylized
           span Print 
-          span Publication
+          span Booklet
       div#download
     div.page#page1
       // input#title(type='textarea', placeholder='Insert Title Here', maxlength="16")
@@ -88,83 +98,42 @@ div.wrapper
       p Your Publication data:
       div.buttons
         div.collection
-          a(href='saved?id=').tile#full_width
-            div.publication
-              p publication
-              // img(src='assets/img/cover.png')
-            div.description
-              title publication
-              div.author
-                span Written by 
-                span publication id
-              div.date
-                span Created on: 
-                span publication id
-              div.assets
-                span Number of assets: 
-                span publication id
-              div.pages
-                span Number of pages:  
-                span publication id
-              div.time
-                span Total time:  
-                span publication id
-              div.awards
-                span Awards won: 
-                span publication id
-        a.button(onclick='savetoDb(Publication);')
-          .stylized
-            span Save 
-            span PDF
-        a.button#save(onclick='window.location.href = "/pdf?id=" + Publication.id;')
-          .stylized
-            span Print 
-            span Publication
-
-//- div#save-modal
-//-   h2 Time has expired!
-//-   p Do you wish to keep or discard this publication?
-//-   div.button#save Keep
-//-   div.button#save Restart
-//-   //- div#loader
-//-   //-   #loadingbar
-//-   //- div#spinner
-//-   //-   div#animation
-//-     img(src="assets/img/printer.png")
-
-//- div#save-modal
-//-   h2 Time has expired!
-//-   p Do you wish to print or save this publication?
-//-   div.collection
-//-     a(href='saved?id=').tile#full_width
-//-       div.publication
-//-         p publication
-//-         img(src='assets/img/cover.png')
-//-       div.description
-//-         title publication
-//-         div.author
-//-           span Written by 
-//-           span publication id
-//-         div.date
-//-           span Created on: 
-//-           span publication id
-//-         div.assets
-//-           span Number of assets: 
-//-           span publication id
-//-         div.pages
-//-           span Number of pages:  
-//-           span publication id
-//-         div.time
-//-           span Total time:  
-//-           span publication id
-//-         div.awards
-//-           span Awards won: 
-//-           span publication id
-//-   div.button Save publication to database
-//-   br
-//-   div.button Download .PDF and save to database
-  //- div#loader
-  //-   #loadingbar
+          //- a(href='saved?id=').tile#full_width
+          //-   div.publication
+          //-     p publication
+          //-     // img(src='assets/img/cover.png')
+          //-   div.description
+          //-     title publication
+          //-     div.author
+          //-       span Written by 
+          //-       span publication id
+          //-     div.date
+          //-       span Created on: 
+          //-       span publication id
+          //-     div.assets
+          //-       span Number of assets: 
+          //-       span publication id
+          //-     div.pages
+          //-       span Number of pages:  
+          //-       span publication id
+          //-     div.time
+          //-       span Total time:  
+          //-       span publication id
+          //-     div.awards
+          //-       span Awards won: 
+          //-       span publication id
+      div.button.save(onclick='savetoDb(Publication);')
+        .stylized
+          span Save 
+          span Publication
+      div.button.pdf(onclick='window.location.href = "/pdf?id=" + Publication.id;')
+        .stylized
+          span Download 
+          span PDF
+      div.button.booklet(onclick='window.location.href = "/pdf?id=" + Publication.id + "&booklet=true";')
+        .stylized
+          span Print 
+          span Booklet
 
 p#pdf-download download as pdf 
 
