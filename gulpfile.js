@@ -6,6 +6,7 @@ var gulp  			= require('gulp'),
     sass  			= require('gulp-sass');
     sourcemaps 	= require('gulp-sourcemaps');
     concat      = require('gulp-concat');
+    autoprefixer = require('gulp-autoprefixer')
     pug					= require('gulp-pug');
 
 gulp.task('build-css', function() {
@@ -14,6 +15,11 @@ return gulp.src('source/scss/**/*.scss')
     	.pipe(plumber())
       .pipe(sass().on('error', sass.logError))
     .pipe(sourcemaps.write()) // Add the map to modified source.
+    .pipe(autoprefixer({
+            browsers: ['last 2 versions'],
+            cascade: false
+        }))
+    .pipe(sass({outputStyle: 'compressed'}))
     .pipe(gulp.dest('public/assets/css'))
 });
 

@@ -24,6 +24,7 @@
     "express": "^4.16.2",
     "fabric": "^2.0.1",
     "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^5.0.0",
     "gulp-concat": "latest",
     "gulp-plumber": "latest",
     "gulp-pug": "latest",
