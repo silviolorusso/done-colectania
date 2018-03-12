@@ -636,6 +636,27 @@ $spread-width: 900px;
 			animation-timing-function: ease-in-out;
 		}
 	}
+
+	#copyright {
+		opacity: .5;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		font-size: 14px;
+		color: $black;
+		text-align: center;
+		padding: 0 10px;
+		margin: auto;
+
+		.monospace {
+			font-family: monospace;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
 }
 @keyframes blink {
 	0% {
@@ -990,17 +1011,13 @@ $spread-width: 900px;
 	position: absolute;
 }
 // --- saved
-
 // body.saved {
-
 // 	#countdown,
 // 	#counter {
 // 		display: none;
 // 	}
-
 // 	.page-element {
 // 		border: none !important;
-
 // 		.close {
 // 			display: none !important;
 // 		}
