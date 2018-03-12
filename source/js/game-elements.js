@@ -27,7 +27,7 @@ if ($('div').hasClass('saved_view')) {
 }
 
 function expiredTime() {
-  $('body').append('<div id="overlay_flash"><h1>Time has Expired</h1></div>');
+  $('body').append('<div id="overlay_flash"><h1>You Perished</h1></div>');
   $('#overlay_flash').height($(window).height());
   setTimeout(function () {
     $('#overlay_flash').css('top','unset');

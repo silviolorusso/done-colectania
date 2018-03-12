@@ -952,21 +952,21 @@ $spread-width: 900px;
 }
 // --- saved
 
-body.saved {
-	// display: none; // add this to hide everything before images are put in place
-	#countdown,
-	#counter {
-		display: none;
-	}
+// body.saved {
 
-	.page-element {
-		border: none !important;
+// 	#countdown,
+// 	#counter {
+// 		display: none;
+// 	}
 
-		.close {
-			display: none !important;
-		}
-	}
-}
+// 	.page-element {
+// 		border: none !important;
+
+// 		.close {
+// 			display: none !important;
+// 		}
+// 	}
+// }
 
 .collection {
 	padding-top: 40px;

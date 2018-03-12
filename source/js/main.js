@@ -7,8 +7,10 @@ var bonusTime = 1000
 var textChunksLength = 1500
 var fontSize = 15
 var scaleFont = 1.5
-var scaleImgs = 0.7
+var scaleUpImgs = 0.7
+var scaleDownImgs = 0.7
 var achievementSpan = 3
+var drawingModeTime = 10000
 
 
 
@@ -105,6 +107,8 @@ function createElement(element, mousePos, callback) {
 
 // --- initialize canvases
 var canvases = {}
+var title
+var authors
 function initCanvases() {
 	$('canvas').each(function(i) {
 		canvas = new fabric.Canvas(this);
@@ -122,7 +126,7 @@ function initCanvases() {
 	});
 	fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center' // origin at the center
   if (window.location.href.indexOf('saved') < 0) { // if not saved
-  	var title = new fabric.Textbox('Insert Title', {
+  	title = new fabric.Textbox('Insert Title', {
   	  top: 120,
   	  fontFamily: 'AGaramondPro, serif',
   	  fill: '#777',
@@ -158,7 +162,7 @@ function initCanvases() {
   	 	originX: 'left',
   	  originY: 'top'
   	}));
-  	var authors = new fabric.Textbox('Insert Authors', {
+  	authors = new fabric.Textbox('Insert Authors', {
   	  top: 180,
   	  fontFamily: 'AGaramondPro, serif',
   	  fill: '#777',
@@ -336,8 +340,6 @@ function controller(Publication, input) {
 			case input.move == true : // moving or scaling an image
 					Publication.pages[input.page] = canvases[input.page].toJSON()
 					break
-			case input.hasOwnProperty('title') : // changing title
-					Publication.title = input.title;
 		}
 	} else if (input && Publication.expired == true) {
 		// too late
@@ -387,7 +389,7 @@ function onModElement() {
 
 // get mouse position on canvas
 function getMousePos(canvas, e) {
-  var pointer = canvas.getPointer(event, e)
+  var pointer = canvas.getPointer(e)
   var posX = pointer.x
   var posY = pointer.y
   return {
@@ -460,15 +462,7 @@ $(document).on('click', '.close', function() {
 		visible: false,
 		page: pageId
 	});
-});
-
-// changing title // TODO Update
-$('#title').change(function() {
-	controller(Publication, {
-		title: $(this).val()
-	});
 })
-
 
 
 
@@ -567,21 +561,15 @@ var Error = {
 		Sound.error();
 		alertMessage('Too late amigo');
 	}
-};
-
-
-
-// TODO: CONVERT TO FABRIC
-function removeElement(id) {
-	$('#' + id).hide();
-	console.log(id);
 }
+
+
+
+
 
 // --- SAVED
 
 function renderPublication(Publication) {
-  // TODO update title and authors
-
 	for (var canvasId in canvases) {
 		var json = JSON.stringify(Publication.pages[canvasId]);
 		canvases[canvasId].loadFromJSON( json, function() {
@@ -589,7 +577,6 @@ function renderPublication(Publication) {
 			canvases[canvasId].renderAll.bind(canvases[canvasId])
 		})
 	}
-
 }
 
 
@@ -686,7 +673,6 @@ function allElements(type) {
   return objs
 }
 
-// lock elements
 function lockElements(objs) {
   for (var i = objs.length - 1; i >= 0; i--) {
     objs[i].selectable = false
@@ -868,12 +854,25 @@ var Disruption = {
     function _biggerImgs(elements) {
       for (var i = 0; i < elements.length; i++) {
         elements[i].set({
-          scaleY: scaleImgs,
-          scaleX: scaleImgs
+          scaleY: scaleUpImgs,
+          scaleX: scaleUpImgs
         });
       }
     }
     _biggerImgs(allElements('image'))
+    renderAllCanvases()
+    criticSays('BLOW UP!', 'Gutenberg')
+  },
+  smallerImgs: function() {
+    function _smallerImgs(elements) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].set({
+          scaleY: scaleDownImgs,
+          scaleX: scaleDownImgs
+        });
+      }
+    }
+    _smallerImgs(allElements('image'))
     renderAllCanvases()
     criticSays('BLOW UP!', 'Gutenberg')
   },
@@ -885,8 +884,8 @@ var Disruption = {
     function _skewAllElements(elements) {
       for (var i = 0; i < elements.length; i++) {
         elements[i].set({
-          scaleY: scaleImgs,
-          scaleX: scaleImgs,
+          scaleY: scaleUpImgs,
+          scaleX: scaleUpImgs,
           transformMatrix: [1, .50, 0, 1, 0, 0]
         })
       }
@@ -895,8 +894,8 @@ var Disruption = {
     renderAllCanvases()
     criticSays('Stretch those images, come on!', 'Gutenberg')
   },
-  flipAllElements: function() {
-    function _flipAllElements(elements) {
+  flipAllImgs: function() {
+    function _flipAllImgs(elements) {
       for (var i = 0; i < elements.length; i++) {
         elements[i].set({
           angle: '-180',
@@ -904,11 +903,128 @@ var Disruption = {
         })
       }
     }
-    _flipAllElements(allElements('image'))
+    _flipAllImgs(allElements('image'))
     renderAllCanvases()
-    criticSays('Stretch those images, come on!', 'Gutenberg')
+    criticSays('Flip those images, come on!', 'Gutenberg')
+  },
+  bitLeftbitRightAllImgs: function() {
+    function _bitLeftbitRightAllImgs(elements, distance) {
+      var duration = 200
+      var pause = 100
+
+      function left1(i, elements) {
+        setTimeout(function(){
+          elements[i].animate('left', elements[i].left + distance + Math.floor(Math.random() * 10), { // a bit of randomness to make it more human
+            duration: duration + Math.floor(Math.random() * 100),
+            onChange: elements[i].canvas.renderAll.bind(elements[i].canvas),
+          })
+        }, 0)
+      }
+      function left2(i, elements) {
+        setTimeout(function(){
+          elements[i].animate('left', elements[i].left + distance + Math.floor(Math.random() * 10), {
+            duration: duration + Math.floor(Math.random() * 100),
+            onChange: elements[i].canvas.renderAll.bind(elements[i].canvas),
+          })
+        }, duration + pause)
+      }
+      function right1(i, elements) {
+        setTimeout(function(){
+          elements[i].animate('left', elements[i].left - distance - Math.floor(Math.random() * 10), {
+            duration: duration + Math.floor(Math.random() * 100),
+            onChange: elements[i].canvas.renderAll.bind(elements[i].canvas),
+          })
+        }, (duration + pause) * 2 )
+      }
+      function right2(i, elements) {
+        setTimeout(function(){
+          elements[i].animate('left', elements[i].left - distance - Math.floor(Math.random() * 10), {
+            duration: duration + Math.floor(Math.random() * 100),
+            onChange: elements[i].canvas.renderAll.bind(elements[i].canvas),
+          })
+        }, (duration + pause) * 3 )
+      }
+      for (var i = 0; i < elements.length; i++) {
+        left1(i, elements)
+        left2(i, elements)
+        right1(i, elements)
+        right2(i, elements)
+      }
+    }
+    _bitLeftbitRightAllImgs(allElements('image'), 70)
+    renderAllCanvases()
+    criticSays('A bit to the right... No no, a bit to the left...', 'Gutenberg')
+  },
+  rigidMode: function() {
+    function _rigidMode(elements) {
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].set({
+          lockMovementY: true,
+          lockRotation: true
+        })
+      }
+    }
+    _rigidMode(allElements('image'), 70)
+    renderAllCanvases()
+    criticSays('Respect the grid!', 'Gutenberg')
+  },
+  betterTitle: function() {
+    var titles = [
+      'Don Quixote',
+      'In Search of Lost Time',
+      'Ulysses',
+      'The Odyssey',
+      'War and Peace',
+      'Moby Dick',
+      'The Divine Comedy',
+      'Hamlet',
+      'The Great Gatsby',
+      'The Iliad'
+    ]
+    var randTitle = titles[Math.floor(Math.random() * titles.length)]
+    title.text = randTitle
+    renderAllCanvases()
+    Publication.title = randTitle
+    criticSays('I suggest a catchier title', 'Gutenberg')
+  },
+  betterAuthors: function() { // TODO: not sure why this doesn't work
+    var authors = [
+      'Leo Tolstoy',
+      'Fyodor Dostoevsky',
+      'William Shakespeare',
+      'Charles Dickens',
+      'Homer',
+      'J. R. R. Tolkien',
+      'George Orwell',
+      'Edgar Allan Poe',
+      'Mark Twain',
+      'Victor Hugo'
+    ]
+    var randAuthor = authors[Math.floor(Math.random() * authors.length)]
+    authors.text = randAuthor
+    renderAllCanvases()
+    Publication.authors = randAuthor
+    criticSays('We need a well-known testimonial.', 'Gutenberg')
+  },
+  drawingMode: function() { // TODO: not sure why this doesn't work
+    for (canvas in canvases) {
+      canvases[canvas].isDrawingMode = true
+      canvases[canvas].backgroundColor = '#ffffaa'
+      canvases[canvas].renderAll()
+    }
+    setTimeout(function() {
+      for (canvas in canvases) {
+        canvases[canvas].isDrawingMode = false
+        canvases[canvas].backgroundColor = '#ffffff'
+        canvases[canvas].renderAll()
+      }
+    }, drawingModeTime)
+    criticSays('Do you like to draw?', 'Gutenberg')
   }
-};
+}
+
+
+
 
 
 // --- INTERFACE BUTTONS
