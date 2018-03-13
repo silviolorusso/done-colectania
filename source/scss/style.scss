@@ -501,6 +501,9 @@ $spread-width: 900px;
 
 		.instructions {
 			display: inline-block;
+			img.draganddrop {
+				max-width: 50%;
+			}
 		}
 
 		.page {
@@ -703,7 +706,6 @@ $spread-width: 900px;
 	line-height: 30px;
 	padding-bottom: 100px;
 
-	,
 	.logos,
 	h1,
 	p {

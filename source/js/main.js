@@ -109,6 +109,11 @@ var canvases = {}
 var title
 var authors
 function initCanvases() {
+  fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center' // origin at the center
+  // cutomized controls
+  fabric.Object.prototype.borderColor = fabric.Object.prototype.cornerColor = '#ccc'
+  fabric.Object.prototype.cornerSize = 8
+
 	$('canvas').each(function(i) {
 		canvas = new fabric.Canvas(this);
 	  canvas.setWidth( $(this).closest('.page').width() );
@@ -123,7 +128,6 @@ function initCanvases() {
     }
 
 	});
-	fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center' // origin at the center
   if (window.location.href.indexOf('saved') < 0) { // if not saved
   	title = new fabric.Textbox('Insert Title', {
   	  top: 120,
@@ -407,7 +411,6 @@ pages.on('dragleave', function(e) {
 });
 pages.on('drop', function(e) {
 	e.preventDefault();
-	console.log(e);
 	var files = e.originalEvent.dataTransfer.files;
 	var y = 0;
 	for (var i = files.length - 1; i >= 0; i--) {
@@ -1017,7 +1020,7 @@ var Disruption = {
     Publication.authors = randAuthor
     criticSays('We need a well-known testimonial.', 'Gutenberg')
   },
-  drawingMode: function() { // TODO: not sure why this doesn't work
+  drawingMode: function() {
     for (canvas in canvases) {
       canvases[canvas].isDrawingMode = true
       canvases[canvas].backgroundColor = '#ffffaa'
