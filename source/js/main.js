@@ -1020,7 +1020,7 @@ var Disruption = {
     Publication.authors = randAuthor
     criticSays('We need a well-known testimonial.', 'Gutenberg')
   },
-  drawingMode: function() { // TODO: not sure why this doesn't work
+  drawingMode: function() {
     for (canvas in canvases) {
       canvases[canvas].isDrawingMode = true
       canvases[canvas].backgroundColor = '#ffffaa'
