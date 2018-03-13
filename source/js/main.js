@@ -538,6 +538,7 @@ function dropElement(pageId, data, mousePos, callback) {
 	var element = { data: data, page: pageId }
 	var elementPos = createElement(element, mousePos, callback)
 	Sound.ding()
+	$('.droppable').removeClass('droppable');
 }
 
 

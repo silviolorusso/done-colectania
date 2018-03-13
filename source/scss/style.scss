@@ -21,6 +21,23 @@ body {
 	display: none;
 }
 
+.droppable {
+	animation: blink_drop .1s infinite;
+	animation-direction: alternate;
+	animation-timing-function: ease-in-out;
+}
+@keyframes blink_drop {
+	0% {
+		transform: rotate(.5deg);
+		box-shadow: 8px 8px 0 0 $shadow;
+	}
+
+	100% {
+		transform: rotate(-.5deg);
+		box-shadow: 8px 8px 0 0 $shadow;
+	}
+}
+
 a {
 	color: $black;
 

@@ -1,3 +1,10 @@
+$('.page').bind('dragover', function(){
+  $(this).addClass('droppable');
+});
+$('.page').bind('dragleave', function(){
+  $('.droppable').removeClass('droppable');
+});
+
 function savedState() {
   var s = document.getElementsByClassName('spread');
   $('.spread').hide();
