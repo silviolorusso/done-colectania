@@ -6,7 +6,6 @@ $white: #ffffff;
 $gray: #f4f4f4;
 $gradient: linear-gradient(90deg, #EE3131 0%, #FFE500 30%, #90CC2D 50%, #2EE2E2 60%, #4986FC 80%, #FD14FF 100%);
 $red: $gradient;
-$accent: #00ff00;
 $shadow: rgba(137, 137, 137, 0.48);
 $box-shadow: 4px 4px 0 0 $shadow;
 $box-shadow-hover: 6px 6px 0 0 $shadow; // --- Type
@@ -457,12 +456,12 @@ $rotate_printer: 360deg;
 $spread-width: 900px;
 
 .page-shadow {
-	outline: 1px solid $black;
+	border: 1px solid $black;
 	box-shadow: 4px 4px 0 0 rgba(137, 137, 137, 0.48);
 }
 
 .no-page-shadow {
-	outline: none;
+	border: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
@@ -477,7 +476,10 @@ $spread-width: 900px;
 		max-width: $spread-width;
 		height: $spread-width * 0.7070707; // A* ratio
 		margin: 0 auto 50px;
-		@extend .page-shadow;
+		// @extend .page-shadow;
+		.canvas-container {
+			border: 1px solid $black;
+		}
 
 		.achievements {
 			width: $spread-width / 2;
@@ -514,7 +516,6 @@ $spread-width: 900px;
 			float: left;
 			background: white;
 			position: relative;
-			@extend .page-shadow;
 
 			#first {
 				text-align: right;
@@ -526,6 +527,8 @@ $spread-width: 900px;
 			}
 
 			&:nth-of-type(even) {
+				border-left: 1px solid $black;
+
 				.pageNumber {
 					text-align: left;
 				}
@@ -621,7 +624,7 @@ $spread-width: 900px;
 
 			.page {
 				float: right;
-				@extend .page-shadow;
+				// @extend .page-shadow;
 			}
 		}
 
@@ -629,7 +632,7 @@ $spread-width: 900px;
 			@extend .no-page-shadow;
 
 			.page {
-				@extend .page-shadow;
+				// @extend .page-shadow;
 			}
 		}
 	}
@@ -705,9 +708,10 @@ $spread-width: 900px;
 	line-height: 30px;
 	padding-bottom: 100px;
 
+	,
+	.logos,
 	h1,
-	p,
-	.logos, {
+	p {
 		max-width: 600px;
 		padding-bottom: 30px;
 		margin: auto;
@@ -715,16 +719,19 @@ $spread-width: 900px;
 
 	.logos {
 		padding-top: 20px;
+
 		img {
 			max-width: 200px;
 			float: left;
 			margin-right: 30px;
 		}
+
 		img.fotocolectania {
 			margin-top: -20px;
 		}
+
 		img.pl {
-			max-width: 150px
+			max-width: 150px;
 		}
 	}
 
@@ -924,7 +931,6 @@ $spread-width: 900px;
 	margin-left: auto;
 	margin-right: auto;
 
-
 	.logotype {
 		margin-top: 50px;
 		margin-left: auto;
@@ -1015,13 +1021,13 @@ $spread-width: 900px;
 		#loader {
 			height: 25px;
 			width: 0;
-			background-image: $gradient;
+			background-color: grey;
 		}
 	}
 
 	#text {
 		font-size: 14px;
-		padding-top: 15px;
+		padding-top: 18px;
 		font-weight: bold;
 		margin-left: auto;
 		margin-right: auto;
@@ -1069,7 +1075,6 @@ $spread-width: 900px;
 // 		}
 // 	}
 // }
-
 
 .collection {
 	padding-top: 40px;
