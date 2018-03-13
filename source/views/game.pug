@@ -9,8 +9,21 @@ div#countdownWrapper
 div.wrapper
   div.spread#dropZone
     div.achievements.instructions
-      h2 Instructions
-      p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
+      h2 What do I do?
+      p You can drag and drop images (
+        strong .jpg, .gif, .png  
+        | ) or text (
+        strong .txt
+        | ) onto the page.
+      p The file-size limit is 
+        strong.maxfilesize 1mb
+        | .
+      p Press 
+        strong Backspace  
+        | to remove elements.
+
+      img.draganddrop(src='assets/img/draganddrop.gif')
+
 
       div.button#done(onclick='showExpired()') 
         .stylized
@@ -147,4 +160,5 @@ script(src='assets/js/main.js')
 
 script(src='assets/js/game-elements.js')
 script(src='assets/js/interface.js')
+
 != publication_script
