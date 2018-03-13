@@ -86,6 +86,7 @@
       -webkit-transition-duration: .2s;
       box-shadow: 4px 4px 0 0 rgba(137, 137, 137, 0.48);
       top: 0;
+      outline: 1px solid $black;
       border: none;
 
       &:nth-of-type(1n) {
