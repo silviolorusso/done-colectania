@@ -477,9 +477,7 @@ $spread-width: 900px;
 		height: $spread-width * 0.7070707; // A* ratio
 		margin: 0 auto 50px;
 		// @extend .page-shadow;
-		.canvas-container {
-			border: 1px solid $black;
-		}
+		.canvas-container {}
 
 		.achievements {
 			width: $spread-width / 2;
@@ -509,6 +507,7 @@ $spread-width: 900px;
 		}
 
 		.page {
+			outline: 1px solid $black;
 			-webkit-box-sizing: border-box;
 			box-sizing: border-box;
 			width: $spread-width / 2;
@@ -522,7 +521,6 @@ $spread-width: 900px;
 			}
 
 			.pageNumber {
-				display: block;
 				padding-top: 10px;
 			}
 

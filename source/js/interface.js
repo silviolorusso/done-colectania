@@ -13,3 +13,8 @@ $(document).ready(function() {
     });
   });
 });
+
+var isFirefox = typeof InstallTrigger !== 'undefined';
+if (isFirefox) {
+  $('.pageNumber').hide();
+}
