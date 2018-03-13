@@ -456,12 +456,12 @@ $rotate_printer: 360deg;
 $spread-width: 900px;
 
 .page-shadow {
-	outline: 1px solid $black;
+	border: 1px solid $black;
 	box-shadow: 4px 4px 0 0 rgba(137, 137, 137, 0.48);
 }
 
 .no-page-shadow {
-	outline: none;
+	border: none;
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
@@ -510,7 +510,6 @@ $spread-width: 900px;
 			float: left;
 			background: white;
 			position: relative;
-			@extend .page-shadow;
 
 			#first {
 				text-align: right;
@@ -522,6 +521,8 @@ $spread-width: 900px;
 			}
 
 			&:nth-of-type(even) {
+				border-left: 1px solid $black;
+
 				.pageNumber {
 					text-align: left;
 				}
