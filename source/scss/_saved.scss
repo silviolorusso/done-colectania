@@ -30,11 +30,13 @@
         line-height: 1.2rem;
       }
 
-      .button {
+      .button.saved {
         &:nth-of-type(2n) {
           margin-left: 10px;
         }
-        &.pdf, &.booklet {
+
+        &.booklet,
+        &.pdf {
           display: inline-block;
         }
       }

@@ -3,15 +3,14 @@ include parts/headerLogo_notype.pug
 // pages
 div.saved_view
   div.spread
-    // maybe move achievements outside spread
     div.achievements.saved 
       h2 Saved view
       p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
-      div.button.pdf(onclick='window.location.href = "/pdf?id=" + Publication.id;')
+      div.button.pdf.saved(onclick='window.location.href = "/pdf?id=" + Publication.id;')
         .stylized
           span Download 
           span PDF
-      div.button.booklet(onclick='window.location.href = "/pdf?id=" + Publication.id + "&booklet=true";')
+      div.button.booklet.saved(onclick='window.location.href = "/pdf?id=" + Publication.id + "&booklet=true";')
         .stylized
           span Print 
           span Booklet
@@ -38,11 +37,11 @@ div.saved_view
     div.achievements.last_achievements.saved
       h2 Saved view
       p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
-      div.button.pdf(onclick='window.location.href = "/pdf?id=" + Publication.id;')
+      div.button.pdf.saved(onclick='window.location.href = "/pdf?id=" + Publication.id;')
         .stylized
           span Download 
           span PDF
-      div.button.booklet(onclick='window.location.href = "/pdf?id=" + Publication.id + "&booklet=true";')
+      div.button.booklet.saved(onclick='window.location.href = "/pdf?id=" + Publication.id + "&booklet=true";')
         .stylized
           span Print 
           span Booklet   

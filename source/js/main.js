@@ -14,7 +14,6 @@ var drawingModeTime = 10000
 
 
 
-
 // --- GENERAL FUNCTIONS
 
 function makeId() {
