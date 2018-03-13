@@ -481,11 +481,22 @@ var Sound = {
 };
 
 // TODO: merge these two
+function pad(n, len) {
+  return (new Array(len + 1).join('0') + n).slice(-len);
+}
+
+
 function showTime(Publication) {
 	seconds = Publication.timeLeft / 1000;
 	$('#counter').show();
-	document.getElementById('counter').innerHTML =
-		seconds.toFixed(2) + ' seconds left!';
+	if (seconds > 60) {
+		var minutes = Math.floor(seconds / 60);
+		var seconds = seconds % 60;
+		var ms = Publication.timeLeft.toString().substr(2, 2);
+		document.getElementById('counter').innerHTML = pad(minutes, 2) + ':' + pad(seconds.toFixed(0), 2) + ':' + ms + ' left!';
+	} else {
+		document.getElementById('counter').innerHTML = seconds.toFixed(2) + 's left!';
+	}
 }
 function mouseCounter() {
 	$(document).bind('mousemove', function(e) {
