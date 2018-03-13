@@ -82,10 +82,11 @@
       float: left;
       background: white;
       position: relative;
-      @extend .page-shadow;
+      // @extend .page-shadow;
       -webkit-transition-duration: .2s;
       box-shadow: 4px 4px 0 0 rgba(137, 137, 137, 0.48);
       top: 0;
+      border: none;
 
       &:nth-of-type(1n) {
         transition: .2;
@@ -232,7 +233,7 @@
 
       .page {
         float: right;
-        @extend .page-shadow;
+        // @extend .page-shadow;
       }
     }
 
@@ -240,7 +241,7 @@
       @extend .no-page-shadow;
 
       .page {
-        @extend .page-shadow;
+        // @extend .page-shadow;
       }
     }
   }
