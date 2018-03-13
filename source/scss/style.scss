@@ -6,7 +6,6 @@ $white: #ffffff;
 $gray: #f4f4f4;
 $gradient: linear-gradient(90deg, #EE3131 0%, #FFE500 30%, #90CC2D 50%, #2EE2E2 60%, #4986FC 80%, #FD14FF 100%);
 $red: $gradient;
-$accent: #00ff00;
 $shadow: rgba(137, 137, 137, 0.48);
 $box-shadow: 4px 4px 0 0 $shadow;
 $box-shadow-hover: 6px 6px 0 0 $shadow; // --- Type
@@ -986,13 +985,13 @@ $spread-width: 900px;
 		#loader {
 			height: 25px;
 			width: 0;
-			background-image: $gradient;
+			background-color: grey;
 		}
 	}
 
 	#text {
 		font-size: 14px;
-		padding-top: 15px;
+		padding-top: 18px;
 		font-weight: bold;
 		margin-left: auto;
 		margin-right: auto;
