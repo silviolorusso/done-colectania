@@ -44,21 +44,25 @@ function expiredTime() {
 }
 
 function updateMouseCounter(e) {
-  $('.counter').css('opacity', '1');
-  if (e.clientX >= 200) { // ($(document).width()/2)
-    // if mouse of right side of client
-    $('.counter').addClass('mouse_right');
-    $('.counter').css({
-      left:  e.clientX - 20 - $('.counter').width(),
-      top:   e.clientY - 50
-    });
+  if (getUrlParameter('demo')) {
+    // don't show conter
   } else {
-    // if mouse of left side of client
-    $('.counter').removeClass('mouse_right');
-    $('.counter').css({
-      left:  e.clientX + 20,
-      top:   e.clientY - 50
-    });
+    $('.counter').css('opacity', '1');
+    if (e.clientX >= 200) { // ($(document).width()/2)
+      // if mouse of right side of client
+      $('.counter').addClass('mouse_right');
+      $('.counter').css({
+        left:  e.clientX - 20 - $('.counter').width(),
+        top:   e.clientY - 50
+      });
+    } else {
+      // if mouse of left side of client
+      $('.counter').removeClass('mouse_right');
+      $('.counter').css({
+        left:  e.clientX + 20,
+        top:   e.clientY - 50
+      });
+    }
   }
 }
 
@@ -67,7 +71,7 @@ $(document).bind('mousemove', function(e){
 });
 
 $(document).bind("dragover", function(e){
-    updateMouseCounter(e);
+  updateMouseCounter(e);
 });
 
 
