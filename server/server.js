@@ -161,6 +161,7 @@ app.post('/db', function(req, res) {
     publication.save(function (err, publication) {
       if (err) return console.error(err);
       console.log('saved to db')
+      res.status(200).json({status:"ok"})
     });
 
     console.log('saving to db');
@@ -215,8 +216,8 @@ app.get('/pdf', function (req, res) {
           var canvas = new fabric.StaticCanvas('c') // random name
           canvas.setWidth(canvasWidth)
           canvas.setHeight(canvasHeight)
-          var pages = publication.pages
-          if ( pages.hasOwnProperty('p' + i) ) { // if not empty
+          if ( publication && publication.pages.hasOwnProperty('p' + i) ) { // if not empty
+            var pages = publication.pages
             canvas.loadFromJSON(pages['p' + i]);
           }
           canvases.push(canvas)
@@ -237,7 +238,7 @@ app.get('/pdf', function (req, res) {
             if (bold && !italic) {return 'Courier-Bold';}
             if (!bold && italic) {return 'Courier-Oblique';}
             if (!bold && !italic) {return 'Courier';}
-          } else if (family.match(/(?:^|,)\s*Comic Sans MS\s*$/)) {
+          } else if (family.indexOf('Comic')) {
             if (bold && italic) {return '"Comic Sans MS"';}
             if (bold && !italic) {return '"Comic Sans MS-bold"';}
             if (!bold && italic) {return '"Comic Sans MS"';}
@@ -247,7 +248,7 @@ app.get('/pdf', function (req, res) {
             if (bold && !italic) {return 'Helvetica-Bold';}
             if (!bold && italic) {return 'Helvetica-Oblique';}
             if (!bold && !italic) {return 'Helvetica';}
-          } 
+          }
         }
 
         if (booklet != 'true') {
@@ -287,6 +288,10 @@ app.get('/pdf', function (req, res) {
           doc.registerFont('"Comic Sans MS-bold"', __dirname + '/../public/assets/fonts/comic-bold.ttf')
           doc.registerFont('"Comic Sans MS-italic"', __dirname + '/../public/assets/fonts/comic-italic.ttf')
           doc.registerFont('"Comic Sans MS-bolditalic"', __dirname + '/../public/assets/fonts/comic-bolditalic.ttf')
+          doc.registerFont('AGaramondPro', __dirname + '/../public/assets/fonts/AGaramondPro-Regular.otf')
+          doc.registerFont('AGaramondPro-Bold', __dirname + '/../public/assets/fonts/AGaramondPro-Bold.otf')
+          doc.registerFont('AGaramondPro-Italic', __dirname + '/../public/assets/fonts/AGaramondPro-Italic.otf')
+          doc.registerFont('AGaramondPro-BoldItalic', __dirname + '/../public/assets/fonts/AGaramondPro-BoldItalic.otf')
 
           // all the -1 to have a normal page number
           SVGtoPDF(doc, canvases[8-1].toSVG(), 0, 0);

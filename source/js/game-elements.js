@@ -1,10 +1,3 @@
-$('.page').bind('dragover', function(){
-  $(this).addClass('droppable');
-});
-$('.page').bind('dragleave', function(){
-  $('.droppable').removeClass('droppable');
-});
-
 function savedState() {
   var s = document.getElementsByClassName('spread');
   $('.spread').hide();
@@ -197,9 +190,14 @@ function achievement(time_added, txt) {
 }
 
 function animatetimecounter(bonusTime) {
-	console.log(bonusTime);
+  if (bonusTime > 0) {
+    var prepend = '+'
+  } else {
+    var prepend = ''
+  }
+  $('#bonusTime').remove()
 	$('#animatetimecounter').prepend(
-		"<span id='bonusTime'>" + bonusTime + '</span>'
+		"<span id='bonusTime'>" + prepend + bonusTime + '</span>'
 	);
 	// $('#animatetimecounter').show().fadeOut(1000);
 

@@ -181,14 +181,10 @@ header {
 
 	#animatetimecounter {
 		font-size: 22px;
-		padding: 10px;
+		padding: 20px;
 		font-family: $font-game;
 		color: $red;
 		opacity: 0;
-
-		&:before {
-			content: '+';
-		}
 	}
 }
 $time: 1.5s;
