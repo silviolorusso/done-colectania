@@ -549,6 +549,7 @@ function showExpired() {
   if (Publication.expired != true) {
     Publication.expired = true
     lockElements(allElements())
+
     setTimeout(function(){
       $('.suggestions').hide()
     }, 800)
@@ -557,6 +558,7 @@ function showExpired() {
   	expiredTime()
     for (canvas in canvases) {
       canvases[canvas].selection = false
+      canvases[canvas].discardActiveObject().renderAll()
     }
   	setTimeout(function () {
   		$('.wrapper').addClass('saved_view');
