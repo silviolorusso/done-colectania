@@ -523,7 +523,7 @@ function showTime(Publication) {
 	var minutes = Math.floor(seconds / 60);
 	var seconds = seconds % 60;
 	var ms;
-	if (document.getElementById('counter')) {
+	if (!!document.getElementById('counter')) {
 		setTimeout(function () {
 			var d = new Date();
 			ms = d.getMilliseconds();
