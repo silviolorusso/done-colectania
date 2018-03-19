@@ -39,6 +39,7 @@ function expiredTime() {
 function updateMouseCounter(e) {
   if (getUrlParameter('demo')) {
     // don't show conter
+    $('.counter').remove();
   } else {
     $('.counter').css('opacity', '1');
     if (e.clientX >= 200) { // ($(document).width()/2)

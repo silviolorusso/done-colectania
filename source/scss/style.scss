@@ -497,6 +497,7 @@ $spread-width: 900px;
 
 		.instructions {
 			display: inline-block;
+
 			img.draganddrop {
 				max-width: 50%;
 			}
@@ -517,20 +518,20 @@ $spread-width: 900px;
 			}
 
 			.pageNumber {
-				padding-top: 10px;
+				padding-top: 5px;
 			}
 
 			&:nth-of-type(even) {
-				border-left: 1px solid $black;
-
 				.pageNumber {
 					text-align: left;
+					display: block;
 				}
 			}
 
 			&:nth-of-type(odd) {
 				.pageNumber {
 					text-align: left;
+					display: block;
 				}
 			}
 
@@ -538,7 +539,6 @@ $spread-width: 900px;
 				.pageNumber {
 					text-align: right;
 					display: block;
-					padding-top: 5px;
 				}
 			}
 
