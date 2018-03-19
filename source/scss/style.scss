@@ -930,34 +930,6 @@ $spread-width: 900px;
 		margin-right: auto;
 		text-align: center;
 		padding-top: 50px;
-		line-height: 30px;
-
-		#publish {
-			font-size: 80px;
-			display: inline-block;
-			padding-right: 10px;
-		}
-
-		#or {
-			font-size: 48px;
-			display: inline;
-			padding-right: 100px;
-			opacity: .7;
-		}
-
-		#perish {
-			font-family: $font-game;
-			color: $red;
-			font-size: 110px;
-			line-height: normal;
-			background-image: $gradient;
-			-webkit-text-fill-color: transparent;
-			color: transparent;
-			-webkit-background-clip: text;
-			background-clip: text;
-			display: block;
-			padding-left: 140px;
-		}
 	}
 
 	p {
