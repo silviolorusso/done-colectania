@@ -16,7 +16,6 @@ $('.sound').css('opacity', '0');
       var i = 1;
       var interval = setInterval(step, 30);
 
-
       function step() {
         context.fillStyle = '#D0D0D0';
         context.globalAlpha = 0.5;

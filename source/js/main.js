@@ -320,6 +320,7 @@ function controller(Publication, input) {
                 disruptions = Object.keys(Disruption)
                 Disruption[disruptions[ disruptions.length * Math.random() << 0]]()
                 shake(pages)
+                sfx.disruption()
               }, disruptionInterval)
             }
 
@@ -405,6 +406,11 @@ $(document).ready(function() {
 function addTime(bonusTime) {
 	Publication.timeLeft = Publication.timeLeft + bonusTime;
 	animatetimecounter(bonusTime);
+  if (bonusTime >= 0) {
+    sfx.addTimePlus()
+  } else {
+    sfx.addTimeMinus()
+  }
 }
 
 // modify element listener
@@ -473,7 +479,6 @@ $('body').on('dragleave', function(e) {
 });
 $('body').on('drop', function(e) {
 	e.preventDefault();
-	Sound.error();
 });
 
 // remove element (TODO: UPDATE FOR FABRIC)
@@ -502,16 +507,6 @@ $(document).on('click', '.close', function() {
 
 // --- VIEW
 
-var Sound = {
-	error: function() {
-		var audio = new Audio('assets/audio/incorrect.mp3');
-		audio.play();
-	},
-	ding: function() {
-		var audio = new Audio('assets/audio/ding.mp3');
-		audio.play();
-	}
-};
 
 // TODO: merge these two
 function pad(n, len) {
@@ -585,8 +580,8 @@ function dropElement(pageId, data, mousePos, callback) {
 	console.log(mousePos)
 	var element = { data: data, page: pageId }
 	var elementPos = createElement(element, mousePos, callback)
-	Sound.ding()
 }
+
 
 
 
@@ -598,19 +593,15 @@ function dropElement(pageId, data, mousePos, callback) {
 
 var Error = {
 	notAllowed: function() {
-		Sound.error()
 		alertMessage('The file you dropped is not allowed!')
 	},
 	tooBig: function() {
-		Sound.error()
 		alertMessage('The file you dropped is too big!')
 	},
   noGifs: function() {
-    Sound.error()
     alertMessage('Gifs are not allowed. (This sucks, I know...)')
   },
 	tooLate: function() {
-		Sound.error()
 		alertMessage('Too late amigo')
 	}
 }
@@ -818,7 +809,7 @@ var Disruption = {
     var toShuffle = []
     var i = 0
     for (canvasId in canvases) {
-      if (i > 0) { // prevent shuffling first page
+      if (i > 0 && i <= 6) { // prevent shuffling first page
         toShuffle.push( canvases[canvasId].toJSON() )
       }
       i += 1
@@ -826,7 +817,7 @@ var Disruption = {
     shuffleArray(toShuffle)
     var y = 0
     for (canvasId in canvases) {
-      if (y > 0) {
+      if (y > 0 && y <= 6) {
         canvases[canvasId].loadFromJSON(toShuffle[y - 1], function() {
           canvases[canvasId].renderAll.bind(canvases[canvasId])
         })
