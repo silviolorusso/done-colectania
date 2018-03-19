@@ -34,32 +34,29 @@ div.wrapper
       div.badges
     div.achievements.saved 
       h2 Time is up
-      p Your Publication data:
-      div.collection
-        //- a(href='saved?id=').tile#full_width
-        //-   div.publication
-        //-     p publication
-        //-     // img(src='assets/img/cover.png')
-        //-   div.description
-        //-     title publication
-        //-     div.author
-        //-       span Written by 
-        //-       span publication id
-        //-     div.date
-        //-       span Created on: 
-        //-       span publication id
-        //-     div.assets
-        //-       span Number of assets: 
-        //-       span publication id
-        //-     div.pages
-        //-       span Number of pages:  
-        //-       span publication id
-        //-     div.time
-        //-       span Total time:  
-        //-       span publication id
-        //-     div.awards
-        //-       span Achievements obtained: 
-        //-       span publication id
+
+      p Your publication data:
+      div.publicationdata
+        h3.title publication
+        div.authors
+          span Written by: 
+          span
+        div.date
+          span Created on: 
+          span
+        div.imagesamount
+          span Number of images: 
+          span
+        div.textamount
+          span Amount of text:  
+          span
+        div.elapsedtime
+          span Elapsed time:  
+          span
+        div.achievementsamount
+          span Achievements obtained: 
+          span
+
       div.button.save(onclick='savetoDb(Publication);')
         .stylized
           span Save 
@@ -105,33 +102,31 @@ div.wrapper
       span.pageNumber 8
     div.achievements.last_achievements.saved 
       h2 Time is up
+      
       p Your Publication data:
       div.buttons
-        div.collection
-          //- a(href='saved?id=').tile#full_width
-          //-   div.publication
-          //-     p publication
-          //-     // img(src='assets/img/cover.png')
-          //-   div.description
-          //-     title publication
-          //-     div.author
-          //-       span Written by 
-          //-       span publication id
-          //-     div.date
-          //-       span Created on: 
-          //-       span publication id
-          //-     div.assets
-          //-       span Number of assets: 
-          //-       span publication id
-          //-     div.pages
-          //-       span Number of pages:  
-          //-       span publication id
-          //-     div.time
-          //-       span Total time:  
-          //-       span publication id
-          //-     div.awards
-          //-       span Awards won: 
-          //-       span publication id
+      p Your publication data:
+      div.publicationdata
+        h3.title publication
+        div.authors
+          span Written by: 
+          span
+        div.date
+          span Created on: 
+          span
+        div.imagesamount
+          span Number of images: 
+          span
+        div.textamount
+          span Amount of text:  
+          span
+        div.elapsedtime
+          span Elapsed time:  
+          span
+        div.achievementsamount
+          span Achievements obtained: 
+          span
+
         div.button.save(onclick='savetoDb(Publication);')
           .stylized
             span Save 
