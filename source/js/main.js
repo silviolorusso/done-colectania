@@ -523,11 +523,15 @@ function showTime(Publication) {
 	var minutes = Math.floor(seconds / 60);
 	var seconds = seconds % 60;
 	var ms;
-	setTimeout(function () {
-		var d = new Date();
-		ms = d.getMilliseconds();
-		document.getElementById('counter').innerHTML = pad(minutes, 2) + ':' + pad(seconds.toFixed(0), 2) + ':' + ms.toString().substr(0,2) + ' left!';
-	}, 1)
+	if (document.getElementById('counter')) {
+		setTimeout(function () {
+			var d = new Date();
+			ms = d.getMilliseconds();
+			document.getElementById('counter').innerHTML = pad(minutes, 2) + ':' + pad(seconds.toFixed(0), 2) + ':' + ms.toString().substr(0,2) + ' left!';
+		}, 1)
+	} else {
+		// console.log('error');
+	}
 }
 function mouseCounter() {
 	$(document).bind('mousemove', function(e) {
