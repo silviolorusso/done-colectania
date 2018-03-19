@@ -71,13 +71,13 @@ $(document).bind("dragover", function(e){
 
 function criticSays(message, actor) {
 	var messageArray = [
-    "So dope dude. so dope.",
-    "Wow... a book filled with screenshots, that looks like modern art",
-    "What if this image was roated 5 degrees",
+    "So dope dude",
+    "Wow... that looks like contemporary art",
     "👌  Great job",
-    "It took you a while",
-    "Here have a picture of Trump",
-    "I think it would be better to change the font to our company font 'Comic Sans'"
+    "It took you a while...",
+    "Come on!",
+    "",
+
   ]
 	if (message === undefined) {
 		// choose a random default one
@@ -85,11 +85,12 @@ function criticSays(message, actor) {
 	}
 
 	var actorArray = [
-    "Stef",
-    "Silvio",
-    "Obama",
     "Clippy",
-    "Gutenberg"
+    "Gutenberg",
+    "McLuhan",
+    "Manutius",
+    "Mergenthaler",
+    "Morris"
   ]
 	if (actor === undefined) {
 		// choose a random default one

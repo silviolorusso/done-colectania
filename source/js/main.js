@@ -156,12 +156,13 @@ function initCanvases() {
       id: 'lock',
       cache: false
   	}).on('editing:entered', function(e) {
-      if (this.text = 'Insert Title') {
+      if (this.text == 'Insert Title') {
         this.text = ''
         this.hiddenTextarea.value = ''
       }
     }).on('editing:exited', function(e) {
-      Publication.title = this.text
+      Publication.title = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
+      this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
       this.selectable = false
       this.hasControls = false
     })
@@ -191,12 +192,13 @@ function initCanvases() {
       id: 'lock',
       cache: false
   	}).on('editing:entered', function(e) {
-      if (this.text = 'Insert Authors') {
+      if (this.text == 'Insert Authors') {
         this.text = ''
         this.hiddenTextarea.value = ''
       }
     }).on('editing:exited', function(e) {
-      Publication.authors = this.text
+      Publication.authors = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
+      this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
       this.selectable = false
       this.hasControls = false
     })
@@ -239,6 +241,7 @@ $(document).keydown(function(e) { // del or backspace to delete
     for (canvas in canvases) {
       if (canvases[canvas].getActiveObject()) {
         canvases[canvas].remove(canvases[canvas].getActiveObject());
+        controller(Publication, { remove: true })
       }
     }
   }
@@ -280,10 +283,10 @@ function controller(Publication, input) {
 	}
 
 	if (input && Publication.expired == false) {
-		console.log(input)
 		switch (true) {
-			case input.visible == false: // deleting an element
-					removeElement(input.id)
+			case input.remove == true: // deleting an element
+          addTime(-bonusTime)
+          criticSays('Think twice next time...')
 					break
 			case input.data &&
 				byteCount(input.data) > 1398117 : // file too big (1mb)
@@ -328,10 +331,8 @@ function controller(Publication, input) {
   					criticSays()
 
           } else { // a gif
-
             Error.noGifs()
             addTime(-bonusTime)
-
           }
 
 					break
@@ -339,22 +340,32 @@ function controller(Publication, input) {
 				input.data.includes('data:text/plain') &&
 				input.visible == true: // new text
 
-					var publicationUpdate = function(inputPage) { // update canvas
-						setTimeout(function() {
-							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
-						}, 1)
-					}
-					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
+          var deBasedInput = atob(input.data.substring(23));
+          if (deBasedInput.includes('<script>')) { // code injection
 
-          Publication.textAmount += input.data.length
-          if (Publication.textAmount >= 500) {
-            achievement(500, 'More than 500 characters added')
+            Error.codeInjection()
+            addTime(-bonusTime)
+
+          } else {
+
+  					var publicationUpdate = function(inputPage) { // update canvas
+  						setTimeout(function() {
+  							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
+  						}, 1)
+  					}
+  					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
+
+            Publication.textAmount += input.data.length
+            if (Publication.textAmount >= 500) {
+              achievement(500, 'More than 500 characters added')
+            }
+
+  					addTime(bonusTime * 2)
+            criticSays('This is gonna be a goood read')
+
           }
-
-					addTime(bonusTime * 2)
-          criticSays('This is gonna be a goood read')
-
-					break
+					
+          break
 			case input.data &&
 				!input.data.includes('data:image') &&
 				!input.data.includes('data:text/plain'): // neither an image nor text
@@ -405,7 +416,7 @@ $(document).ready(function() {
 
 function addTime(bonusTime) {
 	Publication.timeLeft = Publication.timeLeft + bonusTime;
-	animatetimecounter(bonusTime);
+	animatetimecounter(bonusTime/1000);
   if (bonusTime >= 0) {
     sfx.addTimePlus()
   } else {
@@ -464,9 +475,8 @@ pages.on('drop', function(e) {
 				});
 			}, y * dropDelay);
 			y += 1;
-		};
-		console.log(files[i]);
-		reader.readAsDataURL(files[i]);
+		}
+		reader.readAsDataURL(files[i])
 	}
 	return false;
 });
@@ -481,25 +491,7 @@ $('body').on('drop', function(e) {
 	e.preventDefault();
 });
 
-// remove element (TODO: UPDATE FOR FABRIC)
-$(document).on('click', '.close', function() {
-	var pageId = $(this)
-		.closest('.page')
-		.attr('id');
-	var elementId = $(this)
-		.parent()
-		.attr('id');
-	var elementData = $(this)
-		.siblings()
-		.attr('src');
-	controller(Publication, {
-		id: elementId,
-		data: elementData,
-		pos: [0, 0, 0, 0, 0],
-		visible: false,
-		page: pageId
-	});
-})
+
 
 
 
@@ -550,8 +542,12 @@ function showExpired() {
   if (Publication.expired != true) {
     Publication.expired = true
     lockElements(allElements())
-    title.text = defaultTitle
-    authors.text = defaultAuthors
+    if (title.text == 'Insert Title') {
+      title.text = defaultTitle
+    }
+    if (authors.text == 'Insert Authors') {
+      authors.text = defaultAuthors
+    }
     renderAllCanvases()
     showPublicationData(Publication)
     if ( document.getElementById('counter') ) {
@@ -601,7 +597,10 @@ var Error = {
   },
 	tooLate: function() {
 		alertMessage('Too late amigo')
-	}
+	},
+  codeInjection: function() {
+    alertMessage('Hey hacker, you\'re trying to inject code. Please don\'t.')
+  }
 }
 
 
@@ -655,6 +654,12 @@ function savetoDb(publication) {
   		success: function() {
         $('.button.save').hide()
         $('.button.pdf, .button.booklet').css('display','inline-block')
+
+        $('.title').empty()
+        a = document.createElement('a')
+        $(a).text(Publication.title).attr("href", '/saved?id=' + Publication.id)
+        $(a).appendTo($('.title'))
+
   			console.log('publication sent to database.');
   		}
   	});
