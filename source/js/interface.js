@@ -18,3 +18,9 @@ var isFirefox = typeof InstallTrigger !== 'undefined';
 if (isFirefox) {
   $('.pageNumber').hide();
 }
+
+$(document).ready(function() {
+  $('.button').click( function(e) {
+    sfx.button()
+  })
+})

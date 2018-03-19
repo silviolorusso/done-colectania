@@ -188,6 +188,7 @@ function achievement(time_added, txt) {
 
 	$('.coin').fadeIn(300).html(coin).delay(3000).fadeOut(300);
 	$('.badges').append(badge);
+  sfx.achievement()
 }
 
 function animatetimecounter(bonusTime) {
