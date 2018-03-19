@@ -1,9 +1,5 @@
 (function() {
-  $('.sound').hide();
-})
-
-(function() {
-
+$('.sound').css('opacity', '0');
   var canvas = document.getElementById('canvas'),
   context = canvas.getContext('2d');
 
