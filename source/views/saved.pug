@@ -4,8 +4,30 @@ include parts/headerLogo_notype.pug
 div.saved_view
   div.spread
     div.achievements.saved 
-      h2 Saved view
-      p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
+      h2 Browse through!
+
+      p Publication data:
+      div.publicationdata
+        h3.title publication
+        div.authors
+          span Written by: 
+          span
+        div.date
+          span Created on: 
+          span
+        div.imagesamount
+          span Number of images: 
+          span
+        div.textamount
+          span Amount of text:  
+          span
+        div.elapsedtime
+          span Elapsed time:  
+          span
+        div.achievementsamount
+          span Achievements obtained: 
+          span
+
       div.button.pdf.saved(onclick='window.location.href = "/pdf?id=" + Publication.id;')
         .stylized
           span Download 
@@ -35,8 +57,30 @@ div.saved_view
     div.page
       canvas#p8
     div.achievements.last_achievements.saved
-      h2 Saved view
-      p It’s possible to drag and drop images or text onto the page. Each image will add 5 seconds to the counter. Each text will add 3 seconds to the counter. When the time runs out your publication will be printed.
+      h2 Browse through!
+
+      p Publication data:
+      div.publicationdata
+        h3.title publication
+        div.authors
+          span Written by: 
+          span
+        div.date
+          span Created on: 
+          span
+        div.imagesamount
+          span Number of images: 
+          span
+        div.textamount
+          span Amount of text:  
+          span
+        div.elapsedtime
+          span Elapsed time:  
+          span
+        div.achievementsamount
+          span Achievements obtained: 
+          span
+      
       div.button.pdf.saved(onclick='window.location.href = "/pdf?id=" + Publication.id;')
         .stylized
           span Download 

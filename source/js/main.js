@@ -13,6 +13,8 @@ var scaleDownImgs = 0.7
 var achievementSpan = 3
 var drawingModeTime = 10000
 var infiniteTime = false
+var defaultTitle = 'Untitled'
+var defaultAuthors = 'Anonymous'
 
 
 
@@ -114,8 +116,8 @@ function createElement(element, mousePos, callback) {
 
 // --- initialize canvases
 var canvases = {}
-var title
-var authors
+let title
+let authors
 function initCanvases() {
   fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center' // origin at the center
   // cutomized controls
@@ -249,10 +251,10 @@ $(document).keydown(function(e) { // del or backspace to delete
 var Publication = {
 	// all our states
 	id: makeId(),
-	title: 'Untitled',
+	title: defaultTitle,
 	timeLeft: timeLeft,
 	expired: false,
-	authors: 'Anonymous',
+	authors: defaultAuthors,
   date: Date.now(),
   imagesAmount: 0,
   textAmount: 0,
@@ -549,10 +551,10 @@ function showExpired() {
   if (Publication.expired != true) {
     Publication.expired = true
     lockElements(allElements())
-
-    setTimeout(function(){
-      $('.suggestions').hide()
-    }, 800)
+    title.text = defaultTitle
+    authors.text = defaultAuthors
+    renderAllCanvases()
+    showPublicationData(Publication)
   	document.getElementById('counter').style.display = 'none';
   	$('body').addClass('expired')
   	expiredTime()
@@ -611,6 +613,16 @@ var Error = {
 
 // --- SAVED
 
+function showPublicationData(Publication) {
+  $('.title').text( Publication.title )
+  $('.authors span:last-child').text( Publication.authors )
+  $('.date span:last-child').text( timeConverter( Number(Publication.date)) ) 
+  $('.imagesamount span:last-child').text( Publication.imagesAmount ) 
+  $('.textamount span:last-child').text( Publication.textAmount + ' chars' ) 
+  $('.elapsedtime span:last-child').text( Publication.timeElapsed + ' s' )
+  $('.achievementsamount span:last-child').text( Publication.achievementsAmount )  
+}
+
 function renderPublication(Publication) {
 	for (var canvasId in canvases) {
 		var json = JSON.stringify(Publication.pages[canvasId]);
@@ -619,7 +631,9 @@ function renderPublication(Publication) {
 			canvases[canvasId].renderAll.bind(canvases[canvasId])
 		})
 	}
+  showPublicationData(Publication)
 }
+
 
 
 
