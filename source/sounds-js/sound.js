@@ -17,21 +17,23 @@ function checkKey() {
 
 console.log();
 
-$('.sound').click(function () {
-  checkSoundIfMuted();
+// i moved this stuff to soundfx.js
 
-})
+// $('.sound').click(function () {
+//   checkSoundIfMuted();
 
-function checkSoundIfMuted() {
-  if ($('.sound').hasClass('mute')) {
-    // true: audio is muted
-    createjs.Sound.stop('music');
-    $('.sound').removeClass('mute');
-    return true
-  } else {
-    // false: audio is not muted
-    createjs.Sound.play('music','.3');
-    $('.sound').addClass('mute');
-    return false
-  }
-}
+// })
+
+// function checkSoundIfMuted() {
+//   if ($('.sound').hasClass('mute')) {
+//     // true: audio is muted
+//     createjs.Sound.stop('music');
+//     $('.sound').removeClass('mute');
+//     return true
+//   } else {
+//     // false: audio is not muted
+//     createjs.Sound.play('music','.3');
+//     $('.sound').addClass('mute');
+//     return false
+//   }
+// }

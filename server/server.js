@@ -123,7 +123,7 @@ app.get('/archive', function (req, res) {
     return time;
   }
 
-  var perPage = 15
+  var perPage = 9
   pageParam = req.param('page')
   if (pageParam == null) {
     pageParam = 0
@@ -131,9 +131,8 @@ app.get('/archive', function (req, res) {
   var page = Math.max(0, pageParam)
 
   // find all publications
-  Publication.find().limit(15).skip(perPage * page).sort('-date').exec(function (err, _publications) {
+  Publication.find().limit(perPage).skip(perPage * page).sort('-date').exec(function (err, _publications) {
     if (err) return console.error(err);
-
 
     for (id in _publications) { // convert date to text
       _publications[id].date = timeConverter( Number(_publications[id].date) )
@@ -142,7 +141,7 @@ app.get('/archive', function (req, res) {
     res.render(__dirname + '/../source/views/archive', {
       publications: _publications,
       nextPage: page + 1,
-      // prevPage: page - 1
+      prevPage: page - 1
     })
 
     console.log('serving archive')
