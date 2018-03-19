@@ -141,7 +141,8 @@ app.get('/archive', function (req, res) {
 
     res.render(__dirname + '/../source/views/archive', {
       publications: _publications,
-      nextPage: page + 1
+      nextPage: page + 1,
+      // prevPage: page - 1
     })
 
     console.log('serving archive')

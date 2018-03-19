@@ -119,42 +119,30 @@
 .scene {
   animation-name: rotateCoin;
   transform: rotateX(170deg) rotateY(180deg) rotateZ(180deg) translateY(0px);
-  animation-duration: 10s;
+  animation-duration: 7s;
   animation-direction: normal;
   animation-iteration-count: 1;
   animation-timing-function: linear;
 }
 @keyframes rotateCoin {
   0% {
-    transform: rotateX(0deg) rotateY(180deg) rotateZ(180deg) translateY(0px);
-  }
-
-  20% {
-    transform: translateY(150px);
+    transform: rotateX(180deg) rotateY(0deg) rotateZ(180deg) translateY(-100px);
   }
 
   30% {
-    transform: rotateX(360deg) rotateY(180deg) rotateZ(180deg) translateY(0px);
-  }
-
-  50% {
-    transform: translateY(150px);
+    transform: rotateX(180deg) rotateY(360deg) rotateZ(180deg) translateY(-10px);
   }
 
   60% {
-    transform: rotateX(0deg) rotateY(180deg) rotateZ(180deg) translateY(0px);
-  }
-
-  80% {
-    transform: translateY(150px);
+    transform: rotateX(180deg) rotateY(0deg) rotateZ(180deg) translateY(0px);
   }
 
   90% {
-    transform: rotateX(360deg) rotateY(180deg) rotateZ(180deg) translateY(0px);
+    transform: rotateX(180deg) rotateY(360deg) rotateZ(180deg) translateY(0px);
   }
 
   100% {
-    transform: rotateX(170deg) rotateY(180deg) rotateZ(180deg) translateY(0px);
+    transform: rotateX(180deg) rotateY(0deg) rotateZ(180deg) translateY(0px);
   }
 }
 
