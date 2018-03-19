@@ -527,7 +527,7 @@ function showTime(Publication) {
 		setTimeout(function () {
 			var d = new Date();
 			ms = d.getMilliseconds();
-			document.getElementById('counter').innerHTML = pad(minutes, 2) + ':' + pad(seconds.toFixed(0), 2) + ':' + ms.toString().substr(0,2) + ' left!';
+			document.getElementById('counter').innerHTML = pad(minutes, 2) + ':' + pad(seconds.toFixed(0), 2) + ':' + pad(ms.toString().substr(0,2), 2) + ' left!';
 		}, 1)
 	} else {
 		// console.log('error');
