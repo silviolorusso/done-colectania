@@ -29,7 +29,8 @@ div.wrapper.intro
             span Obtained achievements: 
             span= publication.achievementsAmount
   div.pagination
-    a.older(href='archive?page=' + nextPage) Older
+    if nextPage != false
+      a.older(href='archive?page=' + nextPage) Older
     if prevPage >= 0
       a.newer(href='archive?page=' + prevPage) Newer
 

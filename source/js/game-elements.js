@@ -259,27 +259,6 @@ function shake(obj, time) {
 }
 
 function countdownWrapper() {
-	// function loadSound() {
-	// 	console.log('load sound!');
-	// 	createjs.Sound.registerSound('assets/audio/beep.mp3', 'beep');
-	// 	createjs.Sound.registerSound('assets/audio/ding.mp3', 'ding');
-
-	// 	// printer soundjs
-	// 	createjs.Sound.registerSound(
-	// 		'assets/audio/printer/matrix-short.wav',
-	// 		'printer-short'
-	// 	);
-	// 	createjs.Sound.registerSound(
-	// 		'assets/audio/printer/matrix-long.wav',
-	// 		'printer-long'
-	// 	);
-	// 	createjs.Sound.registerSound(
-	// 		'assets/audio/printer/load_paper.wav',
-	// 		'load_paper'
-	// 	);
-	// }
-
-	// loadSound();
 
 	// when page is ready do this
 	$(document).ready(function() {
@@ -326,6 +305,6 @@ function countdownWrapper() {
 	});
 }
 
-if (!getUrlParameter('demo')) {
+if (!getUrlParameter('demo') && window.location.href.indexOf('saved') == -1) {
   countdownWrapper();
 }

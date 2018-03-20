@@ -17,8 +17,9 @@ const port = 3000
 
 // --- DB STUFF
 
+mongoose.Promise = global.Promise
 mongoose.connect('mongodb://admin:donecolectania2018@ds135820.mlab.com:35820/done-colectania', { useMongoClient: true })
-const db = mongoose.connection;
+const db = mongoose.connection
 
 var publicationSchema = mongoose.Schema({
   id: String,
@@ -84,7 +85,7 @@ app.get('/game', function (req, res) {
 
 // cover
 app.get('/cover', function (req, res) {
-  var publication_id = req.param('id'); // e.g. http://localhost:3000/cover?id=R1520262399067
+  var publication_id = req.query['id'] // e.g. http://localhost:3000/cover?id=R1520262399067
 
   Publication.findOne({ 'id': publication_id }, function (err, publication) {
     if (err) return console.error(err)
@@ -124,7 +125,7 @@ app.get('/archive', function (req, res) {
   }
 
   var perPage = 15
-  pageParam = req.param('page')
+  pageParam = req.query['page']
   if (pageParam == null) {
     pageParam = 0
   }
@@ -132,16 +133,27 @@ app.get('/archive', function (req, res) {
 
   // find all publications
   Publication.find().limit(perPage).skip(perPage * page).sort('-date').exec(function (err, _publications) {
-    if (err) return console.error(err);
+    if (err) return console.error(err)
 
     for (id in _publications) { // convert date to text
       _publications[id].date = timeConverter( Number(_publications[id].date) )
     }
 
-    res.render(__dirname + '/../source/views/archive', {
-      publications: _publications,
-      nextPage: page + 1,
-      prevPage: page - 1
+    Publication.find().limit(perPage).skip(perPage * (page + 1) ).count({},function(err, count) { // check if it's last page
+      if (err) return console.error(err)
+
+      if (count == 0) {
+        nextPage = false
+      } else {
+        nextPage = page + 1
+      }
+
+      res.render(__dirname + '/../source/views/archive', {
+        publications: _publications,
+        nextPage: nextPage,
+        prevPage: page - 1
+      })
+      
     })
 
     console.log('serving archive')
@@ -183,7 +195,7 @@ app.post('/db', function(req, res) {
 
 // show saved
 app.get('/saved', function (req, res) {
-  var publication_id = req.param('id'); // e.g. http://localhost:3000/saved?id=R1516627472029
+  var publication_id = req.query['id'] // e.g. http://localhost:3000/saved?id=R1516627472029
 
   // find publication
   var publication_model
@@ -194,13 +206,12 @@ app.get('/saved', function (req, res) {
 
     if (publication_model) { // publication found
 
-    publication_model = JSON.stringify(publication_model)
-    var publication_script = '<script>var Publication = ' +  publication_model + ';</script>'     // script to insert the saved model into saved
-    res.render(__dirname + '/../source/views/saved', { publication_script: publication_script })
+      publication_model = JSON.stringify(publication_model)
+      var publication_script = '<script>var Publication = ' +  publication_model + ';</script>'     // script to insert the saved model into saved
+      res.render(__dirname + '/../source/views/saved', { publication_script: publication_script })
 
     } else { // publication not found
-      res.writeHead(301, {Location: '/'});
-      res.end();
+      res.redirect('/')
     }
   })
   console.log('serving saved publication')
@@ -209,8 +220,8 @@ app.get('/saved', function (req, res) {
 
 // serve pdf
 app.get('/pdf', function (req, res) {
-  var publication_id = req.param('id'); // e.g. http://localhost:3000/pdf?id=I1519673917344
-  var booklet = req.param('booklet'); // e.g. http://localhost:3000/pdf?id=I15196739173440&booklet=true
+  var publication_id = req.query['id'] // e.g. http://localhost:3000/pdf?id=I1519673917344
+  var booklet = req.query['booklet'] // e.g. http://localhost:3000/pdf?id=I15196739173440&booklet=true
 
   const canvasWidth = 450
   const canvasHeight = 636
@@ -252,16 +263,16 @@ app.get('/pdf', function (req, res) {
             if (bold && !italic) {return 'Courier-Bold';}
             if (!bold && italic) {return 'Courier-Oblique';}
             if (!bold && !italic) {return 'Courier';}
-          } else if (family.indexOf('Comic')) {
-            if (bold && italic) {return '"Comic Sans MS"';}
-            if (bold && !italic) {return '"Comic Sans MS-bold"';}
-            if (!bold && italic) {return '"Comic Sans MS"';}
-            if (!bold && !italic) {return '"Comic Sans MS"';}
-          } else if (family.match(/(?:^|,)\s*sans-serif\s*$/) || true) {
+          } else if (family.match(/(?:^|,)\s*Helvetica\s*$/)) {
             if (bold && italic) {return 'Helvetica-BoldOblique';}
             if (bold && !italic) {return 'Helvetica-Bold';}
             if (!bold && italic) {return 'Helvetica-Oblique';}
             if (!bold && !italic) {return 'Helvetica';}
+          } else {
+            if (bold && italic) {return '"Comic Sans MS"';}
+            if (bold && !italic) {return '"Comic Sans MS-bold"';}
+            if (!bold && italic) {return '"Comic Sans MS"';}
+            if (!bold && !italic) {return '"Comic Sans MS"';}
           }
         }
 
@@ -276,7 +287,7 @@ app.get('/pdf', function (req, res) {
           var i = 0
 
           canvases.forEach(function(canvas) {
-            SVGtoPDF(doc, canvas.toSVG(), 0, 0, {fontCallback: fonts }) // TODO: preserve fonts
+            SVGtoPDF(doc, canvas.toSVG(), 0, 0, {fontCallback: fonts })
             if (i != canvases.length - 1) {
               doc.addPage()
             }
@@ -302,23 +313,19 @@ app.get('/pdf', function (req, res) {
           doc.registerFont('"Comic Sans MS-bold"', __dirname + '/../public/assets/fonts/comic-bold.ttf')
           doc.registerFont('"Comic Sans MS-italic"', __dirname + '/../public/assets/fonts/comic-italic.ttf')
           doc.registerFont('"Comic Sans MS-bolditalic"', __dirname + '/../public/assets/fonts/comic-bolditalic.ttf')
-          doc.registerFont('AGaramondPro', __dirname + '/../public/assets/fonts/AGaramondPro-Regular.otf')
-          doc.registerFont('AGaramondPro-Bold', __dirname + '/../public/assets/fonts/AGaramondPro-Bold.otf')
-          doc.registerFont('AGaramondPro-Italic', __dirname + '/../public/assets/fonts/AGaramondPro-Italic.otf')
-          doc.registerFont('AGaramondPro-BoldItalic', __dirname + '/../public/assets/fonts/AGaramondPro-BoldItalic.otf')
 
           // all the -1 to have a normal page number
-          SVGtoPDF(doc, canvases[8-1].toSVG(), 0, 0);
-          SVGtoPDF(doc, canvases[1-1].toSVG(), pageWidth, 0);
+          SVGtoPDF(doc, canvases[8-1].toSVG(), 0, 0, {fontCallback: fonts });
+          SVGtoPDF(doc, canvases[1-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
           doc.addPage()
-          SVGtoPDF(doc, canvases[2-1].toSVG(), 0, 0);
-          SVGtoPDF(doc, canvases[7-1].toSVG(), pageWidth, 0);
+          SVGtoPDF(doc, canvases[2-1].toSVG(), 0, 0, {fontCallback: fonts });
+          SVGtoPDF(doc, canvases[7-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
           doc.addPage()
-          SVGtoPDF(doc, canvases[6-1].toSVG(), 0, 0);
-          SVGtoPDF(doc, canvases[3-1].toSVG(), pageWidth, 0);
+          SVGtoPDF(doc, canvases[6-1].toSVG(), 0, 0, {fontCallback: fonts });
+          SVGtoPDF(doc, canvases[3-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
           doc.addPage()
-          SVGtoPDF(doc, canvases[4-1].toSVG(), 0, 0);
-          SVGtoPDF(doc, canvases[5-1].toSVG(), pageWidth, 0);
+          SVGtoPDF(doc, canvases[4-1].toSVG(), 0, 0, {fontCallback: fonts });
+          SVGtoPDF(doc, canvases[5-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
 
           doc.pipe(res).on('finish', function() {
             console.log('booklet pdf was successfully created')
