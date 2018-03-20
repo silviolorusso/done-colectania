@@ -4,7 +4,7 @@ $element-border: #588ac5;
 $black: #191919;
 $white: #ffffff;
 $gray: #f4f4f4;
-$gradient: linear-gradient(90deg, #EE3131 0%, #FFE500 30%, #90CC2D 50%, #2EE2E2 60%, #4986FC 80%, #FD14FF 100%);
+$gradient: linear-gradient(120deg, #EE3131 0%, #FFE500 30%, #90CC2D 50%, #2EE2E2 60%, #4986FC 80%, #FD14FF 100%);
 $red: $gradient;
 $shadow: rgba(137, 137, 137, 0.48);
 $box-shadow: 4px 4px 0 0 $shadow;
@@ -773,10 +773,21 @@ $spread-width: 900px;
 				display: inline-block;
 				position: relative;
 				margin-bottom: 5px !important;
+				z-index: 1;
 
 				&:hover {
-					background-color: $gray;
+					background-color: $red;
 					color: $black;
+
+					&:before {
+						content: '';
+						width: 100%;
+						height: 235px;
+						background: $gradient;
+						position: absolute;
+						top: 0;
+						left: 0;
+					}
 				}
 
 				img {
