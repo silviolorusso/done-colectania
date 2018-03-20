@@ -145,7 +145,7 @@ function alertMessage(message) {
     var message = messageArray[randomNum(messageArray.length)]
   }
 
-  var messageHTML = $('<div class="alert draggable"><div class="topbar draggable-handler"><span class="title">Error</span></div><img class="close closeAlert" src="/assets/img/x.png" /><h2 class="alertTitle">Alert</h2><div class="alertMessage">' + message + '</div><div class="buttons"><div class="button closeAlert">Continue</div></div></div>');
+  var messageHTML = $('<div class="alert draggable"><div class="topbar draggable-handler"></div><img class="close closeAlert" src="/assets/img/x.png" /><h2 class="alertTitle">Alert</h2><div class="alertMessage">' + message + '</div><div class="buttons"><div class="button closeAlert">Continue</div></div></div>');
   $('body').append(messageHTML)
   messageHTML.show();
   // createjs.Sound.play("beep")
