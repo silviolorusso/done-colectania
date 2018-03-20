@@ -3,27 +3,37 @@ createjs.Sound.registerSound('assets/audio/beep.mp3', 'beep');
 createjs.Sound.registerSound('assets/audio/background_loop.mp3', 'music');
 
 
-console.log('loaded');
+document.onkeydown = checkKey;
+$(document).click(function () {
+  checkKey();
+});
 
-$(document).ready(function () {
-  $('.sound').click(function () {
-    console.log('click');
-    checkSoundIfMuted();
 
-  })
+function checkKey() {
+  // createjs.Sound.play('music');
 
-  function checkSoundIfMuted() {
-    if ($('.sound').hasClass('mute')) {
-      // true: audio is muted
-      createjs.Sound.stop('music');
-      $('.sound').removeClass('mute');
-      return true
-    } else {
-      // false: audio is not muted
-      createjs.Sound.play('music','.3');
-      $('.sound').addClass('mute');
-      return false
-    }
-  }
+};
 
-})
+
+console.log();
+
+// i moved this stuff to soundfx.js
+
+// $('.sound').click(function () {
+//   checkSoundIfMuted();
+
+// })
+
+// function checkSoundIfMuted() {
+//   if ($('.sound').hasClass('mute')) {
+//     // true: audio is muted
+//     createjs.Sound.stop('music');
+//     $('.sound').removeClass('mute');
+//     return true
+//   } else {
+//     // false: audio is not muted
+//     createjs.Sound.play('music','.3');
+//     $('.sound').addClass('mute');
+//     return false
+//   }
+// }

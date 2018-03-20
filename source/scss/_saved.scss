@@ -30,6 +30,10 @@
         line-height: 1.2rem;
       }
 
+      .button {
+        margin-right: 9px;
+      }
+
       .button.saved {
         &:nth-of-type(2n) {
           margin-left: 10px;
@@ -55,9 +59,9 @@
     }
 
     .last_achievements {
-      .buttons,
       h2,
-      p {
+      p,
+      .publicationdata {
         margin-left: auto;
         max-width: 90%;
       }
