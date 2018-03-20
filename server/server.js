@@ -26,7 +26,7 @@ var publicationSchema = mongoose.Schema({
   title: String,
   expired: Boolean,
   authors: String,
-  date: String,
+  date: { type: String, index: true },
   imagesAmount: Number,
   textAmount: Number,
   timeElapsed: Number,
