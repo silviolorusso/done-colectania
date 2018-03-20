@@ -661,6 +661,7 @@ function savetoDb(publication) {
   		contentType: 'application/json',
   		dataType: 'json',
   		success: function() {
+        sfx.ready()
         $('.button.save').hide()
         $('.button.pdf, .button.booklet').css('display','inline-block')
 

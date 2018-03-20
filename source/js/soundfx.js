@@ -11,7 +11,8 @@ var library = {
   "countdown":{"Frequency":{"Start":1433.6305316706266},"Volume":{"Sustain":0.0347783240096079,"Decay":0.39222229683338117,"Punch":0.5511267709068541},"Generator":{"Func":"sine"}},
   "loading":{"Frequency":{"Start":1800,"Min":1402,"Slide":-0.7127048155930049},"Generator":{"Func":"sine","A":0.30364788843107227,"ASlide":0.057573559806855634},"Filter":{"HP":0.19324063423690388},"Volume":{"Sustain":0.1964293192566542,"Decay":0.023271947952411855,"Punch":0.04603489865660102}},
   "loaded":{"Frequency":{"Start":599.4087759865977,"Slide":0.4423875329916726,"RepeatSpeed":0.7386864833329531},"Generator":{"A":0.44767248110493446},"Volume":{"Sustain":0.10494383413944118,"Decay":0.4929892029388092}},
-  "error":{"Frequency":{"Start":451.522575399669,"Slide":-0.4866219113811203},"Generator":{"Func":"square","A":0.38842468202591096,"ASlide":-0.04223165548495689},"Volume":{"Sustain":0.04503758846105768,"Decay":0.10912816671117827}}
+  "error":{"Frequency":{"Start":451.522575399669,"Slide":-0.4866219113811203},"Generator":{"Func":"square","A":0.38842468202591096,"ASlide":-0.04223165548495689},"Volume":{"Sustain":0.04503758846105768,"Decay":0.10912816671117827}},
+  "ready":{"Frequency":{"Start":600.5936281460497,"Slide":0.22289345063425814},"Vibrato":{"Depth":0.27802441337207046,"Frequency":35.90766409757357},"Generator":{"A":0.3354589217595621},"Volume":{"Sustain":0.3735321464174761,"Decay":0.26493156145629737}}
 }
 var libraryMuted = {}
 for (var sound in library) {
