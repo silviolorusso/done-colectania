@@ -160,7 +160,7 @@ function initCanvases() {
         this.text = ''
         this.hiddenTextarea.value = ''
       }
-    }).on('editing:exited', function(e) {
+    }).on('changed', function(e) {
       Publication.title = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
       this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
       this.selectable = false
@@ -196,7 +196,7 @@ function initCanvases() {
         this.text = ''
         this.hiddenTextarea.value = ''
       }
-    }).on('editing:exited', function(e) {
+    }).on('changed', function(e) {
       Publication.authors = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
       this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
       this.selectable = false
@@ -272,7 +272,8 @@ var Publication = {
 		p6: {},
 		p7: {},
 		p8: {}
-	}
+	},
+  thumb: ''
 };
 
 function controller(Publication, input) {
@@ -291,6 +292,8 @@ function controller(Publication, input) {
 			case input.data &&
 				byteCount(input.data) > 1398117 : // file too big (1mb)
 				 	Error.tooBig()
+          addTime(-bonusTime)
+          criticSays('This is not a server farm.')
 					break
 			case input.data &&
 				input.data.includes('data:image') &&
@@ -345,6 +348,7 @@ function controller(Publication, input) {
 
             Error.codeInjection()
             addTime(-bonusTime)
+            criticSays('You deserve to be punished.')
 
           } else {
 
@@ -361,7 +365,7 @@ function controller(Publication, input) {
             }
 
   					addTime(bonusTime * 2)
-            criticSays('This is gonna be a goood read')
+            criticSays('This is gonna be a gooooood read')
 
           }
 					
@@ -559,6 +563,7 @@ function showExpired() {
     }
   	$('body').addClass('expired')
   	expiredTime()
+    sfx.perished()
     for (canvas in canvases) {
       canvases[canvas].selection = false
       canvases[canvas].discardActiveObject().renderAll()
@@ -675,54 +680,6 @@ function savetoDb(publication) {
 
 
 
-
-// --- INTERFACE FX
-
-
-// move these functions to interface part of js?
-function animateUp(obj) {
-  obj.show();
-  obj.css('margin-top', '20px');
-  obj.animate({
-      opacity: 1,
-      marginTop: "0px",
-    }, 3000, function() {
-      // Animation complete.
-  });
-};
-
-function animateUpOut(obj, time) {
-  obj.show();
-  obj.css('margin-top', '20px');
-  obj.animate({
-      opacity: 1,
-      marginTop: "0px",
-    }, time/2, function() {
-      // Animation complete.
-  });
-  obj.animate({
-      opacity: 0,
-      marginTop: "20px",
-    }, time/2, function() {
-      // Animation complete.
-  });
-};
-
-function shake(obj, time) {
-  if (!time) (
-    time = 500
-  )
-  obj.addClass( 'shake shake-constant' )
-  setTimeout(function(){
-    obj.removeClass( 'shake shake-constant' )
-  }, time);
-}
-
-
-
-
-
-
 // --- DISRUPTIONS
 
 
@@ -775,7 +732,7 @@ var Disruption = {
     _comic( allElements('text') )
     _comic( allElements('textbox') )
     renderAllCanvases()
-    criticSays('Can\'t you spice the typography a bit?', 'Gutenberg')
+    criticSays('Can\'t you spice the typography a bit?')
 	},
 	rotateImgsRand: function() {
     function _rotateImgsRand(objs) {
@@ -790,7 +747,7 @@ var Disruption = {
       }
     }
     _rotateImgsRand(allElements('image'))
-    criticSays('I find this layout a bit static...', 'Gutenberg')
+    criticSays('I find this layout a bit static...')
 	},
 	lockRandPage: function() {
     var keys = Object.keys(canvases)
@@ -810,7 +767,7 @@ var Disruption = {
 		}))
 		randCanvas.renderAll();
 		// TODO: prevent drop
-    criticSays('Page ' + randCanvas.id + ' is now locked...', 'Gutenberg') // TODO
+    criticSays('Page ' + randCanvas.id + ' is now locked...') // TODO
 	},
   shufflePages: function() {
     var toShuffle = []
@@ -831,7 +788,7 @@ var Disruption = {
       }
       y += 1
     }
-    criticSays('The rythm of this publication is a bit weak. Don\'t you think?', 'Gutenberg')
+    criticSays('The rythm of this publication is a bit weak. Don\'t you think?')
   },
 	ads: function () {
 		var keys = Object.keys(canvases)
@@ -866,39 +823,39 @@ var Disruption = {
 				// TODO: it only works with one image for some reason. running the function multiple times it adds more top bars but just moves all the images to the same place
 		})
 
-    criticSays('I found a sponsor!', 'Gutenberg')
+    criticSays('I found a sponsor!')
 	},
   halfTime: function () {
     Publication.timeLeft = Publication.timeLeft / 2
-    criticSays('This is taking too long...', 'Gutenberg')
+    criticSays('This is taking too long...')
   },
   doubleTime: function () {
     Publication.timeLeft = Publication.timeLeft * 2
-    criticSays('Take your time...', 'Gutenberg')
+    criticSays('Take your time...')
   },
   greyscaleImgs: function() {
     filterImgs(allElements('image'), new fabric.Image.filters.Grayscale() )
-    criticSays('Shall we make it look classic?', 'Gutenberg')
+    criticSays('Shall we make it look classic?')
   },
   invertImgs: function() {
     filterImgs(allElements('image'), new fabric.Image.filters.Invert() )
-    criticSays('The visuals need some edgy colors', 'Gutenberg')
+    criticSays('The visuals need some edgy colors')
   },
   sepiaImgs: function() {
     filterImgs(allElements('image'), new fabric.Image.filters.Sepia() )
-    criticSays('Ever heard of Instagram?', 'Gutenberg')
+    criticSays('Ever heard of Instagram?')
   },
   blackwhiteImgs: function() {
     filterImgs(allElements('image'), new fabric.Image.filters.BlackWhite() )
-    criticSays('This should look like a zine!', 'Gutenberg')
+    criticSays('This should look like a zine!')
   },
   pixelateImgs: function() {
     filterImgs(allElements('image'), new fabric.Image.filters.Pixelate({blocksize: 20}) )
-    criticSays('Isn\'t this a videogame after all?', 'Gutenberg')
+    criticSays('Isn\'t this a videogame after all?')
   },
   noiseImgs: function() {
     filterImgs(allElements('image'), new fabric.Image.filters.Noise({noise: 200}) )
-    criticSays('MAKE SOME NOOISE!!', 'Gutenberg')
+    criticSays('MAKE SOME NOOISE!!')
   },
   fontSizeBigger: function() {
     function _fontSizeBigger(elements) {
@@ -908,17 +865,17 @@ var Disruption = {
     }
     _fontSizeBigger(allElements('textbox'))
     renderAllCanvases()
-    criticSays('Can\'t read anything :(', 'Gutenberg')
+    criticSays('Can\'t read anything :(')
   },
   fontSizeSmaller: function() {
-    function _fontSizeBigger(elements) {
+    function _fontSizeSmaller(elements) {
       for (var i = 0; i < elements.length; i++) {
         elements[i].set('fontSize', elements[i].fontSize / scaleFont);
       }
     }
     _fontSizeSmaller(allElements('textbox'))
     renderAllCanvases()
-    criticSays('I\'m not blind!', 'Gutenberg')
+    criticSays('I\'m not blind!')
   },
   biggerImgs: function() {
     function _biggerImgs(elements) {
@@ -931,7 +888,7 @@ var Disruption = {
     }
     _biggerImgs(allElements('image'))
     renderAllCanvases()
-    criticSays('BLOW UP!', 'Gutenberg')
+    criticSays('BLOW UP!')
   },
   smallerImgs: function() {
     function _smallerImgs(elements) {
@@ -944,11 +901,11 @@ var Disruption = {
     }
     _smallerImgs(allElements('image'))
     renderAllCanvases()
-    criticSays('BLOW UP!', 'Gutenberg')
+    criticSays('BLOW UP!')
   },
   lockAllElements: function() {
     lockElements(allElements())
-    criticSays('Things are perfect as they are.', 'Gutenberg')
+    criticSays('Things are perfect as they are.')
   },
   skewAllElements: function() {
     function _skewAllElements(elements) {
@@ -962,7 +919,7 @@ var Disruption = {
     }
     _skewAllElements(allElements('image'))
     renderAllCanvases()
-    criticSays('Stretch those images, come on!', 'Gutenberg')
+    criticSays('Stretch those images, come on!')
   },
   flipAllImgs: function() {
     function _flipAllImgs(elements) {
@@ -975,7 +932,7 @@ var Disruption = {
     }
     _flipAllImgs(allElements('image'))
     renderAllCanvases()
-    criticSays('Flip those images, come on!', 'Gutenberg')
+    criticSays('Flip those images, come on!')
   },
   bitLeftbitRightAllImgs: function() {
     function _bitLeftbitRightAllImgs(elements, distance) {
@@ -1023,7 +980,7 @@ var Disruption = {
     }
     _bitLeftbitRightAllImgs(allElements('image'), 70)
     renderAllCanvases()
-    criticSays('A bit to the right... No no, a bit to the left...', 'Gutenberg')
+    criticSays('A bit to the right... No no, a bit to the left...')
   },
   rigidMode: function() {
     function _rigidMode(elements) {
@@ -1036,7 +993,7 @@ var Disruption = {
     }
     _rigidMode(allElements('image'), 70)
     renderAllCanvases()
-    criticSays('Respect the grid!', 'Gutenberg')
+    criticSays('Respect the grid!')
   },
   betterTitle: function() {
     var titles = [
@@ -1055,7 +1012,7 @@ var Disruption = {
     title.text = randTitle
     renderAllCanvases()
     Publication.title = randTitle
-    criticSays('I suggest a catchier title', 'Gutenberg')
+    criticSays('I suggest a catchier title')
   },
   betterAuthors: function() { // TODO: not sure why this doesn't work
     var authors = [
@@ -1074,7 +1031,7 @@ var Disruption = {
     authors.text = randAuthor
     renderAllCanvases()
     Publication.authors = randAuthor
-    criticSays('We need a well-known testimonial.', 'Gutenberg')
+    criticSays('We need a well-known testimonial.')
   },
   drawingMode: function() {
     for (canvas in canvases) {
@@ -1089,6 +1046,6 @@ var Disruption = {
         canvases[canvas].renderAll()
       }
     }, drawingModeTime)
-    criticSays('Do you like to draw?', 'Gutenberg')
+    criticSays('Do you like to draw?')
   }
 }

@@ -18,6 +18,7 @@ function savedState() {
       count--;
       s[count].style.display = 'block';
     }
+    sfx.browse()
   });
 }
 
@@ -71,13 +72,15 @@ $(document).bind("dragover", function(e){
 
 function criticSays(message, actor) {
 	var messageArray = [
-    "So dope dude",
+    "DOPE!",
     "Wow... that looks like contemporary art",
     "👌  Great job",
     "It took you a while...",
     "Come on!",
-    "",
-
+    "This is what I call 'performative'!",
+    "Xerox it!",
+    "Publish Publish Publish",
+    "Shake that layout"
   ]
 	if (message === undefined) {
 		// choose a random default one
@@ -90,7 +93,11 @@ function criticSays(message, actor) {
     "McLuhan",
     "Manutius",
     "Mergenthaler",
-    "Morris"
+    "Morris",
+    'Eisenstein',
+    'Ong',
+    'Drucker',
+    'Hayles'
   ]
 	if (actor === undefined) {
 		// choose a random default one
@@ -213,28 +220,66 @@ function animatetimecounter(bonusTime) {
 	}, 1000);
 }
 
+function animateUp(obj) {
+  obj.show();
+  obj.css('margin-top', '20px');
+  obj.animate({
+      opacity: 1,
+      marginTop: "0px",
+    }, 3000, function() {
+      // Animation complete.
+  });
+};
+
+function animateUpOut(obj, time) {
+  obj.show();
+  obj.css('margin-top', '20px');
+  obj.animate({
+      opacity: 1,
+      marginTop: "0px",
+    }, time/2, function() {
+      // Animation complete.
+  });
+  obj.animate({
+      opacity: 0,
+      marginTop: "20px",
+    }, time/2, function() {
+      // Animation complete.
+  });
+};
+
+function shake(obj, time) {
+  if (!time) (
+    time = 500
+  )
+  obj.addClass( 'shake shake-constant' )
+  setTimeout(function(){
+    obj.removeClass( 'shake shake-constant' )
+  }, time);
+}
+
 function countdownWrapper() {
-	function loadSound() {
-		console.log('load sound!');
-		createjs.Sound.registerSound('assets/audio/beep.mp3', 'beep');
-		createjs.Sound.registerSound('assets/audio/ding.mp3', 'ding');
+	// function loadSound() {
+	// 	console.log('load sound!');
+	// 	createjs.Sound.registerSound('assets/audio/beep.mp3', 'beep');
+	// 	createjs.Sound.registerSound('assets/audio/ding.mp3', 'ding');
 
-		// printer soundjs
-		createjs.Sound.registerSound(
-			'assets/audio/printer/matrix-short.wav',
-			'printer-short'
-		);
-		createjs.Sound.registerSound(
-			'assets/audio/printer/matrix-long.wav',
-			'printer-long'
-		);
-		createjs.Sound.registerSound(
-			'assets/audio/printer/load_paper.wav',
-			'load_paper'
-		);
-	}
+	// 	// printer soundjs
+	// 	createjs.Sound.registerSound(
+	// 		'assets/audio/printer/matrix-short.wav',
+	// 		'printer-short'
+	// 	);
+	// 	createjs.Sound.registerSound(
+	// 		'assets/audio/printer/matrix-long.wav',
+	// 		'printer-long'
+	// 	);
+	// 	createjs.Sound.registerSound(
+	// 		'assets/audio/printer/load_paper.wav',
+	// 		'load_paper'
+	// 	);
+	// }
 
-	loadSound();
+	// loadSound();
 
 	// when page is ready do this
 	$(document).ready(function() {
@@ -243,7 +288,8 @@ function countdownWrapper() {
 
 
 		function countdown(startTime) {
-			animateUpOut($('#countdownWrapper'), 2000);
+			animateUpOut($('#countdownWrapper'), 1000)
+      sfx.countdown()
 
 			switch (startTime) {
 				case 3:
@@ -262,7 +308,7 @@ function countdownWrapper() {
 			if (startTime >= 0) {
 				setTimeout(function () {
 					countdown(startTime);
-				}, 2000);
+				}, 1300);
 			} else {
 				$('#countdownWrapper').remove();
         $('.counter').fadeIn(300);
@@ -274,7 +320,9 @@ function countdownWrapper() {
 		}
 
 		var startTime = 3;
-		countdown(startTime);
+    setTimeout(function () {
+		  countdown(startTime)
+    }, 200)
 	});
 }
 
