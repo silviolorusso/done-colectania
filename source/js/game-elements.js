@@ -71,13 +71,15 @@ $(document).bind("dragover", function(e){
 
 function criticSays(message, actor) {
 	var messageArray = [
-    "So dope dude",
+    "DOPE!",
     "Wow... that looks like contemporary art",
     "👌  Great job",
     "It took you a while...",
     "Come on!",
-    "",
-
+    "This is what I call 'performative'!",
+    "Xerox it!",
+    "Publish Publish Publish",
+    "Shake that layout"
   ]
 	if (message === undefined) {
 		// choose a random default one
@@ -90,7 +92,11 @@ function criticSays(message, actor) {
     "McLuhan",
     "Manutius",
     "Mergenthaler",
-    "Morris"
+    "Morris",
+    'Eisenstein',
+    'Ong',
+    'Drucker',
+    'Hayles'
   ]
 	if (actor === undefined) {
 		// choose a random default one
