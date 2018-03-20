@@ -7,15 +7,15 @@
   background-color: $white;
   box-shadow: $box-shadow;
   border: 1px solid $black;
-  padding: 0 0 20px;
 
   .topbar {
-    background-color: $black;
-    color: $white;
+    background: $gradient;
+    font-family: $font-game;
     border-bottom: 1px solid $black;
     padding-top: 8px;
     padding-bottom: 8px;
     height: 20px;
+    line-height: 20px;
 
     img {
       width: 20px;
@@ -40,9 +40,10 @@
     margin: 8px;
     border: 1px solid $black;
     width: 20px;
-    height: 20px;
+    height: 19px;
     text-align: center;
     transition: .2s;
+    line-height: 10px;
 
     &:hover {
       transition: .2s;
@@ -55,7 +56,7 @@
 
   .alertTitle {
     margin-top: 0;
-    padding-top: 10px;
+    padding-top: 20px;
     margin-bottom: 10px;
     padding-left: 20px;
     padding-right: 20px;
@@ -72,6 +73,7 @@
 
     .button {
       font-size: 16px;
+      font-family: $font-game;
       box-shadow: none;
       margin-right: 10px;
       padding: 10px;

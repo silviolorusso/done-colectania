@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="47px" height="52px" viewBox="0 0 47 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
     <title>sound-off</title>
     <desc>Created with Sketch.</desc>
     <defs>
@@ -11,8 +11,16 @@
             <feComposite in="shadowOffsetOuter1" in2="SourceAlpha" operator="out" result="shadowOffsetOuter1"></feComposite>
             <feColorMatrix values="0 0 0 0 0.537388393   0 0 0 0 0.537388393   0 0 0 0 0.537388393  0 0 0 0.476987092 0" type="matrix" in="shadowOffsetOuter1"></feColorMatrix>
         </filter>
-        <rect id="path-3" x="-2" y="20" width="57" height="6"></rect>
-        <filter x="-4.4%" y="-41.7%" width="115.8%" height="250.0%" filterUnits="objectBoundingBox" id="filter-4">
+        <linearGradient x1="0%" y1="0%" x2="101.999998%" y2="100.999999%" id="linearGradient-3">
+            <stop stop-color="#FF0000" offset="0%"></stop>
+            <stop stop-color="#FFFF00" offset="22.2046604%"></stop>
+            <stop stop-color="#008000" offset="41.2707731%"></stop>
+            <stop stop-color="#00FFFF" offset="60.4475253%"></stop>
+            <stop stop-color="#0000FF" offset="80.8232478%"></stop>
+            <stop stop-color="#EE82EE" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-4" x="-2" y="20" width="57" height="6"></rect>
+        <filter x="-4.4%" y="-41.7%" width="115.8%" height="250.0%" filterUnits="objectBoundingBox" id="filter-5">
             <feMorphology radius="0.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
             <feOffset dx="4" dy="4" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
             <feComposite in="shadowOffsetOuter1" in2="SourceAlpha" operator="out" result="shadowOffsetOuter1"></feComposite>
@@ -28,8 +36,8 @@
                     <use stroke="#000000" stroke-width="1" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
                 </g>
                 <g id="Rectangle-6" transform="translate(26.500000, 23.000000) scale(-1, 1) rotate(45.000000) translate(-26.500000, -23.000000) ">
-                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
-                    <use stroke="#000000" stroke-width="1" fill="#CD1602" fill-rule="evenodd" xlink:href="#path-3"></use>
+                    <use fill="black" fill-opacity="1" filter="url(#filter-5)" xlink:href="#path-4"></use>
+                    <use stroke="#000000" stroke-width="1" fill="url(#linearGradient-3)" fill-rule="evenodd" xlink:href="#path-4"></use>
                 </g>
             </g>
         </g>

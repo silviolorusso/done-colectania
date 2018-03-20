@@ -1,5 +1,5 @@
 .sound::after {
-  content: url('/assets/img/sound-off.svg');
+  content: url('/assets/img/sound-off.png');
   position: fixed;
   bottom: 10px;
   right: 10px;
@@ -9,5 +9,5 @@
 }
 
 .mute::after {
-  content: url('/assets/img/sound-on.svg');
+  content: url('/assets/img/sound-on.png');
 }

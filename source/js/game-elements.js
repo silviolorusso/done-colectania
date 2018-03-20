@@ -40,7 +40,7 @@ function expiredTime() {
 function updateMouseCounter(e) {
   if (getUrlParameter('demo')) {
     // don't show conter
-    $('.counter').remove();
+    $('.counter').hide();
   } else {
     $('.counter').css('opacity', '1');
     if (e.clientX >= 200) { // ($(document).width()/2)
@@ -145,7 +145,7 @@ function alertMessage(message) {
     var message = messageArray[randomNum(messageArray.length)]
   }
 
-  var messageHTML = $('<div class="alert draggable"><div class="topbar draggable-handler"><span class="title"><img src="/assets/img/favicon/favicon-20x20.png" />Alert Message</span></div><span class="close closeAlert">𝗫</span><h2 class="alertTitle">Alert</h2><div class="alertMessage">' + message + '</div><div class="buttons"><div class="button closeAlert">Continue</div></div></div>');
+  var messageHTML = $('<div class="alert draggable"><div class="topbar draggable-handler"><span class="title">Error</span></div><img class="close closeAlert" src="/assets/img/x.png" /><h2 class="alertTitle">Alert</h2><div class="alertMessage">' + message + '</div><div class="buttons"><div class="button closeAlert">Continue</div></div></div>');
   $('body').append(messageHTML)
   messageHTML.show();
   // createjs.Sound.play("beep")
