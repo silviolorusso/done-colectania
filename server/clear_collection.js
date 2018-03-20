@@ -3,18 +3,23 @@ const mongoose = require('mongoose')
 mongoose.connect('mongodb://admin:donecolectania2018@ds135820.mlab.com:35820/done-colectania', { useMongoClient: true })
 const db = mongoose.connection;
 
-// how to avoid declaring the publication schema here?
 var publicationSchema = mongoose.Schema({
   id: String,
   title: String,
-  date: Number,
   expired: Boolean,
-  elements: Array
+  authors: String,
+  date: String,
+  imagesAmount: Number,
+  textAmount: Number,
+  timeElapsed: Number,
+  achievementsAmount: Number,
+  pages: Object,
+  thumb: String
 })
 
 var Publication = mongoose.model('Publication', publicationSchema)
 
 Publication.remove(function (err) {
   if (err) return handleError(err);
-  // removed!
+  console.log('removed ')
 });

@@ -160,7 +160,7 @@ function initCanvases() {
         this.text = ''
         this.hiddenTextarea.value = ''
       }
-    }).on('editing:exited', function(e) {
+    }).on('changed', function(e) {
       Publication.title = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
       this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
       this.selectable = false
@@ -196,7 +196,7 @@ function initCanvases() {
         this.text = ''
         this.hiddenTextarea.value = ''
       }
-    }).on('editing:exited', function(e) {
+    }).on('changed', function(e) {
       Publication.authors = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
       this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
       this.selectable = false
@@ -272,7 +272,8 @@ var Publication = {
 		p6: {},
 		p7: {},
 		p8: {}
-	}
+	},
+  thumb: ''
 };
 
 function controller(Publication, input) {
@@ -679,54 +680,6 @@ function savetoDb(publication) {
 
 
 
-
-// --- INTERFACE FX
-
-
-// move these functions to interface part of js?
-function animateUp(obj) {
-  obj.show();
-  obj.css('margin-top', '20px');
-  obj.animate({
-      opacity: 1,
-      marginTop: "0px",
-    }, 3000, function() {
-      // Animation complete.
-  });
-};
-
-function animateUpOut(obj, time) {
-  obj.show();
-  obj.css('margin-top', '20px');
-  obj.animate({
-      opacity: 1,
-      marginTop: "0px",
-    }, time/2, function() {
-      // Animation complete.
-  });
-  obj.animate({
-      opacity: 0,
-      marginTop: "20px",
-    }, time/2, function() {
-      // Animation complete.
-  });
-};
-
-function shake(obj, time) {
-  if (!time) (
-    time = 500
-  )
-  obj.addClass( 'shake shake-constant' )
-  setTimeout(function(){
-    obj.removeClass( 'shake shake-constant' )
-  }, time);
-}
-
-
-
-
-
-
 // --- DISRUPTIONS
 
 
@@ -915,7 +868,7 @@ var Disruption = {
     criticSays('Can\'t read anything :(')
   },
   fontSizeSmaller: function() {
-    function _fontSizeBigger(elements) {
+    function _fontSizeSmaller(elements) {
       for (var i = 0; i < elements.length; i++) {
         elements[i].set('fontSize', elements[i].fontSize / scaleFont);
       }

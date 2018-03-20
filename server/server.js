@@ -20,7 +20,6 @@ const port = 3000
 mongoose.connect('mongodb://admin:donecolectania2018@ds135820.mlab.com:35820/done-colectania', { useMongoClient: true })
 const db = mongoose.connection;
 
-// how to avoid declaring the publication schema here?
 var publicationSchema = mongoose.Schema({
   id: String,
   title: String,
@@ -31,7 +30,8 @@ var publicationSchema = mongoose.Schema({
   textAmount: Number,
   timeElapsed: Number,
   achievementsAmount: Number,
-  pages: Object
+  pages: Object,
+  thumb: String
 })
 
 var Publication = mongoose.model('Publication', publicationSchema)
@@ -123,7 +123,7 @@ app.get('/archive', function (req, res) {
     return time;
   }
 
-  var perPage = 9
+  var perPage = 15
   pageParam = req.param('page')
   if (pageParam == null) {
     pageParam = 0
@@ -158,11 +158,25 @@ app.get('/about', function (req, res) {
 // save to db
 app.post('/db', function(req, res) {
     var publication = new Publication( req.body )
-    publication.save(function (err, publication) {
-      if (err) return console.error(err);
-      console.log('saved to db')
-      res.status(200).json({status:"ok"})
-    });
+
+    // save thumb
+    const coverWidth = 450
+    const coverHeight = 636
+    const cover = new fabric.StaticCanvas('c')
+    cover.setWidth(coverWidth)
+    cover.setHeight(coverHeight)
+    cover.loadFromJSON(publication.pages.p1)
+    coverImg = cover.toSVG()
+
+    svg2img(cover.toSVG(), function(error, buffer) {
+      publication.thumb = 'data:image/png;base64,' + buffer.toString('base64')
+      publication.save(function (err, publication) {
+        if (err) return console.error(err);
+        console.log('saved to db')
+        res.status(200).json({status:"ok"})
+      });
+
+    })
 
     console.log('saving to db');
 });

@@ -788,6 +788,10 @@ $spread-width: 900px;
 						top: 0;
 						left: 0;
 					}
+
+					span {
+						color: $white;
+					}
 				}
 
 				img {
@@ -805,6 +809,7 @@ $spread-width: 900px;
 					bottom: 10px;
 					left: 0;
 					right: 0;
+					font-family: $font-game;
 				}
 			}
 

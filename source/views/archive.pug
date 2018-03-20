@@ -6,7 +6,7 @@ div.wrapper.intro
   div.collection
     each publication in publications
       a(href='saved?id=' + publication.id).tile
-        img.cover(src='cover?id=' + publication.id)
+        img.cover(src= publication.thumb)
         div.description
           div.title
             span= publication.title
