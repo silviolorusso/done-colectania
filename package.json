@@ -39,6 +39,7 @@
     "svg2img": "^0.2.8"
   },
   "dependencies": {
+    "async": "^2.6.0",
     "gulp-run-command": "0.0.9",
     "node-gyp": "^3.6.2",
     "node-sass": "^4.7.2",
