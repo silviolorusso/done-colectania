@@ -285,15 +285,16 @@ $timewiggle: $time;
 	margin-left: auto;
 	margin-right: auto;
 	padding-top: 42vh;
-	position: fixed;
-	z-index: 9999999999;
 	text-align: center;
 	width: 100%;
 	opacity: 0;
 	display: none;
+	position: absolute;
+	z-index: 1;
 
 	#countdown {
 		top: 20vh;
+		z-index: 1;
 		font-size: 78px;
 		font-family: $font;
 		background-color: $white;

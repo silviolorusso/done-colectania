@@ -145,7 +145,7 @@ function alertMessage(message) {
     var message = messageArray[randomNum(messageArray.length)]
   }
 
-  var messageHTML = $('<div class="alert draggable"><div class="topbar draggable-handler"></div><img class="close closeAlert" src="/assets/img/x.png" /><h2 class="alertTitle">Alert</h2><div class="alertMessage">' + message + '</div><div class="buttons"><div class="button closeAlert">Continue</div></div></div>');
+  var messageHTML = $('<div class="alert draggable"><div class="topbar draggable-handler"><span class="title">Error</span></div><img class="close closeAlert" src="/assets/img/x.png" /><h2 class="alertTitle">Alert</h2><div class="alertMessage">' + message + '</div><div class="buttons"><div class="button closeAlert">Continue</div></div></div>');
   $('body').append(messageHTML)
   messageHTML.show();
   // createjs.Sound.play("beep")
@@ -259,6 +259,27 @@ function shake(obj, time) {
 }
 
 function countdownWrapper() {
+	// function loadSound() {
+	// 	console.log('load sound!');
+	// 	createjs.Sound.registerSound('assets/audio/beep.mp3', 'beep');
+	// 	createjs.Sound.registerSound('assets/audio/ding.mp3', 'ding');
+
+	// 	// printer soundjs
+	// 	createjs.Sound.registerSound(
+	// 		'assets/audio/printer/matrix-short.wav',
+	// 		'printer-short'
+	// 	);
+	// 	createjs.Sound.registerSound(
+	// 		'assets/audio/printer/matrix-long.wav',
+	// 		'printer-long'
+	// 	);
+	// 	createjs.Sound.registerSound(
+	// 		'assets/audio/printer/load_paper.wav',
+	// 		'load_paper'
+	// 	);
+	// }
+
+	// loadSound();
 
 	// when page is ready do this
 	$(document).ready(function() {
@@ -289,7 +310,7 @@ function countdownWrapper() {
 					countdown(startTime);
 				}, 1300);
 			} else {
-				$('#countdownWrapper').remove();
+				// $('#countdownWrapper').remove();
         $('.counter').fadeIn(300);
         if ( getUrlParameter('time') ) { // difficulty
     			Publication.timeLeft = timeSet = getUrlParameter('time')
@@ -305,6 +326,6 @@ function countdownWrapper() {
 	});
 }
 
-if (!getUrlParameter('demo') && window.location.href.indexOf('saved') == -1) {
+if (!getUrlParameter('demo')) {
   countdownWrapper();
 }
