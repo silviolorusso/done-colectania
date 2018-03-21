@@ -261,7 +261,7 @@ if (cluster.isMaster) {
           canvas.setHeight(canvasHeight)
           if ( _publication && _publication.pages.hasOwnProperty('p' + i) ) { // if not empty
             var pages = _publication.pages
-            // canvas.loadFromJSON(pages['p' + i]);
+            //canvas.loadFromJSON(pages['p' + i]);
           }
           canvases.push(canvas)
         }
@@ -310,13 +310,13 @@ if (cluster.isMaster) {
 
           var i = 0
 
-          canvases.forEach(function(canvas) {
-            SVGtoPDF(doc, canvas.toSVG(), 0, 0, {fontCallback: fonts })
-            if (i != canvases.length - 1) {
-              doc.addPage()
-            }
-            i++
-          })
+          // canvases.forEach(function(canvas) {
+          //   SVGtoPDF(doc, canvas.toSVG(), 0, 0, {fontCallback: fonts })
+          //   if (i != canvases.length - 1) {
+          //     doc.addPage()
+          //   }
+          //   i++
+          // })
 
           doc.pipe(res).on('finish', function() {
             console.log('single page pdf was successfully created by ' + process.pid)
