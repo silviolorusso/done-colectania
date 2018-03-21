@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/silviolorusso/done-colectania#readme",
   "devDependencies": {
-    "async": "^2.6.0",
     "body-parser": "^1.18.2",
     "easy-pdf-merge": "^0.1.3",
     "express": "^4.16.2",
