@@ -1,3 +1,25 @@
+var cluster = require('cluster');
+
+if(cluster.isMaster) {
+    var numWorkers = require('os').cpus().length;
+
+    console.log('Master cluster setting up ' + numWorkers + ' workers...');
+
+    for(var i = 0; i < numWorkers; i++) {
+        cluster.fork();
+    }
+
+    cluster.on('online', function(worker) {
+        console.log('Worker ' + worker.process.pid + ' is online');
+    });
+
+    cluster.on('exit', function(worker, code, signal) {
+        console.log('Worker ' + worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal);
+        console.log('Starting a new worker');
+        cluster.fork();
+    });
+} else {
+
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const fs = require('fs')
@@ -209,7 +231,7 @@ app.get('/saved', function (req, res) {
 })
 
 
-// serve pdf
+// serve pdf 
 app.get('/pdf', function (req, res) {
   var publication_id = req.query['id'] // e.g. http://localhost:3000/pdf?id=I1519673917344
   var booklet = req.query['booklet'] // e.g. http://localhost:3000/pdf?id=I15196739173440&booklet=true
@@ -247,7 +269,7 @@ app.get('/pdf', function (req, res) {
     },
     function makePdf(callback) {
 
-      fonts = function(family, bold, italic, fontOptions) { // remember to choose fonts and change them
+      fonts = function(family, bold, italic, fontOptions) {
         if (family.match(/(?:^|,)\s*serif\s*$/)) {
           if (bold && italic) {return 'Times-BoldItalic';}
           if (bold && !italic) {return 'Times-Bold';}
@@ -362,3 +384,5 @@ app.listen(portset, (err) => {
 
 	console.log('server is listening on http://localhost:' + portset);
 });
+
+}
