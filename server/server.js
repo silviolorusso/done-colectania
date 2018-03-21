@@ -246,23 +246,23 @@ if (cluster.isMaster) {
     var _publication
 
     const tasks = [
-      function findPublication(callback) {
-        Publication.findOne({ 'id': publication_id }, function (err, publication) {
-          if (err) return console.error(err)
-            _publication = publication
-          console.log('found pub')
-          callback(null)
-        })
-      },
+      // function findPublication(callback) {
+      //   Publication.findOne({ 'id': publication_id }, function (err, publication) {
+      //     if (err) return console.error(err)
+      //       _publication = publication
+      //     console.log('found pub')
+      //     callback(null)
+      //   })
+      // },
       function makeCanvases(callback) {
         for (var i = 1; i < 9; i++) {
           var canvas = new fabric.StaticCanvas('c') // random name
           canvas.setWidth(canvasWidth)
           canvas.setHeight(canvasHeight)
-          if ( _publication && _publication.pages.hasOwnProperty('p' + i) ) { // if not empty
-            var pages = _publication.pages
-            //canvas.loadFromJSON(pages['p' + i]);
-          }
+          // if ( _publication && _publication.pages.hasOwnProperty('p' + i) ) { // if not empty
+          //   var pages = _publication.pages
+          //   //canvas.loadFromJSON(pages['p' + i]);
+          // }
           canvases.push(canvas)
         }
         console.log('made canvases')
