@@ -281,7 +281,7 @@ function countdownWrapper() {
 					countdown(startTime);
 				}, 1300);
 			} else {
-				// $('#countdownWrapper').remove();
+				$('#countdownWrapper').remove();
         $('.counter').fadeIn(300);
         if ( getUrlParameter('time') ) { // difficulty
     			Publication.timeLeft = timeSet = getUrlParameter('time')
