@@ -263,7 +263,7 @@ app.get('/pdf-test', function (req, res) {
         if ( _publication && _publication.pages.hasOwnProperty('p' + i) ) { // if not empty
           var pages = _publication.pages
           // canvas.loadFromJSON(pages['p' + i]);
-          // SVGtoPDF(doc, canvas.toSVG(), 0, 0)
+          SVGtoPDF(doc, canvas.toSVG(), 0, 0)
           if (i != 8) {
             doc.addPage()
           }
