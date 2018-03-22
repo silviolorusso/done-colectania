@@ -1,5 +1,6 @@
 // basic fadeIn / page animation
 $('body').fadeIn(600);
+achievement(200, 'Your mom bought 12 copies');
 
 $(document).ready(function() {
   $('a').click( function(e) {

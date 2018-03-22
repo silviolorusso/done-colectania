@@ -3,41 +3,39 @@
     max-width: 80%;
 
     .badge {
-      width: 33%;
+      width: 100%;
       display: inline-block;
       position: relative;
       margin-bottom: 20px;
 
       img {
-        width: 80px;
-        width: 80px;
-        display: block;
+        width: 30%;
+        display: inline-block;
         margin: auto;
       }
 
-      .name {
-        padding-top: 10px;
-        display: block;
-        text-align: center;
-      }
+      .descr {
+        width: 70%;
+        display: inline-block;
 
-      .time {
-        text-align: center;
-        position: absolute;
-        margin: auto;
-        left: 0;
-        right: 0;
-        top: 25px;
-        font-size: 28px;
-        color: $white;
-
-        &:before {
-          content: '+';
+        .name {
+          padding-top: 10px;
+          display: inline-block;
         }
 
-        &:after {
-          content: 'sec';
-          font-size: 24px;
+        .time {
+          display: inline-block;
+          font-size: 45px;
+          color: $white;
+
+          &:before {
+            content: '+';
+          }
+
+          &:after {
+            content: 'sec';
+            font-size: 38px;
+          }
         }
       }
     }
