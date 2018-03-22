@@ -240,6 +240,8 @@ app.get('/pdf-test', function (req, res) {
           canvas.loadFromJSON(pages['p' + i]);
         }
         canvases.push(canvas)
+        canvas.clear()
+        canvas.dispose()
       }
       console.log('made canvases')
       callback(null)
