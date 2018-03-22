@@ -232,7 +232,7 @@ app.get('/pdf-test', function (req, res) {
     doc = new PDFDocument({size:[pageWidth, pageHeight]})
 
     for (var i = 1; i < 9; i++) {
-      
+
       canvas = new fabric.StaticCanvas()
       canvas.setWidth(canvasWidth)
       canvas.setHeight(canvasHeight)
@@ -242,7 +242,6 @@ app.get('/pdf-test', function (req, res) {
         SVGtoPDF(doc, canvas.toSVG(), 0, 0)
         canvas.clear()
         canvas.dispose()
-        global.gc()
         if (i != 8) {
           doc.addPage()
         }
