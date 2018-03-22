@@ -51,17 +51,8 @@ app.use(express.static('public'))
 
 // intro
 app.get('/', function (req, res) {
-
-  // find all publications
-  Publication.find(function (err, publications) {
-    if (err) return console.error(err);
-
-    res.render(__dirname + '/../source/views/intro', {
-      publications: publications
-    })
-
-    console.log('serving intro')
-  })
+  res.render(__dirname + '/../source/views/intro')
+  console.log('serving intro')
 })
 
 // splash
@@ -164,7 +155,7 @@ app.get('/archive', function (req, res) {
 // splash
 app.get('/about', function (req, res) {
   res.render(__dirname + '/../source/views/about')
-  console.log('serving about')
+  console.log('serving about by ' + process.pid)
 })
 
 // save to db
@@ -218,7 +209,7 @@ app.get('/saved', function (req, res) {
 })
 
 
-// serve pdf
+// serve pdf 
 app.get('/pdf', function (req, res) {
   var publication_id = req.query['id'] // e.g. http://localhost:3000/pdf?id=I1519673917344
   var booklet = req.query['booklet'] // e.g. http://localhost:3000/pdf?id=I15196739173440&booklet=true
@@ -228,121 +219,123 @@ app.get('/pdf', function (req, res) {
   const pageWidth = canvasWidth/1.34
   const pageHeight = canvasHeight/1.34
 
-  // find publication
-  var publication_model
-  Publication.findOne({ 'id': publication_id }, function (err, publication) {
-    if (err) return console.error(err);
+  var canvases = []
+  var _publication
 
-    var canvases = []
-
-    const tasks = [
-      function makeCanvases(callback) {
-        for (var i = 1; i < 9; i++) {
-          var canvas = new fabric.StaticCanvas('c') // random name
-          canvas.setWidth(canvasWidth)
-          canvas.setHeight(canvasHeight)
-          if ( publication && publication.pages.hasOwnProperty('p' + i) ) { // if not empty
-            var pages = publication.pages
-            canvas.loadFromJSON(pages['p' + i]);
-          }
-          canvases.push(canvas)
-        }
-
+  const tasks = [
+    function findPublication(callback) {
+      Publication.findOne({ 'id': publication_id }, function (err, publication) {
+        if (err) return console.error(err)
+          _publication = publication
+        console.log('found pub')
         callback(null)
-      },
-      function makePdf(callback) {
-
-        fonts = function(family, bold, italic, fontOptions) { // remember to choose fonts and change them
-          if (family.match(/(?:^|,)\s*serif\s*$/)) {
-            if (bold && italic) {return 'Times-BoldItalic';}
-            if (bold && !italic) {return 'Times-Bold';}
-            if (!bold && italic) {return 'Times-Italic';}
-            if (!bold && !italic) {return 'Times-Roman';}
-          } else if (family.match(/(?:^|,)\s*monospace\s*$/)) {
-            if (bold && italic) {return 'Courier-BoldOblique';}
-            if (bold && !italic) {return 'Courier-Bold';}
-            if (!bold && italic) {return 'Courier-Oblique';}
-            if (!bold && !italic) {return 'Courier';}
-          } else if (family.match(/(?:^|,)\s*Helvetica\s*$/)) {
-            if (bold && italic) {return 'Helvetica-BoldOblique';}
-            if (bold && !italic) {return 'Helvetica-Bold';}
-            if (!bold && italic) {return 'Helvetica-Oblique';}
-            if (!bold && !italic) {return 'Helvetica';}
-          } else {
-            if (bold && italic) {return '"Comic Sans MS"';}
-            if (bold && !italic) {return '"Comic Sans MS-bold"';}
-            if (!bold && italic) {return '"Comic Sans MS"';}
-            if (!bold && !italic) {return '"Comic Sans MS"';}
-          }
+      })
+    },
+    function makeCanvases(callback) {
+      for (var i = 1; i < 9; i++) {
+        var canvas = new fabric.StaticCanvas('c') // random name
+        canvas.setWidth(canvasWidth)
+        canvas.setHeight(canvasHeight)
+        if ( _publication && _publication.pages.hasOwnProperty('p' + i) ) { // if not empty
+          var pages = _publication.pages
+          canvas.loadFromJSON(pages['p' + i]);
         }
+        canvases.push(canvas)
+      }
+      console.log('made canvases')
+      callback(null)
+    },
+    function makePdf(callback) {
 
-        if (booklet != 'true') {
-
-          doc = new PDFDocument({size:[pageWidth, pageHeight]})
-          doc.registerFont('"Comic Sans MS"', __dirname + '/../public/assets/fonts/comic.ttf')
-          doc.registerFont('"Comic Sans MS-bold"', __dirname + '/../public/assets/fonts/comic-bold.ttf')
-          doc.registerFont('"Comic Sans MS-italic"', __dirname + '/../public/assets/fonts/comic-italic.ttf')
-          doc.registerFont('"Comic Sans MS-bolditalic"', __dirname + '/../public/assets/fonts/comic-bolditalic.ttf')
-
-          var i = 0
-
-          canvases.forEach(function(canvas) {
-            SVGtoPDF(doc, canvas.toSVG(), 0, 0, {fontCallback: fonts })
-            if (i != canvases.length - 1) {
-              doc.addPage()
-            }
-            i++
-          })
-
-          res.writeHead(200, {
-            'Content-Type': 'application/pdf',
-            'Access-Control-Allow-Origin': '*',
-            'Content-Disposition': 'filename=' + publication_id + '.pdf'
-          });
-
-          doc.pipe(res).on('finish', function() {
-            console.log('single page pdf was successfully created')
-          })
-
-          doc.end()
-
+      fonts = function(family, bold, italic, fontOptions) {
+        if (family.match(/(?:^|,)\s*serif\s*$/)) {
+          if (bold && italic) {return 'Times-BoldItalic';}
+          if (bold && !italic) {return 'Times-Bold';}
+          if (!bold && italic) {return 'Times-Italic';}
+          if (!bold && !italic) {return 'Times-Roman';}
+        } else if (family.match(/(?:^|,)\s*monospace\s*$/)) {
+          if (bold && italic) {return 'Courier-BoldOblique';}
+          if (bold && !italic) {return 'Courier-Bold';}
+          if (!bold && italic) {return 'Courier-Oblique';}
+          if (!bold && !italic) {return 'Courier';}
+        } else if (family.match(/(?:^|,)\s*Helvetica\s*$/)) {
+          if (bold && italic) {return 'Helvetica-BoldOblique';}
+          if (bold && !italic) {return 'Helvetica-Bold';}
+          if (!bold && italic) {return 'Helvetica-Oblique';}
+          if (!bold && !italic) {return 'Helvetica';}
         } else {
-
-          doc = new PDFDocument({size:[pageWidth*2, pageHeight]})
-          doc.registerFont('"Comic Sans MS"', __dirname + '/../public/assets/fonts/comic.ttf')
-          doc.registerFont('"Comic Sans MS-bold"', __dirname + '/../public/assets/fonts/comic-bold.ttf')
-          doc.registerFont('"Comic Sans MS-italic"', __dirname + '/../public/assets/fonts/comic-italic.ttf')
-          doc.registerFont('"Comic Sans MS-bolditalic"', __dirname + '/../public/assets/fonts/comic-bolditalic.ttf')
-
-          // all the -1 to have a normal page number
-          SVGtoPDF(doc, canvases[8-1].toSVG(), 0, 0, {fontCallback: fonts });
-          SVGtoPDF(doc, canvases[1-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
-          doc.addPage()
-          SVGtoPDF(doc, canvases[2-1].toSVG(), 0, 0, {fontCallback: fonts });
-          SVGtoPDF(doc, canvases[7-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
-          doc.addPage()
-          SVGtoPDF(doc, canvases[6-1].toSVG(), 0, 0, {fontCallback: fonts });
-          SVGtoPDF(doc, canvases[3-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
-          doc.addPage()
-          SVGtoPDF(doc, canvases[4-1].toSVG(), 0, 0, {fontCallback: fonts });
-          SVGtoPDF(doc, canvases[5-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
-
-          doc.pipe(res).on('finish', function() {
-            console.log('booklet pdf was successfully created')
-          })
-
-          doc.end()
-
+          if (bold && italic) {return '"Comic Sans MS"';}
+          if (bold && !italic) {return '"Comic Sans MS-bold"';}
+          if (!bold && italic) {return '"Comic Sans MS"';}
+          if (!bold && !italic) {return '"Comic Sans MS"';}
         }
       }
-    ]
 
-    async.series(tasks, (err) => {
-        if (err) {
-            return next(err);
-        }
-    })
+      res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Disposition': 'filename=' + publication_id + '.pdf'
+      });
 
+      if (booklet != 'true') {
+
+        doc = new PDFDocument({size:[pageWidth, pageHeight]})
+        doc.registerFont('"Comic Sans MS"', __dirname + '/../public/assets/fonts/comic.ttf')
+        doc.registerFont('"Comic Sans MS-bold"', __dirname + '/../public/assets/fonts/comic-bold.ttf')
+        doc.registerFont('"Comic Sans MS-italic"', __dirname + '/../public/assets/fonts/comic-italic.ttf')
+        doc.registerFont('"Comic Sans MS-bolditalic"', __dirname + '/../public/assets/fonts/comic-bolditalic.ttf')
+
+        var i = 0
+
+        canvases.forEach(function(canvas) {
+          SVGtoPDF(doc, canvas.toSVG(), 0, 0, {fontCallback: fonts })
+          if (i != canvases.length - 1) {
+            doc.addPage()
+          }
+          i++
+        })
+
+        doc.pipe(res).on('finish', function() {
+          console.log('single page pdf was successfully created by ' + process.pid)
+        })
+
+        doc.end()
+
+      } else {
+
+        doc = new PDFDocument({size:[pageWidth*2, pageHeight]})
+        doc.registerFont('"Comic Sans MS"', __dirname + '/../public/assets/fonts/comic.ttf')
+        doc.registerFont('"Comic Sans MS-bold"', __dirname + '/../public/assets/fonts/comic-bold.ttf')
+        doc.registerFont('"Comic Sans MS-italic"', __dirname + '/../public/assets/fonts/comic-italic.ttf')
+        doc.registerFont('"Comic Sans MS-bolditalic"', __dirname + '/../public/assets/fonts/comic-bolditalic.ttf')
+
+        // all the -1 to have a normal page number
+        SVGtoPDF(doc, canvases[8-1].toSVG(), 0, 0, {fontCallback: fonts });
+        SVGtoPDF(doc, canvases[1-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
+        doc.addPage()
+        SVGtoPDF(doc, canvases[2-1].toSVG(), 0, 0, {fontCallback: fonts });
+        SVGtoPDF(doc, canvases[7-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
+        doc.addPage()
+        SVGtoPDF(doc, canvases[6-1].toSVG(), 0, 0, {fontCallback: fonts });
+        SVGtoPDF(doc, canvases[3-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
+        doc.addPage()
+        SVGtoPDF(doc, canvases[4-1].toSVG(), 0, 0, {fontCallback: fonts });
+        SVGtoPDF(doc, canvases[5-1].toSVG(), pageWidth, 0, {fontCallback: fonts });
+
+        doc.pipe(res).on('finish', function() {
+          console.log('booklet pdf was successfully created by ' + process.pid)
+        })
+
+        doc.end()
+
+      }
+    }
+  ]
+
+  async.series(tasks, (err) => {
+      if (err) {
+          return next(err);
+      }
   })
 
   console.log('serving pdf')
