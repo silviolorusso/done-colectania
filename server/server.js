@@ -238,13 +238,14 @@ app.get('/pdf-test', function (req, res) {
         canvas.loadFromJSON(publication.pages['p' + i])
         delete publication.pages['p' + i]
         SVGtoPDF(doc, canvas.toSVG(), 0, 0)
+
+        const used = process.memoryUsage().heapUsed / 1024 / 1024;
+        console.log(`The script uses approximately ${used} MB`);
         if (i != 8) {
           doc.addPage()
         }
       }
       delete publication
-      canvas.clear()
-      canvas.dispose()
       delete canvas
     }
 
