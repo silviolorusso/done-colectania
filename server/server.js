@@ -232,7 +232,7 @@ function start() {
     var canvases = []
     var _publication
 
-    const tasks = [
+    async.series([
       function findPublication(callback) {
         Publication.findOne({ 'id': publication_id }, function (err, publication) {
           if (err) return console.error(err)
@@ -280,12 +280,6 @@ function start() {
             if (!bold && !italic) {return '"Comic Sans MS"';}
           }
         }
-
-        res.writeHead(200, {
-          'Content-Type': 'application/pdf',
-          'Access-Control-Allow-Origin': '*',
-          'Content-Disposition': 'filename=' + publication_id + '.pdf'
-        });
 
         if (booklet != 'true') {
 
@@ -340,13 +334,16 @@ function start() {
 
         }
       }
-    ]
+    ], function (err, results) {
+      // Here, results is an array of t[he value from each function
+      console.log(results); // outputs: []'two', 'five']
 
-    async.series(tasks, (err) => {
-        if (err) {
-            return next(err);
-        }
-    })
+      res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Disposition': 'filename=' + publication_id + '.pdf'
+      });
+    });
 
     console.log('serving pdf')
 
