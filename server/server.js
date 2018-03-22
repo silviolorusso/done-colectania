@@ -262,8 +262,8 @@ app.get('/pdf-test', function (req, res) {
         canvas.setHeight(canvasHeight)
         if ( _publication && _publication.pages.hasOwnProperty('p' + i) ) { // if not empty
           var pages = _publication.pages
-          canvas.loadFromJSON(pages['p' + i]);
-          SVGtoPDF(doc, canvas.toSVG(), 0, 0)
+          // canvas.loadFromJSON(pages['p' + i]);
+          // SVGtoPDF(doc, canvas.toSVG(), 0, 0)
           canvas.clear()
           canvas.dispose()
           if (i != 8) {
