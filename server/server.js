@@ -281,6 +281,12 @@ function start() {
           }
         }
 
+        res.writeHead(200, {
+          'Content-Type': 'application/pdf',
+          'Access-Control-Allow-Origin': '*',
+          'Content-Disposition': 'filename=' + publication_id + '.pdf'
+        });
+
         if (booklet != 'true') {
 
           doc = new PDFDocument({size:[pageWidth, pageHeight]})
@@ -337,12 +343,6 @@ function start() {
     ], async function (err, results) {
       // Here, results is an array of t[he value from each function
       console.log(results); // outputs: []'two', 'five']
-
-      res.writeHead(200, {
-        'Content-Type': 'application/pdf',
-        'Access-Control-Allow-Origin': '*',
-        'Content-Disposition': 'filename=' + publication_id + '.pdf'
-      });
     });
 
     console.log('serving pdf')
