@@ -235,10 +235,9 @@ app.get('/pdf-test', function (req, res) {
       canvas.setWidth(canvasWidth)
       canvas.setHeight(canvasHeight)
       if ( publication && publication.pages.hasOwnProperty('p' + i) ) { // if not empty
-        //canvas.loadFromJSON(publication.pages['p' + i])
-        // delete publication.pages['p' + i]
-        // SVGtoPDF(doc, canvas.toSVG(), 0, 0)
-        doc.image(publication.thumb)
+        canvas.loadFromJSON(publication.pages['p' + i])
+        delete publication.pages['p' + i]
+        SVGtoPDF(doc, canvas.toSVG(), 0, 0)
         if (i != 8) {
           doc.addPage()
         }
