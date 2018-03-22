@@ -246,13 +246,13 @@ app.get('/pdf-test', function (req, res) {
     },
     function makePdf(callback) {
 
-      res.writeHead(200, {
-        'Content-Type': 'application/pdf',
-        'Access-Control-Allow-Origin': '*',
-        'Content-Disposition': 'filename=' + publication_id + '.pdf'
-      });
+      // res.writeHead(200, {
+      //   'Content-Type': 'application/pdf',
+      //   'Access-Control-Allow-Origin': '*',
+      //   'Content-Disposition': 'filename=' + publication_id + '.pdf'
+      // });
 
-      doc = new PDFDocument({size:[pageWidth, pageHeight]})
+      // doc = new PDFDocument({size:[pageWidth, pageHeight]})
 
       // var i = 0
       // canvases.forEach(function(canvas) {
@@ -263,9 +263,11 @@ app.get('/pdf-test', function (req, res) {
       //   i++
       // })
 
-      doc.pipe(res).on('finish', function() {
-        console.log('single page pdf was successfully created by ' + process.pid)
-      })
+      // doc.pipe(res).on('finish', function() {
+      //   console.log('single page pdf was successfully created by ' + process.pid)
+      // })
+
+      res.send('done')
 
       doc.end()
 
