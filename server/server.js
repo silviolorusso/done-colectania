@@ -232,6 +232,7 @@ app.get('/pdf-test', function (req, res) {
     doc = new PDFDocument({size:[pageWidth, pageHeight]})
 
     for (var i = 1; i < 9; i++) {
+      
       canvas = new fabric.StaticCanvas()
       canvas.setWidth(canvasWidth)
       canvas.setHeight(canvasHeight)

@@ -4,7 +4,7 @@
   "description": "## Premise: Digital Publishing is Easy",
   "main": "server/server.js",
   "scripts": {
-    "start": "mongod & gulp & node --expose_gc server/server.js",
+    "start": "mongod & gulp & node --optimize_for_size --max_old_space_size=460 --expose_gc server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
