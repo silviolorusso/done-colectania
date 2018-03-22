@@ -264,12 +264,12 @@ app.get('/pdf-test', function (req, res) {
           var pages = _publication.pages
           // canvas.loadFromJSON(pages['p' + i]);
           // SVGtoPDF(doc, canvas.toSVG(), 0, 0)
-          canvas.clear()
-          canvas.dispose()
           if (i != 8) {
             doc.addPage()
           }
         }
+        canvas.clear()
+        canvas.dispose()
       }
 
       doc.pipe(res).on('finish', function() {
