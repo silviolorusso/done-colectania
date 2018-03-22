@@ -47,6 +47,7 @@
     "pdfkit": "^0.8.3",
     "phantomjs-prebuilt": "^2.1.16",
     "rebuild": "^0.1.2",
-    "svg-to-pdfkit": "^0.1.7"
+    "svg-to-pdfkit": "^0.1.7",
+    "throng": "^4.0.0"
   }
 }
