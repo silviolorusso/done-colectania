@@ -233,7 +233,7 @@ function start() {
     var _publication
 
     async.series([
-      function findPublication(callback) {
+      async function findPublication(callback) {
         Publication.findOne({ 'id': publication_id }, function (err, publication) {
           if (err) return console.error(err)
             _publication = publication
@@ -241,7 +241,7 @@ function start() {
           callback(null)
         })
       },
-      function makeCanvases(callback) {
+      async function makeCanvases(callback) {
         for (var i = 1; i < 9; i++) {
           var canvas = new fabric.StaticCanvas('c') // random name
           canvas.setWidth(canvasWidth)
@@ -255,7 +255,7 @@ function start() {
         console.log('made canvases')
         callback(null)
       },
-      function makePdf(callback) {
+      async function makePdf(callback) {
 
         fonts = function(family, bold, italic, fontOptions) {
           if (family.match(/(?:^|,)\s*serif\s*$/)) {
@@ -334,7 +334,7 @@ function start() {
 
         }
       }
-    ], function (err, results) {
+    ], async function (err, results) {
       // Here, results is an array of t[he value from each function
       console.log(results); // outputs: []'two', 'five']
 
