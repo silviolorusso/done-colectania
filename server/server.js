@@ -267,9 +267,9 @@ app.get('/pdf-test', function (req, res) {
       //   console.log('single page pdf was successfully created by ' + process.pid)
       // })
 
-      res.send('done')
+      // doc.end()
 
-      doc.end()
+      res.send('done')
 
     }
   ]
