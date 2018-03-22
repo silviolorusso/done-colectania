@@ -208,6 +208,7 @@ app.get('/saved', function (req, res) {
   console.log('serving saved publication')
 })
 
+
 // serve pdf 
 app.get('/pdf-test', function (req, res) {
   var publication_id = req.query['id'] // e.g. http://localhost:3000/pdf?id=I1519673917344
@@ -238,9 +239,9 @@ app.get('/pdf-test', function (req, res) {
         canvas.loadFromJSON(publication.pages['p' + i])
         delete publication.pages['p' + i]
         SVGtoPDF(doc, canvas.toSVG(), 0, 0)
-
-        const used = process.memoryUsage().heapUsed / 1024 / 1024;
-        console.log(`The script uses approximately ${used} MB`);
+        canvas.clear()
+        canvas.dispose()
+        global.gc()
         if (i != 8) {
           doc.addPage()
         }
