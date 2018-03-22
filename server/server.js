@@ -235,9 +235,10 @@ app.get('/pdf-test', function (req, res) {
       canvas.setWidth(canvasWidth)
       canvas.setHeight(canvasHeight)
       if ( publication && publication.pages.hasOwnProperty('p' + i) ) { // if not empty
-        canvas.loadFromJSON(publication.pages['p' + i])
-        delete publication.pages['p' + i]
-        SVGtoPDF(doc, canvas.toSVG(), 0, 0)
+        //canvas.loadFromJSON(publication.pages['p' + i])
+        // delete publication.pages['p' + i]
+        // SVGtoPDF(doc, canvas.toSVG(), 0, 0)
+        doc.image(publication.thumb)
         if (i != 8) {
           doc.addPage()
         }
@@ -256,77 +257,7 @@ app.get('/pdf-test', function (req, res) {
 
   })
 
-  // const tasks = [
-  //   function findPublication(callback) {
-  //     Publication.findOne({ 'id': publication_id }, function (err, publication) {
-  //       if (err) return console.error(err)
-  //         _publication = publication
-  //       console.log('found pub')
-  //       callback(null)
-  //     })
-  //   },
-    // function makeCanvases(callback) {
-    //   for (var i = 1; i < 9; i++) {
-    //     var canvas = new fabric.StaticCanvas('c') // random name
-    //     canvas.setWidth(canvasWidth)
-    //     canvas.setHeight(canvasHeight)
-    //     if ( _publication && _publication.pages.hasOwnProperty('p' + i) ) { // if not empty
-    //       var pages = _publication.pages
-    //       canvas.loadFromJSON(pages['p' + i]);
-    //     }
-    //     canvases.push(canvas)
-    //     canvas.clear()
-    //     canvas.dispose()
-    //   }
-    //   console.log('made canvases')
-    //   callback(null)
-    // },
-  //   function makePdf(callback) {
-
-  //     res.writeHead(200, {
-  //       'Content-Type': 'application/pdf',
-  //       'Access-Control-Allow-Origin': '*',
-  //       'Content-Disposition': 'filename=' + publication_id + '.pdf'
-  //     });
-
-  //     doc = new PDFDocument({size:[pageWidth, pageHeight]})
-
-  //     for (var i = 1; i < 9; i++) {
-  //       var canvas = new fabric.StaticCanvas()
-  //       canvas.setWidth(canvasWidth)
-  //       canvas.setHeight(canvasHeight)
-  //       if ( _publication && _publication.pages.hasOwnProperty('p' + i) ) { // if not empty
-  //         canvas.loadFromJSON(_publication.pages['p' + i])
-  //         _publication.pages['p' + i] = null
-  //         SVGtoPDF(doc, canvas.toSVG(), 0, 0)
-  //         if (i != 8) {
-  //           doc.addPage()
-  //         }
-  //       }
-  //       _publication = null
-  //       canvas.clear()
-  //       canvas.dispose()
-  //     }
-
-  //     doc.pipe(res).on('finish', function() {
-  //       console.log('single page pdf was successfully created by ' + process.pid)
-  //     })
-
-  //     doc.end()
-
-  //     // res.send('done')
-
-  //   }
-  // ]
-
-  // async.series(tasks, (err) => {
-  //     if (err) {
-  //         return next(err);
-  //     }
-  // })
-
   console.log('serving pdf')
-
 })
 
 // serve pdf 
