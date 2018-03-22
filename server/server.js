@@ -208,6 +208,79 @@ app.get('/saved', function (req, res) {
   console.log('serving saved publication')
 })
 
+// serve pdf 
+app.get('/pdf-test', function (req, res) {
+  var publication_id = req.query['id'] // e.g. http://localhost:3000/pdf?id=I1519673917344
+  var booklet = req.query['booklet'] // e.g. http://localhost:3000/pdf?id=I15196739173440&booklet=true
+
+  const canvasWidth = 450
+  const canvasHeight = 636
+  const pageWidth = canvasWidth/1.34
+  const pageHeight = canvasHeight/1.34
+
+  var canvases = []
+  var _publication
+
+  const tasks = [
+    function findPublication(callback) {
+      Publication.findOne({ 'id': publication_id }, function (err, publication) {
+        if (err) return console.error(err)
+          _publication = publication
+        console.log('found pub')
+        callback(null)
+      })
+    },
+    function makeCanvases(callback) {
+      for (var i = 1; i < 9; i++) {
+        var canvas = new fabric.StaticCanvas('c') // random name
+        canvas.setWidth(canvasWidth)
+        canvas.setHeight(canvasHeight)
+        if ( _publication && _publication.pages.hasOwnProperty('p' + i) ) { // if not empty
+          var pages = _publication.pages
+          canvas.loadFromJSON(pages['p' + i]);
+        }
+        canvases.push(canvas)
+      }
+      console.log('made canvases')
+      callback(null)
+    },
+    function makePdf(callback) {
+
+      res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Disposition': 'filename=' + publication_id + '.pdf'
+      });
+
+      doc = new PDFDocument({size:[pageWidth, pageHeight]})
+
+      // var i = 0
+      // canvases.forEach(function(canvas) {
+      //   SVGtoPDF(doc, canvas.toSVG(), 0, 0)
+      //   if (i != canvases.length - 1) {
+      //     doc.addPage()
+      //   }
+      //   i++
+      // })
+
+      doc.pipe(res).on('finish', function() {
+        console.log('single page pdf was successfully created by ' + process.pid)
+      })
+
+      doc.end()
+
+    }
+  ]
+
+  async.series(tasks, (err) => {
+      if (err) {
+          return next(err);
+      }
+  })
+
+  console.log('serving pdf')
+
+})
 
 // serve pdf 
 app.get('/pdf', function (req, res) {
