@@ -4,10 +4,7 @@ const fs = require('fs')
 const fabric = require('fabric').fabric
 const stream = require('stream')
 const path = require('path')
-const async = require('async')
 const PDFDocument = require('pdfkit')
-const SVGtoPDF = require('svg-to-pdfkit')
-const svg2img = require('svg2img')
 
 const express = require('express')
 const app = express()
@@ -182,54 +179,58 @@ app.get('/pdf', function (req, res) {
   Publication.findOne({ 'id': publication_id }, function (err, publication) {
     if (err) return console.error(err)
 
-    res.writeHead(200, {
-      'Content-Type': 'application/pdf',
-      'Access-Control-Allow-Origin': '*',
-      'Content-Disposition': 'filename=' + publication_id + '.pdf'
-    })
+    if (publication) {
 
-    if (booklet != 'true') {
+      res.writeHead(200, {
+        'Content-Type': 'application/pdf',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Disposition': 'filename=' + publication_id + '.pdf'
+      })
 
-      doc = new PDFDocument({size:[pageWidth, pageHeight]})
+      if (booklet != 'true') {
 
-      for (var i = 1; i < 9; i++) {
-        if (publication) {
+        doc = new PDFDocument({size:[pageWidth, pageHeight]})
+
+        for (var i = 1; i < 9; i++) {
           doc.image(publication.pages['p' + i], 0, 0, { width: pageWidth})
+          if (i != 8) {
+            doc.addPage()
+          }
         }
-        if (i != 8) {
-          doc.addPage()
-        }
+
+        doc.pipe(res).on('finish', function() {
+          console.log('single page pdf was successfully created')
+        })
+
+        doc.end()
+
+      } else {
+
+        doc = new PDFDocument({size:[pageWidth*2, pageHeight]})
+
+
+        doc.image(publication.pages['p' + 8], 0, 0, { width: pageWidth})
+        doc.image(publication.pages['p' + 1], pageWidth, 0, { width: pageWidth})
+        doc.addPage()
+        doc.image(publication.pages['p' + 2], 0, 0, { width: pageWidth})
+        doc.image(publication.pages['p' + 7], pageWidth, 0, { width: pageWidth})
+        doc.addPage()
+        doc.image(publication.pages['p' + 6], 0, 0, { width: pageWidth})
+        doc.image(publication.pages['p' + 3], pageWidth, 0, { width: pageWidth})
+        doc.addPage()
+        doc.image(publication.pages['p' + 4], 0, 0, { width: pageWidth})
+        doc.image(publication.pages['p' + 5], pageWidth, 0, { width: pageWidth})
+
+        doc.pipe(res).on('finish', function() {
+          console.log('booklet pdf was successfully created by ' + process.pid)
+        })
+
+        doc.end()
+
       }
 
-      doc.pipe(res).on('finish', function() {
-        console.log('single page pdf was successfully created')
-      })
-
-      doc.end()
-
-    } else {
-
-      doc = new PDFDocument({size:[pageWidth*2, pageHeight]})
-
-
-      doc.image(publication.pages['p' + 8], 0, 0, { width: pageWidth})
-      doc.image(publication.pages['p' + 1], pageWidth, 0, { width: pageWidth})
-      doc.addPage()
-      doc.image(publication.pages['p' + 2], 0, 0, { width: pageWidth})
-      doc.image(publication.pages['p' + 7], pageWidth, 0, { width: pageWidth})
-      doc.addPage()
-      doc.image(publication.pages['p' + 6], 0, 0, { width: pageWidth})
-      doc.image(publication.pages['p' + 3], pageWidth, 0, { width: pageWidth})
-      doc.addPage()
-      doc.image(publication.pages['p' + 4], 0, 0, { width: pageWidth})
-      doc.image(publication.pages['p' + 5], pageWidth, 0, { width: pageWidth})
-
-      doc.pipe(res).on('finish', function() {
-        console.log('booklet pdf was successfully created by ' + process.pid)
-      })
-
-      doc.end()
-
+    } else { // no publication
+      res.redirect('/')
     }
 
   })
