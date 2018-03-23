@@ -181,7 +181,6 @@ app.get('/pdf', function (req, res) {
 
   Publication.findOne({ 'id': publication_id }, function (err, publication) {
     if (err) return console.error(err)
-    console.log('found pub')
 
     res.writeHead(200, {
       'Content-Type': 'application/pdf',
@@ -194,7 +193,9 @@ app.get('/pdf', function (req, res) {
       doc = new PDFDocument({size:[pageWidth, pageHeight]})
 
       for (var i = 1; i < 9; i++) {
-        doc.image(publication.pages['p' + i], 0, 0, { width: pageWidth})
+        if (publication) {
+          doc.image(publication.pages['p' + i], 0, 0, { width: pageWidth})
+        }
         if (i != 8) {
           doc.addPage()
         }
