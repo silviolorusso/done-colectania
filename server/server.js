@@ -208,8 +208,6 @@ app.get('/saved', function (req, res) {
   console.log('serving saved publication')
 })
 
-const spawn = require('threads').spawn
-
 
 
 
@@ -234,78 +232,31 @@ app.get('/pdf-test', function (req, res) {
     });
 
     doc = new PDFDocument({size:[pageWidth, pageHeight]})
-    
-    svgs = {}
 
     for (var i = 1; i < 9; i++) {
+      canvas = new fabric.StaticCanvas()
+      canvas.setWidth(canvasWidth)
+      canvas.setHeight(canvasHeight)
       if ( publication && publication.pages.hasOwnProperty('p' + i) ) { // if not empty
-
-        var thread = spawn(function(input, done) {
-          const fabric = require('fabric').fabric
-          
-          const canvasWidth = 450
-          const canvasHeight = 636
-          const pageWidth = canvasWidth/1.34
-          const pageHeight = canvasHeight/1.34
-
-          canvas = new fabric.StaticCanvas()
-          canvas.setWidth(canvasWidth)
-          canvas.setHeight(canvasHeight)
-
-          canvas.loadFromJSON(input.page, function () {
-            svg = canvas.toSVG()
-            done({ _svg : svg, _pNo : input.pNo });
-          })
-        }).send({ page : publication.pages['p' + i], pNo : i })
-          .on('message', function(response) {
-            svgs[response._pNo] = response._svg
-            console.log( 'length ' + Object.keys(svgs).length )
-
-            if ( Object.keys(svgs).length == 7 ) {
-
-
-              SVGtoPDF(doc, svgs[1], 0, 0)
-              doc.addPage()
-              SVGtoPDF(doc, svgs[2], 0, 0)
-              doc.addPage()
-              SVGtoPDF(doc, svgs[3], 0, 0)
-              doc.addPage()
-              SVGtoPDF(doc, svgs[4], 0, 0)
-              doc.addPage()
-              SVGtoPDF(doc, svgs[5], 0, 0)
-              doc.addPage()
-              SVGtoPDF(doc, svgs[6], 0, 0)
-              doc.addPage()
-              SVGtoPDF(doc, svgs[7], 0, 0)
-              doc.addPage()
-              SVGtoPDF(doc, svgs[8], 0, 0) // last page doesn't work
-
-
-              doc.pipe(res).on('finish', function() {
-                console.log('single page pdf was successfully created by ' + process.pid)
-              })
-
-              doc.end()
-
-            }
-
-            thread.kill()
-          })
-          .on('error', function(error) {
-            console.error('Worker errored:', error);
-          })
-          .on('exit', function() {
-            console.log('Worker ' + i + ' has been terminated.');
-          });
-
-        
-
+        canvas.loadFromJSON(publication.pages['p' + i])
+        delete publication.pages['p' + i]
+        SVGtoPDF(doc, canvas.toSVG(), 0, 0)
+        canvas.dispose()
+        const used = process.memoryUsage().heapUsed / 1024 / 1024;
+        console.log(`The script uses approximately ${used} MB`);
+        if (i != 8) {
+          doc.addPage()
+        }
       }
       delete publication
       delete canvas
     }
 
+    doc.pipe(res).on('finish', function() {
+      console.log('single page pdf was successfully created by ' + process.pid)
+    })
 
+    doc.end()
 
   })
 
