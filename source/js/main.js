@@ -70,7 +70,7 @@ function timeConverter(UNIX_timestamp){
 
 
 
-function createElement(element, mousePos, callback) {
+function createElement(element, mousePos) {
   function chunkString(str, length) {
     return str.match(new RegExp('{.1,' + length + '}', 'g'));
   }
@@ -107,7 +107,6 @@ function createElement(element, mousePos, callback) {
         }))
       }
     }
-		callback;
 	}
 }
 
@@ -259,7 +258,7 @@ var Publication = {
   date: Date.now(),
   imagesAmount: 0,
   textAmount: 0,
-  timeElapsed: 0, // TODO set this when time expires
+  timeElapsed: 0,
   achievementsAmount: 0,
 	pages: {
 		p1: {},
@@ -270,8 +269,7 @@ var Publication = {
 		p6: {},
 		p7: {},
 		p8: {}
-	},
-  thumb: ''
+	}
 };
 
 function controller(Publication, input) {
@@ -299,13 +297,7 @@ function controller(Publication, input) {
 
           if (!input.data.includes('data:image/gif')) { // not a gif
 
-            // TODO: probably remove
-  					var publicationUpdate = function(inputPage) { // update canvas
-  						setTimeout(function() {
-  							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
-  						}, 1)
-  					}
-  					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
+  					dropElement(input.page, input.data, input.mousePos); // drop element
 
 
             Publication.imagesAmount += 1 // achievement every x imgs
@@ -352,13 +344,7 @@ function controller(Publication, input) {
 
           } else {
 
-            // TODO: probably remove
-  					var publicationUpdate = function(inputPage) { // update canvas
-  						setTimeout(function() {
-  							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
-  						}, 1)
-  					}
-  					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
+  					dropElement(input.page, input.data, input.mousePos) // drop element
 
             Publication.textAmount += input.data.length
             if (Publication.textAmount >= 500) {
@@ -582,9 +568,9 @@ function showExpired() {
   }
 }
 
-function dropElement(pageId, data, mousePos, callback) {
+function dropElement(pageId, data, mousePos) {
 	var element = { data: data, page: pageId }
-	var elementPos = createElement(element, mousePos, callback)
+	var elementPos = createElement(element, mousePos)
 }
 
 
@@ -631,13 +617,25 @@ function showPublicationData(Publication) {
 }
 
 function renderPublication(Publication) {
-	for (var canvasId in canvases) {
-		var json = JSON.stringify(Publication.pages[canvasId]);
-		canvases[canvasId].loadFromJSON( json, function() {
-      lockElements(allElements())
-			canvases[canvasId].renderAll.bind(canvases[canvasId])
-		})
-	}
+  function renderPage(img, canvasId) {
+    fabric.Image.fromURL(img, function(img){
+        img.hasBorders = false;
+        img.hasControls = false;
+        img.selectable = false;
+        img.left = canvases[canvasId].width / 2;
+        img.top = canvases[canvasId].height / 2;
+        img.lockMovementX = true;
+        img.lockMovementY = true;
+        img.lockRotation = true;
+        img.setControlsVisibility = false;
+        img.id = 'lock'
+        canvases[canvasId].add(img);
+        canvases[canvasId].renderAll.bind(canvases[canvasId])
+    })
+  }
+  for (var canvasId in canvases) {
+    renderPage(Publication.pages[canvasId], canvasId)
+  }
   showPublicationData(Publication)
 }
 
@@ -652,8 +650,7 @@ var saving = false
 function savetoDb(publication) {
   if (saving == false) {
   	for (var page in Publication.pages) {
-  		// Publication.pages[page] = canvases[page].toJSON() // update all pages
-      Publication.pages[page] = canvases[page].toDataURL('image/png') // update all pages
+      Publication.pages[page] = canvases[page].toDataURL('image/png', 1) // update all pages
   	}
     $('.button.save .stylized').html('Saving <span>.</span><span>.</span><span>.</span>').addClass('saving').removeClass('stylized')
     $('.button.save').css('backgroundColor', '#eee')
