@@ -16,6 +16,7 @@ var drawingModeTime = 10000
 var infiniteTime = false
 var defaultTitle = 'Untitled'
 var defaultAuthors = 'Anonymous'
+var canvasZoom = 1000
 
 
 
@@ -624,6 +625,8 @@ function renderPublication(Publication) {
         img.selectable = false;
         img.left = canvases[canvasId].width / 2;
         img.top = canvases[canvasId].height / 2;
+        img.scaleX = canvases[canvasId].width / img.width;
+        img.scaleY = canvases[canvasId].height / img.height;
         img.lockMovementX = true;
         img.lockMovementY = true;
         img.lockRotation = true;
@@ -650,7 +653,40 @@ var saving = false
 function savetoDb(publication) {
   if (saving == false) {
   	for (var page in Publication.pages) {
+      var originWidth = canvases[page].getWidth();
+
+      function zoom (width) {
+        var scale = width / canvases[page].getWidth();
+        height = scale * canvases[page].getHeight();
+
+        canvases[page].setDimensions({
+            "width": width,
+            "height": height
+        });
+
+        canvases[page].calcOffset();
+        var objects = canvases[page].getObjects();
+        for (var i in objects) {
+            var scaleX = objects[i].scaleX;
+            var scaleY = objects[i].scaleY;
+            var left = objects[i].left;
+            var top = objects[i].top;
+
+            objects[i].scaleX = scaleX * scale;
+            objects[i].scaleY = scaleY * scale;
+            objects[i].left = left * scale;
+            objects[i].top = top * scale;
+
+            objects[i].setCoords();
+        }
+        canvases[page].renderAll();
+      }
+
+      zoom(canvasZoom)
+
       Publication.pages[page] = canvases[page].toDataURL('image/png', 1) // update all pages
+
+      zoom (originWidth);
   	}
     $('.button.save .stylized').html('Saving <span>.</span><span>.</span><span>.</span>').addClass('saving').removeClass('stylized')
     $('.button.save').css('backgroundColor', '#eee')

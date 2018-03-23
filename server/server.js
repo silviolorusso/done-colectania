@@ -171,11 +171,6 @@ app.get('/pdf', function (req, res) {
   var publication_id = req.query['id'] // e.g. http://localhost:3000/pdf?id=I1519673917344
   var booklet = req.query['booklet'] // e.g. http://localhost:3000/pdf?id=I15196739173440&booklet=true
 
-  const canvasWidth = 450
-  const canvasHeight = 636
-  const pageWidth = canvasWidth/1.34
-  const pageHeight = canvasHeight/1.34
-
   Publication.findOne({ 'id': publication_id }, function (err, publication) {
     if (err) return console.error(err)
 
@@ -189,10 +184,10 @@ app.get('/pdf', function (req, res) {
 
       if (booklet != 'true') {
 
-        doc = new PDFDocument({size:[pageWidth, pageHeight]})
+        doc = new PDFDocument({size:'A5'})
 
         for (var i = 1; i < 9; i++) {
-          doc.image(publication.pages['p' + i], 0, 0, { width: pageWidth})
+          doc.image(publication.pages['p' + i], 0, 0, { width: doc.page.width})
           if (i != 8) {
             doc.addPage()
           }
@@ -206,10 +201,10 @@ app.get('/pdf', function (req, res) {
 
       } else {
 
-        doc = new PDFDocument({size:[pageWidth*2, pageHeight]})
+        doc = new PDFDocument({size:'A4', layout: 'landscape'})
+        pageWidth = doc.page.width/2
 
-
-        doc.image(publication.pages['p' + 8], 0, 0, { width: pageWidth})
+        doc.image(publication.pages['p' + 8], 0, 0, { width: pageWidth })
         doc.image(publication.pages['p' + 1], pageWidth, 0, { width: pageWidth})
         doc.addPage()
         doc.image(publication.pages['p' + 2], 0, 0, { width: pageWidth})
