@@ -162,23 +162,29 @@ app.get('/about', function (req, res) {
 app.post('/db', function(req, res) {
     var publication = new Publication( req.body )
 
-    // save thumb
-    const coverWidth = 450
-    const coverHeight = 636
-    const cover = new fabric.StaticCanvas('c')
-    cover.setWidth(coverWidth)
-    cover.setHeight(coverHeight)
-    cover.loadFromJSON(publication.pages.p1)
-    coverImg = cover.toSVG()
+    // // save thumb
+    // const coverWidth = 450
+    // const coverHeight = 636
+    // const cover = new fabric.StaticCanvas('c')
+    // cover.setWidth(coverWidth)
+    // cover.setHeight(coverHeight)
+    // cover.loadFromJSON(publication.pages.p1)
+    // coverImg = cover.toSVG()
 
-    svg2img(cover.toSVG(), function(error, buffer) {
-      publication.thumb = 'data:image/png;base64,' + buffer.toString('base64')
-      publication.save(function (err, publication) {
-        if (err) return console.error(err);
-        console.log('saved to db')
-        res.status(200).json({status:"ok"})
-      });
+    // svg2img(cover.toSVG(), function(error, buffer) {
+    //   publication.thumb = 'data:image/png;base64,' + buffer.toString('base64')
+    //   publication.save(function (err, publication) {
+    //     if (err) return console.error(err);
+    //     console.log('saved to db')
+    //     res.status(200).json({status:"ok"})
+    //   });
 
+    // })
+
+    publication.save(function (err, publication) {
+      if (err) return console.error(err);
+      console.log('saved to db')
+      res.status(200).json({status:"ok"})
     })
 
     console.log('saving to db');
@@ -233,24 +239,33 @@ app.get('/pdf-test', function (req, res) {
 
     doc = new PDFDocument({size:[pageWidth, pageHeight]})
 
+    // for (var i = 1; i < 9; i++) {
+    //   console.log(publication.pages['p' + i])
+    //   canvas = new fabric.StaticCanvas()
+    //   canvas.setWidth(canvasWidth)
+    //   canvas.setHeight(canvasHeight)
+    //   if ( publication && publication.pages.hasOwnProperty('p' + i) ) { // if not empty
+    //     canvas.loadFromJSON(publication.pages['p' + i])
+    //     delete publication.pages['p' + i]
+    //     SVGtoPDF(doc, canvas.toSVG(), 0, 0)
+    //     canvas.dispose()
+    //     const used = process.memoryUsage().heapUsed / 1024 / 1024;
+    //     console.log(`The script uses approximately ${used} MB`);
+    //     if (i != 8) {
+    //       doc.addPage()
+    //     }
+    //   }
+    //   delete publication
+    //   delete canvas
+    // }
+
     for (var i = 1; i < 9; i++) {
-      console.log(publication.pages['p' + i])
-      canvas = new fabric.StaticCanvas()
-      canvas.setWidth(canvasWidth)
-      canvas.setHeight(canvasHeight)
-      if ( publication && publication.pages.hasOwnProperty('p' + i) ) { // if not empty
-        canvas.loadFromJSON(publication.pages['p' + i])
-        delete publication.pages['p' + i]
-        SVGtoPDF(doc, canvas.toSVG(), 0, 0)
-        canvas.dispose()
-        const used = process.memoryUsage().heapUsed / 1024 / 1024;
-        console.log(`The script uses approximately ${used} MB`);
-        if (i != 8) {
-          doc.addPage()
-        }
+      doc.image(publication.pages['p' + i])
+      if (i != 8) {
+        doc.addPage()
       }
-      delete publication
-      delete canvas
+      const used = process.memoryUsage().heapUsed / 1024 / 1024;
+      console.log(`The script uses approximately ${used} MB`);
     }
 
     doc.pipe(res).on('finish', function() {

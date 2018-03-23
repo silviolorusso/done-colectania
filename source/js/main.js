@@ -299,6 +299,7 @@ function controller(Publication, input) {
 
           if (!input.data.includes('data:image/gif')) { // not a gif
 
+            // TODO: probably remove
   					var publicationUpdate = function(inputPage) { // update canvas
   						setTimeout(function() {
   							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
@@ -351,6 +352,7 @@ function controller(Publication, input) {
 
           } else {
 
+            // TODO: probably remove
   					var publicationUpdate = function(inputPage) { // update canvas
   						setTimeout(function() {
   							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
@@ -650,7 +652,8 @@ var saving = false
 function savetoDb(publication) {
   if (saving == false) {
   	for (var page in Publication.pages) {
-  		Publication.pages[page] = canvases[page].toJSON() // update all pages
+  		// Publication.pages[page] = canvases[page].toJSON() // update all pages
+      Publication.pages[page] = canvases[page].toDataURL('image/png') // update all pages
   	}
     $('.button.save .stylized').html('Saving <span>.</span><span>.</span><span>.</span>').addClass('saving').removeClass('stylized')
     $('.button.save').css('backgroundColor', '#eee')
