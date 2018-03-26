@@ -310,7 +310,7 @@ function instructionMessage(num) {
 
 $(document).on('click', ".closeWizard", function() {
   $(this).closest('.alert').remove();
-  $('.counter').show();
+  countdownWrapper();
 });
 
 $(document).on('click', ".nextWizard", function() {

@@ -1,0 +1,62 @@
+body {
+  display: block;
+}
+
+.error {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40vh;
+
+  .url {
+    font-family: 'Choc';
+  }
+}
+
+.background {
+  background: linear-gradient(120deg, #EE3131 0%, #FFE500 30%, #90CC2D 50%, #2EE2E2 60%, #4986FC 80%, #FD14FF 100%);
+  background-size: 400% 400%;
+  -webkit-animation: gradientMovement 30s ease infinite;
+  -moz-animation: gradientMovement 30s ease infinite;
+  -o-animation: gradientMovement 30s ease infinite;
+  animation: gradientMovement 30s ease infinite;
+}
+@-webkit-keyframes gradientMovement {
+  0% {
+    background-position: 0 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}
+@-moz-keyframes gradientMovement {
+  0% {
+    background-position: 0 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}
+@keyframes gradientMovement {
+  0% {
+    background-position: 0 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}
