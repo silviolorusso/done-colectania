@@ -22,21 +22,27 @@ for (var sound in library) {
 
 sfx = jsfx.Sounds(library)
 
+const soundtrack = new Howl({
+  src: ['assets/audio/lance-romance.mp3']
+})
 $(document).ready(function() {
   if (localStorage.getItem("soundOn") == "false"){ 
     $('.sound').addClass('mute')
     localStorage.setItem("soundOn", "false")
     sfx = jsfx.Sounds(libraryMuted)
+    soundtrack.volume(0)
   }
   $('.sound').click(function() {
     if ($('.sound').hasClass('mute')) { // true: audio is muted
       $('.sound').removeClass('mute')
       localStorage.setItem('soundOn', "true")
       sfx = jsfx.Sounds(library)
+      soundtrack.volume(1)
     } else {  // false: audio is not muted
       $('.sound').addClass('mute')
       localStorage.setItem('soundOn', "false")
-      sfx = jsfx.Sounds(libraryMuted) 
+      sfx = jsfx.Sounds(libraryMuted)
+      soundtrack.volume(0)
     }
   })
 })
