@@ -256,6 +256,19 @@ app.get('/overview', function (req, res) {
   })
 })
 
+// app.use(function(req, res, next){
+//     res.status(404).render('about', {
+//       url: req.url
+//     });
+// });
+
+app.use(function(req, res) {
+     res.status(400);
+    res.render(__dirname + '/../source/views/404', {
+      url: req.url
+    });
+ });
+
 // ------------------------------------------
 // set the port of our application
 // process.env.PORT lets the port be set by Heroku
