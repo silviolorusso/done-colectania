@@ -17,6 +17,8 @@ var infiniteTime = false
 var defaultTitle = 'Untitled'
 var defaultAuthors = 'Anonymous'
 var canvasZoom = 1000
+var maxFileSize = 1048576 // 1mb
+var maxPublicationSize = 10485760 // 10mb
 
 
 
@@ -68,8 +70,16 @@ function timeConverter(UNIX_timestamp){
   return time;
 }
 
+function formatBytes(a,b){if(0==a)return"0 bytes";var c=1024,d=b||2,e=["bytes","kb","mb","gb","tb","pb","eb","zb","yb"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+e[f]}
 
-
+function updateFilesizePubLeft(data) {
+  filesizePubLeft = filesizePubLeft - data.length
+  if (filesizePubLeft > 0) {
+    $('.filesizePubLeft').text( formatBytes(filesizePubLeft) + ' ' )             
+  } else {
+    $('.filesizePubLeft').text( '0mb ' )
+  }
+}
 
 function createElement(element, mousePos) {
   function chunkString(str, length) {
@@ -114,6 +124,7 @@ function createElement(element, mousePos) {
 
 // --- initialize canvases
 var canvases = {}
+var filesizePubLeft = maxPublicationSize
 let title
 let authors
 let pubDate
@@ -160,12 +171,17 @@ function initCanvases() {
         this.text = ''
         this.hiddenTextarea.value = ''
       }
+      this.selectable = false
+      console.log('entered')
     }).on('changed', function(e) {
       Publication.title = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
       this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
       this.selectable = false
-      this.hasControls = false
-    })
+      console.log('changed')
+    }).on('editing:exited'), function(e) {
+      this.selectable = false
+      console.log('exited')
+    }
   	canvases['p1'].add(title)
   	var lineLenght = 250
   	coverLine = new fabric.Line([0, 0, lineLenght, 0], {
@@ -290,8 +306,14 @@ function controller(Publication, input) {
           addTime(-bonusTime)
           criticSays('Think twice next time...')
 					break
+      case input.data &&
+        filesizePubLeft <= 0: // publication is 10mb
+          Error.pubTooBig()
+          addTime(-bonusTime)
+          criticSays('Enough!')
+          break
 			case input.data &&
-				byteCount(input.data) > 1398117 : // file too big (1mb)
+				byteCount(input.data) > maxFileSize : // file too big (1mb)
 				 	Error.tooBig()
           addTime(-bonusTime)
           criticSays('This is not a server farm.')
@@ -304,13 +326,14 @@ function controller(Publication, input) {
 
   					dropElement(input.page, input.data, input.mousePos); // drop element
 
+            updateFilesizePubLeft(input.data)
 
             Publication.imagesAmount += 1 // achievement every x imgs
             if (Publication.imagesAmount%achievementSpan == 0) {
               achievement(100 * Publication.imagesAmount, Publication.imagesAmount + ' images added!')
               Publication.achievementsAmount += 1
             }
-            if (Publication.imagesAmount == 3) {
+            if (Publication.imagesAmount == 3) { // save pub after loading 3 images
               $('#done').css('display','inline-block')
               criticSays('You can now save your publication!')
             }
@@ -351,6 +374,8 @@ function controller(Publication, input) {
 
   					dropElement(input.page, input.data, input.mousePos) // drop element
 
+            updateFilesizePubLeft(input.data)
+
             Publication.textAmount += input.data.length
             if (Publication.textAmount >= 500) {
               achievement(500, 'More than 500 characters added')
@@ -373,7 +398,7 @@ function controller(Publication, input) {
 					Publication.pages[input.page] = canvases[input.page].toJSON()
 					break
 		}
-	} else if (input && Publication.expired == true) {
+	} else if (input && input.move !== true && Publication.expired == true) {
 		// too late
 		Error.tooLate();
 	}
@@ -550,6 +575,9 @@ function showExpired() {
     if (authors.text == 'Insert Authors') {
       authors.text = defaultAuthors
     }
+    title.exitEditing()
+    authors.exitEditing()
+    title.selectable = title.authors = false
     renderAllCanvases()
     showPublicationData(Publication)
     if ( document.getElementById('counter') ) {
@@ -594,11 +622,15 @@ var Error = {
 	tooBig: function() {
 		alertMessage('The file you dropped is too big!')
 	},
+  pubTooBig: function() {
+    alertMessage('You reached the limit of 10mb for this publication. You can still work on the layout and save the publication.')
+  },
   noGifs: function() {
     alertMessage('Gifs are not allowed. (This sucks, I know...)')
   },
 	tooLate: function() {
 		alertMessage('Too late amigo')
+    sfx.error()
 	},
   codeInjection: function() {
     alertMessage('Hey hacker, you\'re trying to inject code. Please don\'t.')

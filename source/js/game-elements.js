@@ -255,7 +255,7 @@ function countdownWrapper() {
 	// when page is ready do this
 	$(document).ready(function() {
     $('.counter').hide();
-		animateUp($('#counter'));
+		animateUp($('#counter'))
 
 
 		function countdown(startTime) {
@@ -272,7 +272,7 @@ function countdownWrapper() {
 					break;
 				case 1:
 					$('#countdown').html('<span>Publish or <span class="perish">Perish!</span></span>');
-          sfx.countdownReady()
+          sfx.countdown()
 					break;
 				default:
 			}
@@ -283,6 +283,8 @@ function countdownWrapper() {
 					countdown(startTime);
 				}, 1300);
 			} else {
+        sfx.countdownReady()
+        soundtrack.play()
 				$('#countdownWrapper').remove();
         $('.counter').fadeIn(300);
         if ( getUrlParameter('time') ) { // difficulty
@@ -295,13 +297,14 @@ function countdownWrapper() {
 		var startTime = 3;
     setTimeout(function () {
 		  countdown(startTime)
-      sfx.countdownReady()
     }, 200)
 	});
 }
 
 if (!getUrlParameter('demo') && window.location.href.indexOf('/saved') <= -1) {
   countdownWrapper();
+} else if (getUrlParameter('demo')) {
+  soundtrack.play()
 }
 
 var number = 0;
