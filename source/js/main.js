@@ -16,6 +16,7 @@ var drawingModeTime = 10000
 var infiniteTime = false
 var defaultTitle = 'Untitled'
 var defaultAuthors = 'Anonymous'
+var canvasZoom = 1000
 
 
 
@@ -70,7 +71,7 @@ function timeConverter(UNIX_timestamp){
 
 
 
-function createElement(element, mousePos, callback) {
+function createElement(element, mousePos) {
   function chunkString(str, length) {
     return str.match(new RegExp('{.1,' + length + '}', 'g'));
   }
@@ -107,7 +108,6 @@ function createElement(element, mousePos, callback) {
         }))
       }
     }
-		callback;
 	}
 }
 
@@ -259,7 +259,7 @@ var Publication = {
   date: Date.now(),
   imagesAmount: 0,
   textAmount: 0,
-  timeElapsed: 0, // TODO set this when time expires
+  timeElapsed: 0,
   achievementsAmount: 0,
 	pages: {
 		p1: {},
@@ -270,8 +270,7 @@ var Publication = {
 		p6: {},
 		p7: {},
 		p8: {}
-	},
-  thumb: ''
+	}
 };
 
 function controller(Publication, input) {
@@ -299,12 +298,7 @@ function controller(Publication, input) {
 
           if (!input.data.includes('data:image/gif')) { // not a gif
 
-  					var publicationUpdate = function(inputPage) { // update canvas
-  						setTimeout(function() {
-  							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
-  						}, 1)
-  					}
-  					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
+  					dropElement(input.page, input.data, input.mousePos); // drop element
 
 
             Publication.imagesAmount += 1 // achievement every x imgs
@@ -351,12 +345,7 @@ function controller(Publication, input) {
 
           } else {
 
-  					var publicationUpdate = function(inputPage) { // update canvas
-  						setTimeout(function() {
-  							Publication.pages[inputPage] = canvases[inputPage].toJSON() // settimeout otherwise it doesn't get the element
-  						}, 1)
-  					}
-  					dropElement(input.page, input.data, input.mousePos, publicationUpdate(input.page)); // drop element
+  					dropElement(input.page, input.data, input.mousePos) // drop element
 
             Publication.textAmount += input.data.length
             if (Publication.textAmount >= 500) {
@@ -580,9 +569,9 @@ function showExpired() {
   }
 }
 
-function dropElement(pageId, data, mousePos, callback) {
+function dropElement(pageId, data, mousePos) {
 	var element = { data: data, page: pageId }
-	var elementPos = createElement(element, mousePos, callback)
+	var elementPos = createElement(element, mousePos)
 }
 
 
@@ -629,13 +618,27 @@ function showPublicationData(Publication) {
 }
 
 function renderPublication(Publication) {
-	for (var canvasId in canvases) {
-		var json = JSON.stringify(Publication.pages[canvasId]);
-		canvases[canvasId].loadFromJSON( json, function() {
-      lockElements(allElements())
-			canvases[canvasId].renderAll.bind(canvases[canvasId])
-		})
-	}
+  function renderPage(img, canvasId) {
+    fabric.Image.fromURL(img, function(img){
+        img.hasBorders = false;
+        img.hasControls = false;
+        img.selectable = false;
+        img.left = canvases[canvasId].width / 2;
+        img.top = canvases[canvasId].height / 2;
+        img.scaleX = canvases[canvasId].width / img.width;
+        img.scaleY = canvases[canvasId].height / img.height;
+        img.lockMovementX = true;
+        img.lockMovementY = true;
+        img.lockRotation = true;
+        img.setControlsVisibility = false;
+        img.id = 'lock'
+        canvases[canvasId].add(img);
+        canvases[canvasId].renderAll.bind(canvases[canvasId])
+    })
+  }
+  for (var canvasId in canvases) {
+    renderPage(Publication.pages[canvasId], canvasId)
+  }
   showPublicationData(Publication)
 }
 
@@ -650,7 +653,40 @@ var saving = false
 function savetoDb(publication) {
   if (saving == false) {
   	for (var page in Publication.pages) {
-  		Publication.pages[page] = canvases[page].toJSON() // update all pages
+      var originWidth = canvases[page].getWidth();
+
+      function zoom (width) {
+        var scale = width / canvases[page].getWidth();
+        height = scale * canvases[page].getHeight();
+
+        canvases[page].setDimensions({
+            "width": width,
+            "height": height
+        });
+
+        canvases[page].calcOffset();
+        var objects = canvases[page].getObjects();
+        for (var i in objects) {
+            var scaleX = objects[i].scaleX;
+            var scaleY = objects[i].scaleY;
+            var left = objects[i].left;
+            var top = objects[i].top;
+
+            objects[i].scaleX = scaleX * scale;
+            objects[i].scaleY = scaleY * scale;
+            objects[i].left = left * scale;
+            objects[i].top = top * scale;
+
+            objects[i].setCoords();
+        }
+        canvases[page].renderAll();
+      }
+
+      zoom(canvasZoom)
+
+      Publication.pages[page] = canvases[page].toDataURL('image/png', 1) // update all pages
+
+      zoom (originWidth);
   	}
     $('.button.save .stylized').html('Saving <span>.</span><span>.</span><span>.</span>').addClass('saving').removeClass('stylized')
     $('.button.save').css('backgroundColor', '#eee')
