@@ -326,8 +326,8 @@ function instructionMessage(num) {
   $('body').append(messageHTML)
   messageHTML.show();
   // createjs.Sound.play("beep")
-	messageHTML.css('left', ((window.innerWidth/2) - (350/2)) +'px');
-  messageHTML.css('top', (window.innerHeight/2-150) +'px');
+	messageHTML.css('left', ((window.innerWidth/2) - (600/2)) +'px');
+  messageHTML.css('top', ((window.innerHeight/2)- (400/2)) +'px');
 }
 
 $(document).on('click', ".closeWizard", function() {
