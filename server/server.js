@@ -95,7 +95,7 @@ app.get('/archive', function (req, res) {
     return time;
   }
 
-  var perPage = 15
+  var perPage = 9
   pageParam = req.query['page']
   if (pageParam == null) {
     pageParam = 0
