@@ -338,6 +338,3 @@ $(document).on('click', ".nextWizard", function() {
       number = 0;
     }
 });
-
-
-// <div class=""><p>You can drag and drop images (<strong>.jpg, .png  </strong>) or text (<strong>.txt</strong>) onto the page.</p><p>The file-size limit is <strong class="maxfilesize">1mb</strong>.</p><p>Press <strong>Backspace  </strong>to remove elements.</p></div>
