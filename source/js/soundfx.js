@@ -23,7 +23,7 @@ for (var sound in library) {
 sfx = jsfx.Sounds(library)
 
 const soundtrack = new Howl({
-  src: ['assets/audio/lance-romance.mp3']
+  src: ['assets/audio/lance-romance_small.mp3']
 })
 $(document).ready(function() {
   if (localStorage.getItem("soundOn") == "false"){ 

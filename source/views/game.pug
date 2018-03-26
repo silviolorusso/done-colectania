@@ -27,9 +27,6 @@ div.wrapper
         strong Backspace  
         | to remove elements.
 
-      // img.draganddrop(src='assets/img/draganddrop.gif')
-
-
       div.button#done(onclick='showExpired()') 
         .stylized
           span Publication 
@@ -62,6 +59,10 @@ div.wrapper
           span Achievements obtained: 
           span
 
+      div.button.tryagain(onclick='window.location.href = "/difficulty"')
+        .stylized
+          span Try 
+          span Again
       div.button.save(onclick='savetoDb(Publication);')
         .stylized
           span Save 
@@ -74,7 +75,7 @@ div.wrapper
         .stylized
           span Print 
           span Booklet
-      div#download
+
     div.page#page1
       canvas#p1
       span.pageNumber#first 1
@@ -128,6 +129,10 @@ div.wrapper
           span Achievements obtained: 
           span
 
+        div.button.tryagain(onclick='window.location.href = "/difficulty"')
+          .stylized
+            span Try 
+            span Again
         div.button.save(onclick='savetoDb(Publication);')
           .stylized
             span Save 
@@ -140,8 +145,6 @@ div.wrapper
           .stylized
             span Print 
             span Booklet
-
-p#pdf-download download as pdf 
 
 
 div.suggestions
