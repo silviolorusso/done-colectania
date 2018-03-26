@@ -21,7 +21,7 @@ var maxFileSize = 1048576 // 1mb
 var maxPublicationSize = 10485760 // 10mb
 
 
-
+loremIpsum = 'Proceduralize put your feelers out lean into that problem or cross-pollination, or prethink, or wheelhouse. Vertical integration highlights . Design thinking sacred cow, yet race without a finish line goalposts.'
 
 
 // --- GENERAL FUNCTIONS
@@ -129,6 +129,7 @@ let title
 let authors
 let pubDate
 let coverLine
+let isLockedEditing = false
 function initCanvases() {
   fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center' // origin at the center
   // cutomized controls
@@ -150,6 +151,8 @@ function initCanvases() {
 
 	});
   if (window.location.href.indexOf('saved') < 0) { // if not saved
+
+    // title
   	title = new fabric.Textbox('Insert Title', {
   	  top: 120,
   	  fontFamily: 'AGaramondPro, serif',
@@ -171,18 +174,17 @@ function initCanvases() {
         this.text = ''
         this.hiddenTextarea.value = ''
       }
-      this.selectable = false
-      console.log('entered')
+      isLockedEditing = true
     }).on('changed', function(e) {
       Publication.title = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
       this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    }).on('modified', function(e) {
       this.selectable = false
-      console.log('changed')
-    }).on('editing:exited'), function(e) {
-      this.selectable = false
-      console.log('exited')
-    }
+      isLockedEditing = false
+    })
   	canvases['p1'].add(title)
+
+    // line
   	var lineLenght = 250
   	coverLine = new fabric.Line([0, 0, lineLenght, 0], {
   		left: ( canvases['p1'].width - lineLenght) / 2,
@@ -194,6 +196,8 @@ function initCanvases() {
   	  originY: 'top'
   	})
     canvases['p1'].add(coverLine)
+
+    // authors
   	authors = new fabric.Textbox('Insert Authors', {
   	  top: 180,
   	  fontFamily: 'AGaramondPro, serif',
@@ -213,14 +217,18 @@ function initCanvases() {
       if (this.text == 'Insert Authors') {
         this.text = ''
         this.hiddenTextarea.value = ''
+        isLockedEditing = true
       }
     }).on('changed', function(e) {
-      Publication.authors = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
+      Publication.title = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
       this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    }).on('modified', function(e) {
       this.selectable = false
-      this.hasControls = false
+      isLockedEditing = false
     })
-  	canvases['p1'].add(authors)
+    canvases['p1'].add(authors)
+
+    // date
     pubDate = new fabric.Text( timeConverter(Publication.date), {
       top: 600,
       left: canvases['p8'].width/2,
@@ -253,19 +261,52 @@ function initCanvases() {
       canvases['p8'].add(img);
     })
   }
+  for (canvas in canvases) {
+
+    canvases[canvas].on('mouse:dblclick', function(e) {
+
+      obj = this.getActiveObject()
+      if (obj) {
+        var isEditing = obj.isEditing
+      }
+      if (isLockedEditing != true && !obj && typeof isEditing == 'undefined') {
+        mousePos = getMousePos(this)
+        console.log(mousePos)
+
+        this.add(new fabric.Textbox(loremIpsum, {
+          fontFamily: 'Helvetica',
+          left: parseInt(mousePos.x), // to avoid blur
+          top: parseInt(mousePos.y),
+          fontSize: fontSize,
+          fill: fontColor,
+          width: 250,
+          breakWords: true,
+          originX: 'left',
+          originY: 'top'
+        }))
+      } 
+      
+    })
+
+  }
 }
 $(document).keydown(function(e) { // del or backspace to delete
   if( e.which == 8 || e.which == 46) {
     for (canvas in canvases) {
-      if (canvases[canvas].getActiveObject()) {
+      obj = canvases[canvas].getActiveObject()
+      if (obj) {
+        var isEditing = obj.isEditing
+      }
+      if ( obj && isEditing != true ) {  // removing object
+        
         canvases[canvas].remove(canvases[canvas].getActiveObject());
         controller(Publication, { remove: true })
+
+        e.preventDefault()
       }
     }
-    e.preventDefault()
   }
 })
-
 
 
 // --- M-V-C
@@ -583,16 +624,22 @@ function showExpired() {
     authors.exitEditing()
     title.selectable = title.authors = false
     for (canvas in canvases) {
-      canvases[canvas].selection = false
+      canvases[canvas].selectable = false
       canvases[canvas].discardActiveObject().renderAll()
     }
 
-    if (Publication.imagesAmount == 0 && Publication.textAmount == 0) {
+    elementsAmount = 0
+    for (canvas in canvases) {
+      elementsAmount = elementsAmount + canvases[canvas].getObjects().length
+    }
+    if (elementsAmount <= 5) {
       $('.tryagain').css('display','inline-block')
       $('.save').hide()
       setTimeout(function(){
         Error.noContent()
       }, 2000)
+    } else {
+
     }
 
     showPublicationData(Publication)
