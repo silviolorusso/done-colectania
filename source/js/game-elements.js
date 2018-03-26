@@ -165,7 +165,7 @@ function achievement(time_added, txt) {
 
 	var badge = '<div class="badge"><img src="assets/img/achievement.png"><div class="descr"><span class="time perish">' + time_added + '</span><span class="name">' + txt + '</span></div></div>'
 
-	$('.coin').fadeIn(300).html(coin).delay(3000).fadeOut(300);
+	$('.coin').delay(200).fadeIn(300).html(coin).delay(700).fadeOut(300);
 	$('.badges').append(badge);
   sfx.achievement()
 }
