@@ -4,27 +4,25 @@
 
     .badge {
       width: 100%;
-      display: inline-block;
       position: relative;
       margin-bottom: 20px;
 
       img {
         width: 30%;
-        display: inline-block;
         margin: auto;
       }
 
       .descr {
-        width: 70%;
-        display: inline-block;
+        float: right;
+        width: 65%;
+        padding-left: 5%;
 
-        .name {
-          padding-top: 10px;
-          display: inline-block;
+        span {
+          display: block;
         }
 
         .time {
-          display: inline-block;
+          margin-top: 20px;
           font-size: 45px;
           color: $white;
 
@@ -36,6 +34,10 @@
             content: 'sec';
             font-size: 38px;
           }
+        }
+
+        .name {
+          padding-top: 10px;
         }
       }
     }

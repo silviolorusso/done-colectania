@@ -112,7 +112,7 @@ app.get('/archive', function (req, res) {
         nextPage: nextPage,
         prevPage: page - 1
       })
-      
+
     })
 
     console.log('serving archive')
