@@ -262,6 +262,7 @@ $(document).keydown(function(e) { // del or backspace to delete
         controller(Publication, { remove: true })
       }
     }
+    e.preventDefault()
   }
 })
 
@@ -567,7 +568,10 @@ function mouseCounter() {
 
 function showExpired() {
   if (Publication.expired != true) {
+    soundtrack.stop()
     Publication.expired = true
+
+    // locking elements
     lockElements(allElements())
     if (title.text == 'Insert Title') {
       title.text = defaultTitle
@@ -578,25 +582,34 @@ function showExpired() {
     title.exitEditing()
     authors.exitEditing()
     title.selectable = title.authors = false
-    renderAllCanvases()
+    for (canvas in canvases) {
+      canvases[canvas].selection = false
+      canvases[canvas].discardActiveObject().renderAll()
+    }
+
+    if (Publication.imagesAmount == 0 && Publication.textAmount == 0) {
+      $('.tryagain').css('display','inline-block')
+      $('.save').hide()
+      setTimeout(function(){
+        Error.noContent()
+      }, 2000)
+    }
+
     showPublicationData(Publication)
+    
     if ( document.getElementById('counter') ) {
   	 document.getElementById('counter').style.display = 'none'
     }
   	$('body').addClass('expired')
   	expiredTime()
     sfx.perished()
-    for (canvas in canvases) {
-      canvases[canvas].selection = false
-      canvases[canvas].discardActiveObject().renderAll()
-    }
   	setTimeout(function () {
   		$('.wrapper').addClass('saved_view');
   		savedState()
   	}, 500)
-  	clearInterval(x)
+  	clearInterval(x) // clear controller 
     if (typeof y !== 'undefined') { // if disruptions
-      clearInterval(y)
+      clearInterval(y) // clear disruptions
     }
   }
 }
@@ -634,6 +647,10 @@ var Error = {
 	},
   codeInjection: function() {
     alertMessage('Hey hacker, you\'re trying to inject code. Please don\'t.')
+  },
+  noContent: function() {
+    alertMessage('You didn\'t upload any image or text :(')
+    sfx.error()
   }
 }
 

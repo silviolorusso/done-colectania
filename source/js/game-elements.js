@@ -154,6 +154,7 @@ function alertMessage(message) {
 }
 
 $(document).on('click', ".closeAlert", function() {
+    sfx.button()
     $(this).closest('.alert').remove();
 });
 

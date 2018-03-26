@@ -47,6 +47,14 @@
         &.pdf {
           display: inline-block;
         }
+
+        &.tryagain {
+          display: none;
+        }
+      }
+
+      .nocontent {
+        display: none;
       }
 
       #full_width {
