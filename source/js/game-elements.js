@@ -300,3 +300,44 @@ function countdownWrapper() {
 if (!getUrlParameter('demo') && window.location.href.indexOf('/saved') <= -1) {
   countdownWrapper();
 }
+
+var number = 0;
+
+// <p></p>
+function instructionMessage(num) {
+  var messageArray = [
+    '<h2 class="">Welcome to the Game Instructions Setup Wizard</h2> <p>This wizard will guide your throught the publish or perish, publishing workflow. It is recommended to prepare a folder of files for your publication.</p><p>Click Next to Continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div>',
+
+    '<h2 class="">Image Filetypes</h2> <p><p>You can drag and drop images (<strong>.jpg, .png </strong>) on to the page. After adding the images it\'s possible to <strong>move</strong>, <strong>scale</strong> and <strong>rotate</strong> them.</p><p>The file-size limit is <strong>1mb</strong></p><p>Click Next to Continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div>',
+
+    '<h2 class="">Text Filetypes</h2> <p><p>You can drag and drop text (<strong>.txt</strong>) on to the page or you can use the text icon to add a textbox.</p><p>Click Next to start the game</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div>',
+
+    '<h2 class="">Time</h2> <p><p>You will have <strong>time</strong> seconds in which you must finish your publication.</p><p>Click Finish to start the game</p></div><div class="buttons"><div class="button nextWizard">Finish</div><div class="button closeWizard">Cancel</div></div>',
+  ]
+
+
+  var messageHTML = $('<div class="alert wizzard"><div class="topbar"></div><img class="close closeAlert" src="/assets/img/x.png" /><div class="alertMessage">' + messageArray[num] + '</div>');
+  $('body').append(messageHTML)
+  messageHTML.show();
+  // createjs.Sound.play("beep")
+	messageHTML.css('left', ((window.innerWidth/2) - (350/2)) +'px');
+  messageHTML.css('top', (window.innerHeight/2-150) +'px');
+}
+
+$(document).on('click', ".closeWizard", function() {
+    $(this).closest('.alert').remove();
+});
+
+$(document).on('click', ".nextWizard", function() {
+    number = number + 1;
+    console.log(number);
+    $('.alert').remove();
+    if (number <= 3) {
+      instructionMessage(number);
+    } else {
+      number = 0;
+    }
+});
+
+
+// <div class=""><p>You can drag and drop images (<strong>.jpg, .png  </strong>) or text (<strong>.txt</strong>) onto the page.</p><p>The file-size limit is <strong class="maxfilesize">1mb</strong>.</p><p>Press <strong>Backspace  </strong>to remove elements.</p></div>

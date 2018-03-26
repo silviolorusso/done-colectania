@@ -81,3 +81,21 @@
     }
   }
 }
+
+.wizzard {
+  width: 500px;
+
+  h2 {
+    padding: none;
+  }
+
+  .alertMessage {
+    max-width: 80%;
+  }
+
+  .buttons {
+    text-align: right;
+
+    .button {}
+  }
+}
