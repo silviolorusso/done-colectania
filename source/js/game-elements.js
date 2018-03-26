@@ -260,17 +260,19 @@ function countdownWrapper() {
 
 		function countdown(startTime) {
 			animateUpOut($('#countdownWrapper'), 1000)
-      sfx.countdown()
 
 			switch (startTime) {
 				case 3:
 					$('#countdown').html('<span>Prepare your <span class="perish">Assets!</span></span>');
+          sfx.countdown()
 					break;
 				case 2:
 					$('#countdown').html('<span>Create your <span class="perish">Layout!</span></span>');
+          sfx.countdown()
 					break;
 				case 1:
 					$('#countdown').html('<span>Publish or <span class="perish">Perish!</span></span>');
+          sfx.countdownReady()
 					break;
 				default:
 			}
@@ -293,6 +295,7 @@ function countdownWrapper() {
 		var startTime = 3;
     setTimeout(function () {
 		  countdown(startTime)
+      sfx.countdownReady()
     }, 200)
 	});
 }
