@@ -230,32 +230,9 @@ function shake(obj, time) {
 }
 
 function countdownWrapper() {
-	// function loadSound() {
-	// 	console.log('load sound!');
-	// 	createjs.Sound.registerSound('assets/audio/beep.mp3', 'beep');
-	// 	createjs.Sound.registerSound('assets/audio/ding.mp3', 'ding');
-
-	// 	// printer soundjs
-	// 	createjs.Sound.registerSound(
-	// 		'assets/audio/printer/matrix-short.wav',
-	// 		'printer-short'
-	// 	);
-	// 	createjs.Sound.registerSound(
-	// 		'assets/audio/printer/matrix-long.wav',
-	// 		'printer-long'
-	// 	);
-	// 	createjs.Sound.registerSound(
-	// 		'assets/audio/printer/load_paper.wav',
-	// 		'load_paper'
-	// 	);
-	// }
-
-	// loadSound();
-
 	// when page is ready do this
 	$(document).ready(function() {
-    $('.counter').hide();
-		animateUp($('#counter'))
+    animateUp($('#counter'));
 
 
 		function countdown(startTime) {
@@ -302,7 +279,8 @@ function countdownWrapper() {
 }
 
 if (!getUrlParameter('demo') && window.location.href.indexOf('/saved') <= -1) {
-  countdownWrapper();
+  $('.counter').hide();
+  instructionMessage(0);
 } else if (getUrlParameter('demo')) {
   soundtrack.play()
 }
@@ -325,22 +303,25 @@ function instructionMessage(num) {
   var messageHTML = $('<div class="alert wizzard"><div class="topbar"></div><img class="close closeAlert" src="/assets/img/x.png" /><div class="alertMessage">' + messageArray[num] + '</div>');
   $('body').append(messageHTML)
   messageHTML.show();
-  // createjs.Sound.play("beep")
 	messageHTML.css('left', ((window.innerWidth/2) - (600/2)) +'px');
   messageHTML.css('top', ((window.innerHeight/2)- (400/2)) +'px');
 }
 
 $(document).on('click', ".closeWizard", function() {
-    $(this).closest('.alert').remove();
+  $(this).closest('.alert').remove();
 });
 
 $(document).on('click', ".nextWizard", function() {
-    number = number + 1;
-    console.log(number);
-    $('.alert').remove();
-    if (number <= 3) {
-      instructionMessage(number);
-    } else {
-      number = 0;
-    }
+  if ( getUrlParameter('time') ) { // difficulty
+    Publication.timeLeft = timeSet = getUrlParameter('time')
+  }
+  number = number + 1;
+  console.log(number);
+  $('.alert').remove();
+  if (number <= 3) {
+    instructionMessage(number);
+  } else {
+    countdownWrapper();
+    number = 0;
+  }
 });
