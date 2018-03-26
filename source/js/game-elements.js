@@ -231,32 +231,9 @@ function shake(obj, time) {
 }
 
 function countdownWrapper() {
-	// function loadSound() {
-	// 	console.log('load sound!');
-	// 	createjs.Sound.registerSound('assets/audio/beep.mp3', 'beep');
-	// 	createjs.Sound.registerSound('assets/audio/ding.mp3', 'ding');
-
-	// 	// printer soundjs
-	// 	createjs.Sound.registerSound(
-	// 		'assets/audio/printer/matrix-short.wav',
-	// 		'printer-short'
-	// 	);
-	// 	createjs.Sound.registerSound(
-	// 		'assets/audio/printer/matrix-long.wav',
-	// 		'printer-long'
-	// 	);
-	// 	createjs.Sound.registerSound(
-	// 		'assets/audio/printer/load_paper.wav',
-	// 		'load_paper'
-	// 	);
-	// }
-
-	// loadSound();
-
 	// when page is ready do this
 	$(document).ready(function() {
-    $('.counter').hide();
-		animateUp($('#counter'))
+    animateUp($('#counter'));
 
 
 		function countdown(startTime) {
@@ -303,7 +280,50 @@ function countdownWrapper() {
 }
 
 if (!getUrlParameter('demo') && window.location.href.indexOf('/saved') <= -1) {
-  countdownWrapper();
+  $('.counter').hide();
+  instructionMessage(0);
 } else if (getUrlParameter('demo')) {
   soundtrack.play()
 }
+
+var number = 0;
+
+// <p></p>
+function instructionMessage(num) {
+  var messageArray = [
+    '<div class="left"><img class="left" src="assets/img/achievement.png" /></div><div class="right"><h2 class="">Welcome to the Game Instructions Setup Wizard</h2> <p>This wizard will guide your throught the publish or perish, publishing workflow. It is recommended to prepare a folder of files for your publication.</p><p>Click Next to Continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
+
+    '<div class="left"><img class="left" src="assets/img/jpg.png" /></div><div class="right"><h2 class="">Image Filetypes</h2> <p><p>You can drag and drop images (<strong>.jpg, .png </strong>) on to the page. After adding the images it\'s possible to <strong>move</strong>, <strong>scale</strong> and <strong>rotate</strong> them.</p><p>The file-size limit is <strong>1mb</strong></p><p>Click Next to Continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
+
+    '<div class="left"><img class="left" src="assets/img/txt.png" /></div><div class="right"><h2 class="">Text Filetypes</h2> <p><p>You can drag and drop text (<strong>.txt</strong>) on to the page or you can use the text icon to add a textbox.</p><p>Click Next to start the game</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
+
+    '<div class="left"><img class="left" src="assets/img/time.png" /></div><div class="right"><h2 class="">Time</h2> <p><p>You will have <strong>time</strong> seconds in which you must finish your publication.</p><p>Click Finish to start the game</p></div><div class="buttons"><div class="button nextWizard">Finish</div><div class="button closeWizard">Cancel</div></div></div>',
+  ]
+
+
+  var messageHTML = $('<div class="alert wizzard"><div class="topbar"></div><img class="close closeAlert" src="/assets/img/x.png" /><div class="alertMessage">' + messageArray[num] + '</div>');
+  $('body').append(messageHTML)
+  messageHTML.show();
+	messageHTML.css('left', ((window.innerWidth/2) - (600/2)) +'px');
+  messageHTML.css('top', ((window.innerHeight/2)- (400/2)) +'px');
+}
+
+$(document).on('click', ".closeWizard", function() {
+  $(this).closest('.alert').remove();
+  $('.counter').show();
+});
+
+$(document).on('click', ".nextWizard", function() {
+  if ( getUrlParameter('time') ) { // difficulty
+    Publication.timeLeft = timeSet = getUrlParameter('time')
+  }
+  number = number + 1;
+  console.log(number);
+  $('.alert').remove();
+  if (number <= 3) {
+    instructionMessage(number);
+  } else {
+    countdownWrapper();
+    number = 0;
+  }
+});
