@@ -83,19 +83,42 @@
 }
 
 .wizzard {
-  width: 500px;
+  width: 600px;
+  height: 400px;
 
-  h2 {
-    padding: none;
+  .left {
+    width: 100px;
+    display: inline-block;
+    position: relative;
+    float: left;
+    margin-top: 20px;
+
+    img {
+      width: 80px;
+      display: inline-block;
+    }
   }
 
-  .alertMessage {
-    max-width: 80%;
+  .right {
+    margin-top: 20px;
+    display: inline-block;
+    width: 450px;
+    position: relative;
+    right: 0;
+
+    h2 {
+      padding: none;
+    }
+
+    .alertMessage {
+      max-width: 80%;
+    }
   }
 
   .buttons {
     text-align: right;
-
-    .button {}
+    position: absolute;
+    bottom: 0;
+    width: 90%;
   }
 }
