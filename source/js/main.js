@@ -116,6 +116,8 @@ function createElement(element, mousePos) {
 var canvases = {}
 let title
 let authors
+let pubDate
+let coverLine
 function initCanvases() {
   fabric.Object.prototype.originX = fabric.Object.prototype.originY = 'center' // origin at the center
   // cutomized controls
@@ -166,14 +168,16 @@ function initCanvases() {
     })
   	canvases['p1'].add(title)
   	var lineLenght = 250
-  	canvases['p1'].add(new fabric.Line([0, 0, lineLenght, 0], {
+  	coverLine = new fabric.Line([0, 0, lineLenght, 0], {
   		left: ( canvases['p1'].width - lineLenght) / 2,
   	  top: 160,
   	  stroke: '#222',
   	  selectable: false,
+      hasControls: false,
   	 	originX: 'left',
   	  originY: 'top'
-  	}));
+  	})
+    canvases['p1'].add(coverLine)
   	authors = new fabric.Textbox('Insert Authors', {
   	  top: 180,
   	  fontFamily: 'AGaramondPro, serif',
@@ -201,7 +205,7 @@ function initCanvases() {
       this.hasControls = false
     })
   	canvases['p1'].add(authors)
-    var date = new fabric.Text( timeConverter(Publication.date), {
+    pubDate = new fabric.Text( timeConverter(Publication.date), {
       top: 600,
       left: canvases['p8'].width/2,
       fontFamily: 'AGaramondPro, serif',
@@ -216,7 +220,7 @@ function initCanvases() {
       originY: 'top',
       id: 'lock'
     })
-    canvases['p8'].add(date);
+    canvases['p8'].add(pubDate);
     fabric.Image.fromURL(logoFotocolectaniaBase64, function(img){
       img.hasBorders = false;
       img.hasControls = false;
@@ -1096,8 +1100,19 @@ var Disruption = {
       }
     }
     whiteText(allElements('textbox'))
-    whiteText([title,authors])
+    whiteText([title,authors,pubDate])
     fontColor = '#fff'
+    var lineLenght = 250
+    coverLine = new fabric.Line([0, 0, lineLenght, 0], {
+      left: ( canvases['p1'].width - lineLenght) / 2,
+      top: 160,
+      stroke: '#fff',
+      selectable: false,
+      hasControls: false,
+      originX: 'left',
+      originY: 'top'
+    })
+    canvases['p1'].add(coverLine) // not sure why I can't simply change the stroke
     renderAllCanvases()
     criticSays('Think of the page as a blackboard')
   },
@@ -1114,9 +1129,9 @@ var Disruption = {
       img.lockRotation = true;
       img.setControlsVisibility = false;
       img.id = 'lock';
-      for (canvas in canvases) {
-        canvases[canvas].add(img);
-      }
+      var keys = Object.keys(canvases)
+      randCanvas = canvases[keys[ keys.length * Math.random() << 0]]
+      randCanvas.add(img)
     })
     renderAllCanvases()
     criticSays('The public must not know.')
