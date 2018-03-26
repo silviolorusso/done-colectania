@@ -3,41 +3,58 @@
     max-width: 80%;
 
     .badge {
-      width: 100%;
+      width: 33%;
+      display: inline-block;
       position: relative;
       margin-bottom: 20px;
 
-      img {
-        width: 30%;
+      .img {
+        background-image: url('../img/achievement.png');
+        width: 93px;
+        height: 93px;
+        display: block;
         margin: auto;
+        background-repeat: no-repeat;
+        background-size: auto;
       }
 
-      .descr {
-        float: right;
-        width: 65%;
-        padding-left: 5%;
+      span {
+        display: block;
+      }
 
-        span {
-          display: block;
+      .time {
+        text-align: center;
+        margin: 10px auto auto;
+        font-size: 30px;
+        color: $white;
+
+        &:before {
+          content: '+';
         }
 
-        .time {
-          margin-top: 20px;
-          font-size: 45px;
-          color: $white;
+        &:after {
+          content: 'ms';
+          font-size: 32px;
+        }
+      }
 
-          &:before {
-            content: '+';
-          }
+      .name {
+        display: none;
+      }
 
-          &:after {
-            content: 'sec';
-            font-size: 38px;
-          }
+      &:hover {
+        .img {
+          background-image: url('../img/achievement_hover.svg');
         }
 
         .name {
-          padding-top: 10px;
+          display: block;
+          position: absolute;
+          text-align: center;
+          vertical-align: middle;
+          height: 93px;
+          top: 0;
+          padding: 20px;
         }
       }
     }
