@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="79px" height="92px" viewBox="0 0 79 92" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
     <title>logo_50</title>
     <desc>Created with Sketch.</desc>
     <defs>
         <rect id="path-1" x="0" y="0" width="79" height="79"></rect>
-        <linearGradient x1="0%" y1="0%" x2="101.999998%" y2="100.999999%" id="linearGradient-2">
-            <stop stop-color="#FF0000" offset="0%"></stop>
-            <stop stop-color="#FFFF00" offset="22.2046604%"></stop>
-            <stop stop-color="#008000" offset="41.2707731%"></stop>
-            <stop stop-color="#00FFFF" offset="60.4475253%"></stop>
-            <stop stop-color="#0000FF" offset="80.8232478%"></stop>
-            <stop stop-color="#EE82EE" offset="100%"></stop>
-        </linearGradient>
     </defs>
     <g id="logo_50" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Rectangle-8">
-            <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
-            <rect stroke="#000000" stroke-width="2" x="1" y="1" width="77" height="77"></rect>
+        <g id="Group">
+            <g id="Rectangle-8">
+                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                <rect stroke="#000000" stroke-width="2" x="1" y="1" width="77" height="77"></rect>
+            </g>
+            <text id="P" font-family="AGaramondPro-Regular, Adobe Garamond Pro" font-size="55" font-weight="normal" fill="#191919">
+                <tspan x="11.8121019" y="54">P</tspan>
+            </text>
+            <path d="M32.243,46.749 L36.659,45.714 C37.142,41.781 37.97,37.158 38.453,35.778 C40.178,34.122 43.007,32.259 44.732,31.5 C42.938,30.879 39.281,30.051 35.072,29.361 C33.14,29.085 32.519,28.119 32.105,26.808 C31.415,24.738 30.863,22.668 30.38,20.46 C40.868,20.322 54.185,21.633 59.36,26.325 C64.052,30.534 68.123,39.021 68.399,42.609 C68.606,45.3 68.261,46.818 65.777,48.888 C60.119,53.58 49.838,55.65 44.042,56.271 L42.8,54.891 L41.213,62.895 L42.938,64.482 L42.455,66.621 L36.521,69.312 L35.555,68.76 C35.486,63.93 35.417,54.96 35.762,52.062 L35.21,51.786 L32.243,46.749 Z M43.835,43.713 C48.527,42.333 54.668,40.194 57.566,38.193 C54.806,35.64 49.217,32.949 45.629,31.845 C45.146,35.985 44.318,40.953 43.835,43.713 Z" id="P" stroke="#FFFFFF" stroke-width="2" fill="#000000"></path>
         </g>
-        <text id="P" font-family="AGaramondPro-Regular, Adobe Garamond Pro" font-size="55" font-weight="normal" fill="#191919">
-            <tspan x="11.8121019" y="54">P</tspan>
-        </text>
-        <path d="M32.243,45.749 L36.659,44.714 C37.142,40.781 37.97,36.158 38.453,34.778 C40.178,33.122 43.007,31.259 44.732,30.5 C42.938,29.879 39.281,29.051 35.072,28.361 C33.14,28.085 32.519,27.119 32.105,25.808 C31.415,23.738 30.863,21.668 30.38,19.46 C40.868,19.322 54.185,20.633 59.36,25.325 C64.052,29.534 68.123,38.021 68.399,41.609 C68.606,44.3 68.261,45.818 65.777,47.888 C60.119,52.58 49.838,54.65 44.042,55.271 L42.8,53.891 L41.213,61.895 L42.938,63.482 L42.455,65.621 L36.521,68.312 L35.555,67.76 C35.486,62.93 35.417,53.96 35.762,51.062 L35.21,50.786 L32.243,45.749 Z M43.835,42.713 C48.527,41.333 54.668,39.194 57.566,37.193 C54.806,34.64 49.217,31.949 45.629,30.845 C45.146,34.985 44.318,39.953 43.835,42.713 Z" id="P" fill="url(#linearGradient-2)"></path>
     </g>
 </svg>
