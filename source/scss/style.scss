@@ -160,6 +160,7 @@ header {
 	position: fixed;
 	z-index: 99999999;
 	opacity: 0;
+	transform-origin: right;
 
 	#bonusTime {
 		position: absolute;

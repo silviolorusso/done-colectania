@@ -75,7 +75,7 @@ function formatBytes(a,b){if(0==a)return"0 bytes";var c=1024,d=b||2,e=["bytes","
 function updateFilesizePubLeft(data) {
   filesizePubLeft = filesizePubLeft - data.length
   if (filesizePubLeft > 0) {
-    $('.filesizePubLeft').text( formatBytes(filesizePubLeft) + ' ' )             
+    $('.filesizePubLeft').text( formatBytes(filesizePubLeft) + ' ' )
   } else {
     $('.filesizePubLeft').text( '0mb ' )
   }
@@ -284,8 +284,8 @@ function initCanvases() {
           originX: 'left',
           originY: 'top'
         }))
-      } 
-      
+      }
+
     })
 
   }
@@ -298,7 +298,7 @@ $(document).keydown(function(e) { // del or backspace to delete
         var isEditing = obj.isEditing
       }
       if ( obj && isEditing != true ) {  // removing object
-        
+
         canvases[canvas].remove(canvases[canvas].getActiveObject());
         controller(Publication, { remove: true })
 
@@ -428,7 +428,7 @@ function controller(Publication, input) {
             criticSays('This is gonna be a gooooood read')
 
           }
-					
+
           break
 			case input.data &&
 				!input.data.includes('data:image') &&
@@ -582,6 +582,12 @@ function showTime(Publication) {
 			var d = new Date();
 			ms = d.getMilliseconds();
 			document.getElementById('counter').innerHTML = pad(minutes, 2) + ':' + pad(seconds.toFixed(0), 2) + ':' + pad(ms.toString().substr(0,2), 2) + ' left!';
+			if (minutes <= 0 && seconds <= 20) {
+
+				var size = (1.34444444 - (seconds / 60));
+				console.log(size);
+				$('.counter').css('transform', 'scale(' + size + ')');
+			}
 		}, 1)
 	} else {
 		// console.log('error');
@@ -643,7 +649,7 @@ function showExpired() {
     }
 
     showPublicationData(Publication)
-    
+
     if ( document.getElementById('counter') ) {
   	 document.getElementById('counter').style.display = 'none'
     }
@@ -654,7 +660,7 @@ function showExpired() {
   		$('.wrapper').addClass('saved_view');
   		savedState()
   	}, 500)
-  	clearInterval(x) // clear controller 
+  	clearInterval(x) // clear controller
     if (typeof y !== 'undefined') { // if disruptions
       clearInterval(y) // clear disruptions
     }
@@ -710,11 +716,11 @@ var Error = {
 function showPublicationData(Publication) {
   $('.title').text( Publication.title )
   $('.authors span:last-child').text( Publication.authors )
-  $('.date span:last-child').text( timeConverter( Number(Publication.date)) ) 
-  $('.imagesamount span:last-child').text( Publication.imagesAmount ) 
-  $('.textamount span:last-child').text( Publication.textAmount + ' chars' ) 
+  $('.date span:last-child').text( timeConverter( Number(Publication.date)) )
+  $('.imagesamount span:last-child').text( Publication.imagesAmount )
+  $('.textamount span:last-child').text( Publication.textAmount + ' chars' )
   $('.elapsedtime span:last-child').text( Publication.timeElapsed + ' s' )
-  $('.achievementsamount span:last-child').text( Publication.achievementsAmount )  
+  $('.achievementsamount span:last-child').text( Publication.achievementsAmount )
 }
 
 function renderPublication(Publication) {
