@@ -325,7 +325,7 @@ $(document).on('click', '.wizardneveragain input', function() {
   }
 });
 
-$(document).on('click', ".closeWizard", function() {
+$(document).on('click', ".closeWizard, .wizard .closeAlert", function() {
   if ( noWizard == true ) { // if checkbox is checked
     localStorage.setItem("noWizard", "true")
   }
