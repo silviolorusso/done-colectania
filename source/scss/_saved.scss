@@ -48,6 +48,7 @@
           display: inline-block;
         }
       }
+
       .button.tryagain {
         display: none;
       }
@@ -105,11 +106,10 @@
       float: left;
       background: white;
       position: relative;
-      // @extend .page-shadow;
       -webkit-transition-duration: .2s;
-      box-shadow: 4px 4px 0 0 rgba(137, 137, 137, 0.48);
       top: 0;
-      outline: 1px solid $black;
+      box-shadow: 4px 4px 0 0 rgba(137, 137, 137, 0.48), 1px 1px 0 0 $black, -1px -1px 0 0 $black;
+      padding: 2px;
       border: none;
 
       &:nth-of-type(1n) {
@@ -178,7 +178,7 @@
 
       &:hover {
         -webkit-transition-duration: .2s;
-        box-shadow: 8px 8px 0 0 rgba(137, 137, 137, 0.48);
+        box-shadow: 4px 4px 0 0 rgba(137, 137, 137, 0.48), 1px 1px 0 0 $black, -1px -1px 0 0 $black;
       }
 
       input {
@@ -292,20 +292,21 @@
     padding: 10px;
   }
 }
-
-
 // 3 dots animation
 @keyframes blink {
-    0% {
-      opacity: .2;
-    }
-    20% {
-      opacity: 1;
-    }
-    100% {
-      opacity: .2;
-    }
+  0% {
+    opacity: .2;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: .2;
+  }
 }
+
 .saving span {
   animation-name: blink;
   animation-duration: 1.4s;
@@ -318,5 +319,5 @@
 }
 
 .saving span:nth-child(3) {
-    animation-delay: .4s;
+  animation-delay: .4s;
 }
