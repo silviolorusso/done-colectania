@@ -787,7 +787,6 @@ function savetoDb(publication) {
         }
         canvases[page].renderAll();
       }
-
       zoom(canvasZoom)
 
       Publication.pages[page] = canvases[page].toDataURL('image/png', 1) // update all pages
