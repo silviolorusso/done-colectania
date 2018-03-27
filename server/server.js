@@ -45,13 +45,13 @@ app.use(express.urlencoded({ extended: true, limit: '50mb'}))
 
 
 // redirect to www
-app.get('*', function(req, res, next) {
-  if (req.headers.host.slice(0, 3) != 'www') {
-    res.redirect('http://www.' + req.headers.host + req.url, 301);
-  } else {
-    next();
-  }
-});
+// app.get('*', function(req, res, next) {
+//   if (req.headers.host.slice(0, 3) != 'www') {
+//     res.redirect('http://www.' + req.headers.host + req.url, 301);
+//   } else {
+//     next();
+//   }
+// });
 
 
 // static
@@ -95,7 +95,7 @@ app.get('/archive', function (req, res) {
     return time;
   }
 
-  var perPage = 15
+  var perPage = 9
   pageParam = req.query['page']
   if (pageParam == null) {
     pageParam = 0

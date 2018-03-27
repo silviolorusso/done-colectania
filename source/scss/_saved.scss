@@ -47,10 +47,9 @@
         &.pdf {
           display: inline-block;
         }
-
-        &.tryagain {
-          display: none;
-        }
+      }
+      .button.tryagain {
+        display: none;
       }
 
       .nocontent {

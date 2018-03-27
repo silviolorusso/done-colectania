@@ -283,7 +283,7 @@ if (!getUrlParameter('demo') && window.location.href.indexOf('/saved') <= -1) {
   $('.counter').hide();
   instructionMessage(0);
 } else if (getUrlParameter('demo')) {
-  soundtrack.play()
+  instructionMessage(0);
 }
 
 var number = 0;
@@ -310,7 +310,9 @@ function instructionMessage(num) {
 
 $(document).on('click', ".closeWizard", function() {
   $(this).closest('.alert').remove();
-  countdownWrapper();
+  if (!getUrlParameter('demo')) { // if not demo
+    countdownWrapper();
+  }
 });
 
 $(document).on('click', ".nextWizard", function() {
@@ -323,7 +325,12 @@ $(document).on('click', ".nextWizard", function() {
   if (number <= 3) {
     instructionMessage(number);
   } else {
-    countdownWrapper();
+    if (!getUrlParameter('demo')) { // if not demo
+      countdownWrapper();
+    } else {
+      soundtrack.play()
+    }
     number = 0;
+
   }
 });

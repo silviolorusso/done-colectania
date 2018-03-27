@@ -1,4 +1,5 @@
 // generate here: http://loov.io/jsfx
+var soundfxVol = 0.1
 var library = {
   "button": {"Frequency":{"Start":937.6817626618293,"Min":0.04070252646427441,"Slide":-0.7533066229853571},"Generator":{"Func":"sine","A":0.7491017849463704,"ASlide":0.25086403724560674},"Filter":{"HP":0.25887415803303276},"Volume":{"Sustain":0.1542735964448125,"Decay":0.3303739982373566,"Punch":0.193554323015371}},
   "addTimePlus":{"Frequency":{"Start":1445.5731550885357,"ChangeSpeed":0.10671372590863402,"ChangeAmount":8.82267391663804},"Volume":{"Sustain":0.058308031348346084,"Decay":0.23632114637712365,"Punch":0.30405599284659085}},
@@ -15,9 +16,14 @@ var library = {
   "error":{"Frequency":{"Start":451.522575399669,"Slide":-0.4866219113811203},"Generator":{"Func":"square","A":0.38842468202591096,"ASlide":-0.04223165548495689},"Volume":{"Sustain":0.04503758846105768,"Decay":0.10912816671117827}},
   "ready":{"Frequency":{"Start":600.5936281460497,"Slide":0.22289345063425814},"Vibrato":{"Depth":0.27802441337207046,"Frequency":35.90766409757357},"Generator":{"A":0.3354589217595621},"Volume":{"Sustain":0.3735321464174761,"Decay":0.26493156145629737}}
 }
+for (var sound in library) {
+  library[sound]["Volume"]["Master"] = soundfxVol // normalize volumes
+}
+
+
 var libraryMuted = {}
 for (var sound in library) {
-  libraryMuted[sound] = {"Volume":{"Master":0}}
+  libraryMuted[sound] = {"Volume":{"Master":0}} // mute sounds
 }
 
 sfx = jsfx.Sounds(library)
