@@ -43,27 +43,6 @@ gulp.task('build-interface-js', function() {
     .pipe(gulp.dest('public/assets/js'));
 });
 
-gulp.task('build-sounds-js', function() {
-  return gulp.src('source/sounds-js/**/*.js')
-    .pipe(sourcemaps.init())
-      .pipe(concat('sounds-js.js'))
-      //only uglify if gulp is ran with '--type production'
-      .pipe(gutil.env.type === 'production' ? uglify() : gutil.noop())
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('public/assets/js'));
-});
-
-// no need for this
-gulp.task('build-html', function() {
-  return gulp.src('source/views/*.pug')
-			.pipe(plumber())
-      .pipe(pug({
-    		doctype: 'html',
-    		pretty: false
- 			}))
-    .pipe(gulp.dest('public'));
-});
-
 gulp.task('default', ['watch']);
 
 gulp.task('watch', function() {
