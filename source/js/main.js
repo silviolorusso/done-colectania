@@ -585,7 +585,6 @@ function showTime(Publication) {
 			if (minutes <= 0 && seconds <= 20) {
 
 				var size = (1.34444444 - (seconds / 60));
-				console.log(size);
 				$('.counter').css('transform', 'scale(' + size + ')');
 
 				switch (seconds) {
