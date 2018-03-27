@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="107px" viewBox="0 0 80 107" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>txt</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Game-UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="txt">
+            <path d="M66.2524531,1 L1,1 L1,105.666667 L79,105.666667 L79,13.7475469 L66.2524531,1 Z" id="Combined-Shape" stroke="#000000" stroke-width="2"></path>
+            <polygon id="Rectangle-17-Copy" fill="#000000" transform="translate(73.333333, 6.666667) scale(-1, -1) translate(-73.333333, -6.666667) " points="66.6666667 0 80 0 80 13.3333333"></polygon>
+            <text id=".txt" font-family="ChocStd, Choc Std" font-size="26.6666667" font-weight="normal" fill="#000000">
+                <tspan x="7.33333333" y="23.3333333">.txt</tspan>
+            </text>
+            <rect id="Rectangle-21" fill="#000000" x="9" y="43" width="61" height="2"></rect>
+            <rect id="Rectangle-21" fill="#000000" x="9" y="55" width="61" height="2"></rect>
+            <rect id="Rectangle-21" fill="#000000" x="9" y="67" width="61" height="2"></rect>
+        </g>
+    </g>
+</svg>
