@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="107px" viewBox="0 0 80 107" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>jpg</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Game-UI" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="jpg">
+            <path d="M66.2524531,1 L1,1 L1,105.666667 L79,105.666667 L79,13.7475469 L66.2524531,1 Z" id="Combined-Shape" stroke="#000000" stroke-width="2"></path>
+            <polygon id="Rectangle-17-Copy" fill="#000000" transform="translate(73.333333, 6.666667) scale(-1, -1) translate(-73.333333, -6.666667) " points="66.6666667 0 80 0 80 13.3333333"></polygon>
+            <polygon id="Rectangle-18" fill="#000000" points="20.4 76.6870241 34.7241203 94.6351938 59.5843024 68 72.6666667 102.020357 7.33333333 102.020357"></polygon>
+            <circle id="Oval-3" fill="#000000" cx="64.3333333" cy="49.6666667" r="8.33333333"></circle>
+            <text id=".jpg" font-family="ChocStd, Choc Std" font-size="26.6666667" font-weight="normal" fill="#000000">
+                <tspan x="7.38666667" y="23.3333333">.jpg</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

@@ -282,13 +282,13 @@ function countdownWrapper() {
 if (!getUrlParameter('demo') && window.location.href.indexOf('/saved') <= -1) {
   $('.counter').hide();
   if (localStorage.getItem("noWizard") != "true") {
-    instructionMessage(0);   
+    instructionMessage(0);
   } else if (!getUrlParameter('demo')) {
     countdownWrapper()
   }
 } else if (getUrlParameter('demo')) {
   if (localStorage.getItem("noWizard") != "true") {
-    instructionMessage(0);   
+    instructionMessage(0);
   }
 }
 
