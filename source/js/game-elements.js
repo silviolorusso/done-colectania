@@ -153,7 +153,7 @@ function alertMessage(message) {
   messageHTML.css('top', (window.innerHeight/2-150) +'px');
 }
 
-$(document).on('click', ".closeAlert", function() {
+$(document).on('click', ".closeAlert, .nextWizard, .closeWizard", function() {
     sfx.button()
     $(this).closest('.alert').remove();
 });
@@ -281,9 +281,15 @@ function countdownWrapper() {
 
 if (!getUrlParameter('demo') && window.location.href.indexOf('/saved') <= -1) {
   $('.counter').hide();
-  instructionMessage(0);
+  if (localStorage.getItem("noWizard") != "true") {
+    instructionMessage(0);   
+  } else if (!getUrlParameter('demo')) {
+    countdownWrapper()
+  }
 } else if (getUrlParameter('demo')) {
-  instructionMessage(0);
+  if (localStorage.getItem("noWizard") != "true") {
+    instructionMessage(0);   
+  }
 }
 
 var number = 0;
@@ -291,24 +297,38 @@ var number = 0;
 // <p></p>
 function instructionMessage(num) {
   var messageArray = [
-    '<div class="left"><img class="left" src="assets/img/achievement.png" /></div><div class="right"><h2 class="">Welcome to the Game Instructions Setup Wizard</h2> <p>This wizard will guide your throught the publish or perish, publishing workflow. It is recommended to prepare a folder of files for your publication.</p><p>Click Next to Continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
+    '<div class="left"><img class="left" src="assets/img/achievement.png" /></div><div class="right"><h2>Welcome to Publish or Perish! Instructions Wizard</h2> <p>This wizard will guide you through the workflow of <em>Publish or Perish!</em>. It is recommended to <strong>prepare a directory of files</strong> for your publication in advance.</p><p>Click Next to Continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
 
-    '<div class="left"><img class="left" src="assets/img/jpg.svg" /></div><div class="right"><h2 class="">Image Filetypes</h2> <p><p>You can drag and drop images (<strong>.jpg, .png </strong>) on to the page. After adding the images it\'s possible to <strong>move</strong>, <strong>scale</strong> and <strong>rotate</strong> them.</p><p>The file-size limit is <strong>1mb</strong></p><p>Click Next to Continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
+    '<div class="left"><img class="left" src="assets/img/jpg.svg" /></div><div class="right"><h2>Images</h2> <p><p>You can drag and drop images (<strong>.jpg, .png </strong>) from your computer onto the page. These images can be <strong>moved</strong>, <strong>scaled</strong> and <strong>rotated</strong>.</p><p>The file-size limit is <strong>1mb</strong>.</p><p>Click Next to Continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
 
-    '<div class="left"><img class="left" src="assets/img/txt.svg" /></div><div class="right"><h2 class="">Text Filetypes</h2> <p><p>You can drag and drop text (<strong>.txt</strong>) on to the page or you can use the text icon to add a textbox.</p><p>Click Next to start the game</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
+    '<div class="left"><img class="left" src="assets/img/txt.svg" /></div><div class="right"><h2>Text</h2> <p><p>You can drag and drop text (<strong>.txt</strong>) from your computer onto the page or you can <strong>double click</strong> to create a new textbox.</p><p>Click Next to continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
 
-    '<div class="left"><img class="left" src="assets/img/time.svg" /></div><div class="right"><h2 class="">Time</h2> <p><p>You will have <strong>time</strong> seconds in which you must finish your publication.</p><p>Click Finish to start the game</p></div><div class="buttons"><div class="button nextWizard">Finish</div><div class="button closeWizard">Cancel</div></div></div>',
+    '<div class="left"><img class="left" src="assets/img/time.svg" /></div><div class="right"><h2>Time & Disruptions</h2> <p><p>You will have <strong>' + Publication.timeLeft + 'seconds</strong> to complete your publication. During this time, if you\'re not in Demo mode, <strong>unexpected things will happen</strong>. Be ready!</p><p>Click Finish to start the game</p></div><div class="buttons"><label class="wizardneveragain"><input type="checkbox"><span class="checkmark"></span>Don\'t show this wizard again</label><div class="button nextWizard">Finish</div><div class="button closeWizard">Cancel</div></div></div>',
   ]
 
 
-  var messageHTML = $('<div class="alert wizzard"><div class="topbar"></div><img class="close closeAlert" src="/assets/img/x.png" /><div class="alertMessage">' + messageArray[num] + '</div>');
+  var messageHTML = $('<div class="alert wizard"><div class="topbar"></div><img class="close closeAlert" src="/assets/img/x.png" /><div class="alertMessage">' + messageArray[num] + '</div>');
   $('body').append(messageHTML)
   messageHTML.show();
 	messageHTML.css('left', ((window.innerWidth/2) - (600/2)) +'px');
   messageHTML.css('top', ((window.innerHeight/2)- (400/2)) +'px');
 }
 
+var noWizard = false
+$(document).on('click', '.wizardneveragain input', function() {
+  if ($(this).attr('checked')) {
+    $(this).attr('checked', false)
+    noWizard = false
+  } else {
+    $(this).attr('checked', true)
+    noWizard = true
+  }
+});
+
 $(document).on('click', ".closeWizard", function() {
+  if ( noWizard == true ) { // if checkbox is checked
+    localStorage.setItem("noWizard", "true")
+  }
   $(this).closest('.alert').remove();
   if (!getUrlParameter('demo')) { // if not demo
     countdownWrapper();
@@ -320,7 +340,9 @@ $(document).on('click', ".nextWizard", function() {
     Publication.timeLeft = timeSet = getUrlParameter('time')
   }
   number = number + 1;
-  console.log(number);
+  if ( noWizard == true ) { // if checkbox is checked
+    localStorage.setItem("noWizard", "true")
+  }
   $('.alert').remove();
   if (number <= 3) {
     instructionMessage(number);
