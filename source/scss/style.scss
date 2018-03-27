@@ -28,12 +28,12 @@ body {
 @keyframes blink_drop {
 	0% {
 		transform: rotate(.5deg);
-		box-shadow: 8px 8px 0 0 $shadow;
+		box-shadow: 8px 8px 0 0 $shadow, 1px 1px 0 0 $black, -1px -1px 0 0 $black;
 	}
 
 	100% {
 		transform: rotate(-.5deg);
-		box-shadow: 8px 8px 0 0 $shadow;
+		box-shadow: 8px 8px 0 0 $shadow, 1px 1px 0 0 $black, -1px -1px 0 0 $black;
 	}
 }
 
