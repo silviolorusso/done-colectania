@@ -787,7 +787,6 @@ function savetoDb(publication) {
         }
         canvases[page].renderAll();
       }
-
       zoom(canvasZoom)
 
       Publication.pages[page] = canvases[page].toDataURL('image/png', 1) // update all pages
@@ -808,6 +807,7 @@ function savetoDb(publication) {
         $('.button.pdf, .button.booklet').css('display','inline-block')
 
         $('.title').empty()
+        $('.achievements h3').addClass('arrowed')
         a = document.createElement('a')
         $(a).text(Publication.title).attr("href", '/saved?id=' + Publication.id)
         $(a).appendTo($('.title'))
