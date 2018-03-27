@@ -802,6 +802,7 @@ function savetoDb(publication) {
         $('.button.pdf, .button.booklet').css('display','inline-block')
 
         $('.title').empty()
+        $('.achievements h3').addClass('arrowed')
         a = document.createElement('a')
         $(a).text(Publication.title).attr("href", '/saved?id=' + Publication.id)
         $(a).appendTo($('.title'))
