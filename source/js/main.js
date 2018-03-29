@@ -614,8 +614,27 @@ function showTime(Publication) {
 			if (minutes <= 0 && seconds <= 20) {
 
 				var size = (1.34444444 - (seconds / 60));
-				console.log(size);
 				$('.counter').css('transform', 'scale(' + size + ')');
+
+				switch (seconds) {
+					case 5:
+						sfx.error()
+						break;
+					case 4:
+						sfx.error()
+						break;
+					case 3:
+						sfx.error()
+						break;
+					case 2:
+						sfx.error()
+						break;
+					case 1:
+						sfx.error()
+						break;
+					default:
+
+				}
 			}
 		}, 1)
 	} else {
