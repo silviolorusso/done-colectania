@@ -298,6 +298,7 @@ function initCanvases() {
             originX: 'left',
             originY: 'top'
           })
+        
         this.add(loremTextbox)
       }
 
