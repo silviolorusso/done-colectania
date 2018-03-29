@@ -268,7 +268,6 @@ function initCanvases() {
     })
   }
 
-
   for (canvas in canvases) {
 
     canvases[canvas].on('mouse:dblclick', function(e) { // on double click create textbox
