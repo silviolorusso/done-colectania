@@ -41,7 +41,7 @@ $('.sound').css('opacity', '0');
 $(document).ready(function(){
   setTimeout(function(){
     sfx.splash()
-  }, 2500)
+  }, 3000)
 })
 
 $('.wrapper').css('opacity', '0');
