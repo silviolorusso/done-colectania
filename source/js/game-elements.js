@@ -334,6 +334,8 @@ $(document).on('click', ".closeWizard, .wizard .closeAlert", function() {
   $(this).closest('.alert').remove();
   if (!getUrlParameter('demo')) { // if not demo
     countdownWrapper();
+  } else {
+    soundtrack.play()
   }
 });
 
