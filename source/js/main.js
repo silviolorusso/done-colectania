@@ -178,9 +178,12 @@ function initCanvases() {
     }).on('changed', function(e) {
       Publication.title = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
       this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    }).on('modified', function(e) {
+    }).on('editing:exited', function(e) {
       this.selectable = false
       isLockedEditing = false
+      if (this.text == '') {
+        this.text = 'Insert Title'
+      }
     })
   	canvases['p1'].add(title)
 
@@ -217,14 +220,17 @@ function initCanvases() {
       if (this.text == 'Insert Authors') {
         this.text = ''
         this.hiddenTextarea.value = ''
-        isLockedEditing = true
       }
+      isLockedEditing = true
     }).on('changed', function(e) {
       Publication.title = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
       this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    }).on('modified', function(e) {
+    }).on('editing:exited', function(e) {
       this.selectable = false
       isLockedEditing = false
+      if (this.text == '') {
+        this.text = 'Insert Authors'
+      }
     })
     canvases['p1'].add(authors)
 
@@ -261,52 +267,75 @@ function initCanvases() {
       canvases['p8'].add(img);
     })
   }
+
   for (canvas in canvases) {
 
-    canvases[canvas].on('mouse:dblclick', function(e) {
+    canvases[canvas].on('mouse:dblclick', function(e) { // on double click create textbox
 
       obj = this.getActiveObject()
-      if (obj) {
-        var isEditing = obj.isEditing
+      if (obj) { 
+        var isEditing = obj.isEditing 
       }
-      if (isLockedEditing != true && !obj && typeof isEditing == 'undefined') {
-        mousePos = getMousePos(this)
-        console.log(mousePos)
+      if (isLockedEditing != true && !obj && typeof isEditing == 'undefined') { // if not editing title and authors and there is no selected object and not edting anything else 
+        textWidth = 250
+        try {
+          mousePos = getMousePos(this)
+        } catch(err) { // firefox NaN bug
+          var mousePos = {
+            x: this.width / 2 - textWidth/2,
+            y: this.height / 2.5          
+          }
+        }
 
-        this.add(new fabric.Textbox(loremIpsum, {
-          fontFamily: 'Helvetica',
-          left: parseInt(mousePos.x), // to avoid blur
-          top: parseInt(mousePos.y),
-          fontSize: fontSize,
-          fill: fontColor,
-          width: 250,
-          breakWords: true,
-          originX: 'left',
-          originY: 'top'
-        }))
+        loremTextbox = new fabric.Textbox(loremIpsum, {
+            fontFamily: 'Helvetica',
+            left: parseInt(mousePos.x), // to avoid blur
+            top: parseInt(mousePos.y),
+            fontSize: fontSize,
+            fill: fontColor,
+            width: 250,
+            breakWords: true,
+            originX: 'left',
+            originY: 'top'
+          })
+        this.add(loremTextbox)
+        sfx.button()
       }
 
     })
-
+  
   }
-}
-$(document).keydown(function(e) { // del or backspace to delete
-  if( e.which == 8 || e.which == 46) {
-    for (canvas in canvases) {
-      obj = canvases[canvas].getActiveObject()
-      if (obj) {
-        var isEditing = obj.isEditing
+
+  for (canvas in canvases) { // when selecting an object, deselect all the objects on other canvases
+    canvases[canvas].on('object:selected', function(e) {
+      thisCanvas = e.target.canvas.id
+      for (canvas in canvases) {
+        if (canvas !== e.target.canvas.id) {
+          canvases[canvas].discardActiveObject().renderAll()
+        }
       }
-      if ( obj && isEditing != true ) {  // removing object
+    })
+  }
 
-        canvases[canvas].remove(canvases[canvas].getActiveObject());
-        controller(Publication, { remove: true })
+  $(document).keydown(function(e) { // del or backspace to delete
+    if( e.which == 8 || e.which == 46) {
+      for (canvas in canvases) {
+        obj = canvases[canvas].getActiveObject()
+        if (obj) {
+          var isEditing = obj.isEditing
+        }
+        if ( obj && isEditing != true ) {  // removing object
 
-        e.preventDefault()
+          canvases[canvas].remove(canvases[canvas].getActiveObject());
+          controller(Publication, { remove: true })
+
+          e.preventDefault()
+        }
       }
     }
-  }
-})
+  })
+
+}
 
 
 // --- M-V-C
