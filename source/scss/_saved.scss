@@ -24,14 +24,19 @@
         border-bottom: 1px solid $black;
         max-width: 90%;
       }
-
       @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% {
+        0%,
+        100%,
+        20%,
+        50%,
+        80% {
           transform: translateX(0);
         }
+
         40% {
           transform: translateX(-15px);
         }
+
         60% {
           transform: translateX(-5px);
         }
@@ -129,7 +134,6 @@
       -webkit-transition-duration: .2s;
       top: 0;
       box-shadow: 4px 4px 0 0 rgba(137, 137, 137, 0.48), 1px 1px 0 0 $black, -1px -1px 0 0 $black;
-      padding: 2px;
       border: none;
 
       &:nth-of-type(1n) {
