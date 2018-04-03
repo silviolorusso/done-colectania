@@ -223,7 +223,7 @@ function initCanvases() {
       }
       isLockedEditing = true
     }).on('changed', function(e) {
-      Publication.title = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
+      Publication.authors = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;") // prevent code injection
       this.text = this.text.replace(/</g, "&lt;").replace(/>/g, "&gt;")
     }).on('editing:exited', function(e) {
       this.selectable = false
