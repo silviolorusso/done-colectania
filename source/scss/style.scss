@@ -955,6 +955,19 @@ $spread-width: 900px;
 		}
 	}
 }
+
+.publicationdata {
+	.title {
+		font-size: 26px;
+		margin-bottom: -3px;
+	}
+
+	div {
+		span:first-of-type {
+			font-weight: bold;
+		}
+	}
+}
 // --- splash screen
 
 .splashpage {
@@ -1147,10 +1160,16 @@ $spread-width: 900px;
 
 			&.title {
 				font-weight: bold;
+				font-size: 18px;
+				margin-bottom: 15px;
 			}
 
 			span {
 				display: inline;
+			}
+
+			span:first-of-type {
+				font-weight: bold;
 			}
 		}
 	}
