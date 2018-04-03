@@ -279,16 +279,18 @@ function countdownWrapper() {
 	});
 }
 
-if (!getUrlParameter('demo') && window.location.href.indexOf('/saved') <= -1) {
+if (!getUrlParameter('demo') && window.location.href.indexOf('/saved') <= -1) { // if not demo and not /saved
   $('.counter').hide();
   if (localStorage.getItem("noWizard") != "true") {
-    instructionMessage(0);
+    instructionMessage(0);  // show wizard
   } else if (!getUrlParameter('demo')) {
     countdownWrapper()
   }
-} else if (getUrlParameter('demo')) {
+} else if (getUrlParameter('demo')) { // if demo
   if (localStorage.getItem("noWizard") != "true") {
     instructionMessage(0);
+  } else {
+    soundtrack.play()
   }
 }
 
