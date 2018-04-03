@@ -13,9 +13,10 @@ const port = 3000
 
 
 // --- DB STUFF
+var url = process.env.MONGOLAB_URI;
 
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://admin:donecolectania2018@ds135820.mlab.com:35820/done-colectania', { useMongoClient: true })
+mongoose.connect(url, { useMongoClient: true })
 const db = mongoose.connection
 
 var publicationSchema = mongoose.Schema({
