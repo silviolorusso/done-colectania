@@ -196,7 +196,7 @@ app.get('/pdf', function (req, res) {
         doc = new PDFDocument({size:'A5'})
 
         for (var i = 1; i < 9; i++) {
-          doc.image(publication.pages['p' + i], 0, 0, { width: doc.page.width})
+          doc.image(publication.pages['p' + i], 0, 0, { width: doc.page.width, height: doc.page.height})
           if (i != 8) {
             doc.addPage()
           }
