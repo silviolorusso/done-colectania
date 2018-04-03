@@ -1,20 +1,28 @@
 const mongoose = require('mongoose')
 
-mongoose.connect('mongodb://admin:donecolectania2018@ds135820.mlab.com:35820/done-colectania', { useMongoClient: true })
-const db = mongoose.connection;
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').load();
+  console.log('load');
+}
+console.log(process.env.MONGO_URI);
+
+var url = process.env.MONGO_URI;
+
+mongoose.Promise = global.Promise
+mongoose.connect(url, { useMongoClient: true })
+const db = mongoose.connection
 
 var publicationSchema = mongoose.Schema({
   id: String,
   title: String,
   expired: Boolean,
   authors: String,
-  date: String,
+  date: { type: String, index: true },
   imagesAmount: Number,
   textAmount: Number,
   timeElapsed: Number,
   achievementsAmount: Number,
-  pages: Object,
-  thumb: String
+  pages: Object
 })
 
 var Publication = mongoose.model('Publication', publicationSchema)

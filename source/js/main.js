@@ -251,21 +251,21 @@ function initCanvases() {
       id: 'lock'
     })
     canvases['p8'].add(pubDate);
-    fabric.Image.fromURL(logoFotocolectaniaBase64, function(img){
-      img.hasBorders = false;
-      img.hasControls = false;
-      img.selectable = false;
-      img.scale(0.12);
-      img.left = canvases['p8'].width/2;
-      img.top = 530;
-      img.lockMovementX = true;
-      img.lockMovementY = true;
-      img.lockRotation = true;
-      img.setControlsVisibility = false;
-      img.hoverCursor = 'default';
-      img.id = 'lock';
-      canvases['p8'].add(img);
-    })
+    // fabric.Image.fromURL(logoFotocolectaniaBase64, function(img){
+    //   img.hasBorders = false;
+    //   img.hasControls = false;
+    //   img.selectable = false;
+    //   img.scale(0.12);
+    //   img.left = canvases['p8'].width/2;
+    //   img.top = 530;
+    //   img.lockMovementX = true;
+    //   img.lockMovementY = true;
+    //   img.lockRotation = true;
+    //   img.setControlsVisibility = false;
+    //   img.hoverCursor = 'default';
+    //   img.id = 'lock';
+    //   canvases['p8'].add(img);
+    // })
   }
 
   for (canvas in canvases) {

@@ -11,14 +11,14 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+
+// --- DB STUFF
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
   console.log('load');
 }
 console.log(process.env.MONGO_URI);
 
-
-// --- DB STUFF
 var url = process.env.MONGO_URI;
 
 mongoose.Promise = global.Promise
@@ -132,7 +132,7 @@ app.get('/archive', function (req, res) {
 // splash
 app.get('/about', function (req, res) {
   res.render(__dirname + '/../source/views/about')
-  console.log('serving about by ' + process.pid)
+  console.log('serving about')
 })
 
 // save to db
