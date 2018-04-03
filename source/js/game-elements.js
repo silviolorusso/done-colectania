@@ -316,6 +316,20 @@ function instructionMessage(num) {
   messageHTML.show();
 	messageHTML.css('left', ((window.innerWidth/2) - (600/2)) +'px');
   messageHTML.css('top', ((window.innerHeight/2)- (400/2)) +'px');
+
+
+  function setTimeoutAgain() {
+    var t = setTimeout(function() {
+      if ($('.wizard').css('display') == 'block') {
+        if ( getUrlParameter('time') ) { // difficulty
+          Publication.timeLeft = timeSet = getUrlParameter('time')
+        }
+        setTimeoutAgain();
+      }
+    },1000);
+  };
+
+  setTimeoutAgain();
 }
 
 var noWizard = false

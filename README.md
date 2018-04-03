@@ -70,3 +70,6 @@ like
 ## Countdown
 turn on countdown on pageload/ready with this function:
 `countdownWrapper()`
+
+## remove wizard cookie
+`localStorage.setItem("noWizard", null)`
