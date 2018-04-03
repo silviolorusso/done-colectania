@@ -24,7 +24,7 @@
 
       .time {
         text-align: center;
-        margin: 10px auto auto;
+        margin: 5px auto auto;
         font-size: 30px;
         color: $white;
 
@@ -39,23 +39,10 @@
       }
 
       .name {
-        display: none;
-      }
-
-      &:hover {
-        .img {
-          background-image: url('../img/achievement_hover.svg');
-        }
-
-        .name {
-          display: block;
-          position: absolute;
-          text-align: center;
-          vertical-align: middle;
-          height: 93px;
-          top: 0;
-          padding: 20px;
-        }
+        display: block;
+        position: absolute;
+        text-align: center;
+        vertical-align: middle;
       }
     }
   }
