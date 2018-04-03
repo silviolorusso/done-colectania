@@ -6,14 +6,20 @@ const stream = require('stream')
 const path = require('path')
 const PDFDocument = require('pdfkit')
 
+
 const express = require('express')
 const app = express()
 const port = 3000
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').load();
+  console.log('load');
+}
+console.log(process.env.MONGO_URI);
 
 
 // --- DB STUFF
-var url = process.env.MONGOLAB_URI;
+var url = process.env.MONGO_URI;
 
 mongoose.Promise = global.Promise
 mongoose.connect(url, { useMongoClient: true })
