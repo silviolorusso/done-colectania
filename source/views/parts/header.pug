@@ -12,7 +12,10 @@ html(lang='en')
     <meta property="og:site_name" content="Publish or Perish!"/>
     <meta property="og:description" content="Desktop Publishing Made Challenging"/>
 
-    link(rel='stylesheet', href='assets/css/style.css')
+    //- This change should make css load faster, Because of the way the splash screen loads there will be no flash of different fonts
+    //- link(rel='stylesheet', href='assets/css/style.css')
+    link(rel='stylesheet', type='text/css', href='assets/css/style.css', media='none', onload="this.media='all';")
+
     link(rel='stylesheet', href='assets/css/csshake.min.css')
     script(src='assets/js/jquery-3.2.1.min.js')
     script(src="assets/js/fabric.min.js")
