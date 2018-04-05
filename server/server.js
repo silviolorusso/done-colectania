@@ -15,9 +15,7 @@ const port = 3000
 // --- DB STUFF
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();
-  console.log('load');
 }
-console.log(process.env.MONGO_URI);
 
 var url = process.env.MONGO_URI;
 
