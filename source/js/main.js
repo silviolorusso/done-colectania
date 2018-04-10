@@ -272,34 +272,38 @@ function initCanvases() {
 
     canvases[canvas].on('mouse:dblclick', function(e) { // on double click create textbox
 
-      obj = this.getActiveObject()
-      if (obj) {
-        var isEditing = obj.isEditing
-      }
-      if (isLockedEditing != true && !obj && typeof isEditing == 'undefined') { // if not editing title and authors and there is no selected object and not edting anything else
-        textWidth = 250
-        try {
-          mousePos = getMousePos(this)
-        } catch(err) { // firefox NaN bug
-          var mousePos = {
-            x: this.width / 2 - textWidth/2,
-            y: this.height / 2.5
+      if (window.location.href.indexOf('saved') < 0) { // if it's not saved
+
+        obj = this.getActiveObject()
+        if (obj) {
+          var isEditing = obj.isEditing
+        }
+        if (isLockedEditing != true && !obj && typeof isEditing == 'undefined') { // if not editing title and authors and there is no selected object and not edting anything else
+          textWidth = 250
+          try {
+            mousePos = getMousePos(this)
+          } catch(err) { // firefox NaN bug
+            var mousePos = {
+              x: this.width / 2 - textWidth/2,
+              y: this.height / 2.5
+            }
           }
+
+          loremTextbox = new fabric.Textbox(loremIpsum, {
+              fontFamily: 'Helvetica',
+              left: parseInt(mousePos.x), // to avoid blur
+              top: parseInt(mousePos.y),
+              fontSize: fontSize,
+              fill: fontColor,
+              width: 250,
+              breakWords: true,
+              originX: 'left',
+              originY: 'top'
+            })
+          this.add(loremTextbox)
+          sfx.button()
         }
 
-        loremTextbox = new fabric.Textbox(loremIpsum, {
-            fontFamily: 'Helvetica',
-            left: parseInt(mousePos.x), // to avoid blur
-            top: parseInt(mousePos.y),
-            fontSize: fontSize,
-            fill: fontColor,
-            width: 250,
-            breakWords: true,
-            originX: 'left',
-            originY: 'top'
-          })
-        this.add(loremTextbox)
-        sfx.button()
       }
 
     })
