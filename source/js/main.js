@@ -155,7 +155,7 @@ function initCanvases() {
     // title
   	title = new fabric.Textbox('Insert Title', {
   	  top: 120,
-  	  fontFamily: 'AGaramondPro, serif',
+  	  fontFamily: 'AGaramondPro',
   	  fill: '#777',
   	  lineHeight: 1.1,
   	  fontSize: 30,
@@ -203,7 +203,7 @@ function initCanvases() {
     // authors
   	authors = new fabric.Textbox('Insert Authors', {
   	  top: 180,
-  	  fontFamily: 'AGaramondPro, serif',
+  	  fontFamily: 'AGaramondPro',
   	  fill: '#777',
   	  lineHeight: 1.1,
   	  fontSize: 20,
@@ -238,7 +238,7 @@ function initCanvases() {
     pubDate = new fabric.Text( timeConverter(Publication.date), {
       top: 600,
       left: canvases['p8'].width/2,
-      fontFamily: 'AGaramondPro, serif',
+      fontFamily: 'AGaramondPro',
       fill: '#777',
       lineHeight: 1.1,
       fontSize: 14,
@@ -273,17 +273,17 @@ function initCanvases() {
     canvases[canvas].on('mouse:dblclick', function(e) { // on double click create textbox
 
       obj = this.getActiveObject()
-      if (obj) { 
-        var isEditing = obj.isEditing 
+      if (obj) {
+        var isEditing = obj.isEditing
       }
-      if (isLockedEditing != true && !obj && typeof isEditing == 'undefined') { // if not editing title and authors and there is no selected object and not edting anything else 
+      if (isLockedEditing != true && !obj && typeof isEditing == 'undefined') { // if not editing title and authors and there is no selected object and not edting anything else
         textWidth = 250
         try {
           mousePos = getMousePos(this)
         } catch(err) { // firefox NaN bug
           var mousePos = {
             x: this.width / 2 - textWidth/2,
-            y: this.height / 2.5          
+            y: this.height / 2.5
           }
         }
 
@@ -303,7 +303,7 @@ function initCanvases() {
       }
 
     })
-  
+
   }
 
   for (canvas in canvases) { // when selecting an object, deselect all the objects on other canvases
