@@ -837,7 +837,7 @@ function savetoDb(publication) {
       }
       zoom(canvasZoom)
 
-      Publication.pages[page] = canvases[page].toDataURL('image/png', 1) // update all pages
+      Publication.pages[page] = canvases[page].toDataURL('image/jpeg', 1) // update all pages
 
       zoom (originWidth);
   	}
