@@ -16,7 +16,7 @@ var drawingModeTime = 10000
 var infiniteTime = false
 var defaultTitle = 'Untitled'
 var defaultAuthors = 'Anonymous'
-var canvasZoom = 700
+var canvasZoom = 600
 var maxFileSize = 1048576 // 1mb
 var maxPublicationSize = 10485760 // 10mb
 
