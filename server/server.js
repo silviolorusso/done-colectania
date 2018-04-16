@@ -5,6 +5,7 @@ const fabric = require('fabric').fabric
 const stream = require('stream')
 const path = require('path')
 const PDFDocument = require('pdfkit')
+const sharp = require('sharp')
 
 
 const express = require('express')
@@ -137,11 +138,34 @@ app.get('/about', function (req, res) {
 app.post('/db', function(req, res) {
     var publication = new Publication( req.body )
 
-    publication.save(function (err, publication) {
-      if (err) return console.error(err);
-      console.log('saved to db')
-      res.status(200).json({status:"ok"})
-    })
+    function savePub(publication) {
+      publication.save(function (err, publication) {
+        if (err) return console.error(err);
+        console.log('saved to db')
+        res.status(200).json({status:"ok"})
+      })
+    }
+
+    function compressImg(page, callback) {
+      format = 'jpeg'
+      debasedInImg = publication.pages[page].toString().substr(21); // cut "data:image/png;base64" 
+      inBuffer = Buffer.from(debasedInImg, 'base64');
+      var _sharp = sharp(inBuffer).toFormat(format).toBuffer().then(data => {
+        outImg = 'data:image/' + format + ';base64,' + data.toString('base64')
+        publication.pages[page] = outImg
+        if (callback) {
+          callback()
+        }
+      })
+    }
+
+    for (page in publication.pages) {
+      if (page != 'p8') {
+        compressImg(page)        
+      } else {
+        compressImg( page, function(){setTimeout(function(){savePub(publication)}, 3000)} ) // I know, it's ugly    
+      }
+    }
 
     console.log('saving to db');
 });
