@@ -1,3 +1,4 @@
+const sharp = require('sharp')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const fs = require('fs')
@@ -5,7 +6,6 @@ const fabric = require('fabric').fabric
 const stream = require('stream')
 const path = require('path')
 const PDFDocument = require('pdfkit')
-const sharp = require('sharp')
 
 
 const express = require('express')
