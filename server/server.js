@@ -1,4 +1,4 @@
-const sharp = require('sharp')
+const sharp = require('sharp') // sharp should be first otherwise crashes on heroku
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const fs = require('fs')

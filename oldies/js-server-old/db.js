@@ -35,6 +35,5 @@ db.once('open', function() {
   });
 
 
-
 });
 
