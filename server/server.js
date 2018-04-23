@@ -167,6 +167,20 @@ app.post('/db', function(req, res) {
       }
     }
 
+    Publication.collection.stats(function(err, results) { // if db is more than 250 mb, delete last publication
+      console.log('storage size: ' + results.storageSize);
+      if (results.storageSize >= 250000000) { // db is more than 250 mb
+        Publication.findOne().limit(1).exec(function (err, _publication) {
+
+          Publication.find({ id: _publication.id }).remove(function (err) {
+            if (err) return handleError(err);
+            console.log('removed' )
+          });
+        });
+      }
+    });
+
+
     console.log('saving to db');
 });
 

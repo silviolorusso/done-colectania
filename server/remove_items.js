@@ -1,5 +1,12 @@
 const mongoose = require('mongoose')
-const theId = 'R1523369522891'
+
+const theIds = [
+  'D1523887121993',
+  'M1523519639890',
+  'J1523374599561',
+  'I1523370319462',
+  
+] 
 
 
 if (process.env.NODE_ENV !== 'production') {
@@ -29,7 +36,10 @@ var publicationSchema = mongoose.Schema({
 
 var Publication = mongoose.model('Publication', publicationSchema)
 
-Publication.find({ id: theId }).remove(function (err) {
+
+Publication.find({ id: { $in: theIds} }).remove(function (err) {
   if (err) return handleError(err);
-  console.log('removed ')
+  console.log('removed ' + theIds )
 });
+
+
