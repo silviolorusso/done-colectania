@@ -12,6 +12,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+const maxDbSize = 1000000000 // 1gb
 
 // --- DB STUFF
 if (process.env.NODE_ENV !== 'production') {
@@ -169,12 +170,11 @@ app.post('/db', function(req, res) {
 
     Publication.collection.stats(function(err, results) { // if db is more than 250 mb, delete last publication
       console.log('storage size: ' + results.storageSize);
-      if (results.storageSize >= 250000000) { // db is more than 250 mb
+      if (results.storageSize >= maxDbSize) { // db is more than maxDbsize
         Publication.findOne().limit(1).exec(function (err, _publication) {
-
           Publication.find({ id: _publication.id }).remove(function (err) {
             if (err) return handleError(err);
-            console.log('removed' )
+            console.log('removed last' )
           });
         });
       }
