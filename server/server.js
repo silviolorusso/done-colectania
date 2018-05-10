@@ -168,17 +168,19 @@ app.post('/db', function(req, res) {
       }
     }
 
-    Publication.collection.stats(function(err, results) { // if db is more than 250 mb, delete last publication
-      console.log('storage size: ' + results.storageSize);
-      if (results.storageSize >= maxDbSize) { // db is more than maxDbsize
-        Publication.findOne().limit(1).exec(function (err, _publication) {
-          Publication.find({ id: _publication.id }).remove(function (err) {
-            if (err) return handleError(err);
-            console.log('removed last' )
-          });
-        });
-      }
-    });
+    // not sure this works
+    
+    // Publication.collection.stats(function(err, results) { // if db is more than x mb, delete last publication
+    //   console.log('storage size: ' + results.storageSize);
+    //   if (results.storageSize >= maxDbSize) { // db is more than maxDbsize
+    //     Publication.findOne().limit(1).exec(function (err, _publication) {
+    //       Publication.find({ id: _publication.id }).remove(function (err) {
+    //         if (err) return handleError(err);
+    //         console.log('removed last' )
+    //       });
+    //     });
+    //   }
+    // });
 
 
     console.log('saving to db');
