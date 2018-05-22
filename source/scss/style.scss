@@ -640,6 +640,8 @@ $spread-width: 900px;
 
 	img {
 		padding-bottom: 40px;
+		max-width: 322px;
+		height: auto;
 	}
 
 	.button {
@@ -989,6 +991,9 @@ $spread-width: 900px;
 		margin-right: auto;
 		text-align: center;
 		padding-top: 50px;
+		img {
+			max-width: 322px;
+		}
 	}
 
 	p {

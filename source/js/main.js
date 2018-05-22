@@ -480,14 +480,149 @@ function controller(Publication, input) {
 }
 
 
+// --- PRECONTROLLER
 
+function countdownWrapper() {
+  $(document).ready(function() {
+    animateUp($('#counter'));
+
+
+    function countdown(startTime) {
+      animateUpOut($('#countdownWrapper'), 1000)
+
+      switch (startTime) {
+        case 3:
+          $('#countdown').html('<span>Prepare your <span class="perish">Assets!</span></span>');
+          sfx.countdown()
+          break;
+        case 2:
+          $('#countdown').html('<span>Create your <span class="perish">Layout!</span></span>');
+          sfx.countdown()
+          break;
+        case 1:
+          $('#countdown').html('<span>Publish or <span class="perish">Perish!</span></span>');
+          sfx.countdown()
+          break;
+        default:
+      }
+
+      startTime = startTime - 1;
+      if (startTime >= 0) {
+        setTimeout(function () {
+          countdown(startTime);
+        }, 1300);
+      } else {
+        sfx.countdownReady()
+        soundtrack.play()
+        initGame()
+        $('#countdownWrapper').remove();
+        $('.counter').fadeIn(300);
+        if ( getUrlParameter('time') ) { // difficulty
+          Publication.timeLeft = getUrlParameter('time')
+        }
+        return
+      }
+    }
+
+    var startTime = 3;
+    setTimeout(function () {
+      countdown(startTime)
+    }, 200)
+  });
+}
+
+if (!getUrlParameter('demo') && window.location.href.indexOf('/saved') <= -1) { // if not demo and not /saved
+  $('.counter').hide();
+  if (localStorage.getItem("noWizard") != "true") {
+    instructionMessage(0);  // show wizard
+  } else if (!getUrlParameter('demo')) {
+    countdownWrapper()
+  }
+} else if (getUrlParameter('demo')) { // if demo
+  if (localStorage.getItem("noWizard") != "true") {
+    instructionMessage(0);
+  } else {
+    initGame()
+    soundtrack.play()
+  }
+}
+
+
+
+function instructionMessage(num) {
+  var wizardTime = ( getUrlParameter('demo') ) ? '∞' : Publication.timeLeft
+
+  var messageArray = [
+    '<div class="left"><img class="left" src="assets/img/achievement.png" /></div><div class="right"><h2>Welcome to Publish or Perish! Instructions Wizard</h2> <p>This wizard will guide you through the workflow of <em>Publish or Perish!</em>. It is recommended to <strong>prepare a directory of files</strong> for your publication in advance.</p><p>Click Next to Continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
+
+    '<div class="left"><img class="left" src="assets/img/jpg.svg" /></div><div class="right"><h2>Images</h2> <p><p>You can drag and drop images (<strong>.jpg, .png </strong>) from your computer onto the page. These images can be <strong>moved</strong>, <strong>scaled</strong> and <strong>rotated</strong>.</p><p>The file-size limit is <strong>1mb</strong>.</p><p>Click Next to Continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
+
+    '<div class="left"><img class="left" src="assets/img/txt.svg" /></div><div class="right"><h2>Text</h2> <p><p>You can drag and drop text (<strong>.txt</strong>) from your computer onto the page or you can <strong>double click</strong> to create a new textbox.</p><p>Click Next to continue</p></div><div class="buttons"><div class="button nextWizard">Next ></div><div class="button closeWizard">Cancel</div></div></div>',
+
+    '<div class="left"><img class="left" src="assets/img/time.svg" /></div><div class="right"><h2>Time & Disruptions</h2> <p><p>You will have <strong>' + wizardTime + ' seconds</strong> to complete your publication. During this time, if you\'re not in Demo mode, <strong>unexpected things will happen</strong>. Be ready!</p><p>The file-size limit for the whole publication is <strong>10mb</strong>.</p><p>Click Finish to start the game</p></div><div class="buttons"><label class="wizardneveragain"><input type="checkbox"><span class="checkmark"></span>Don\'t show this wizard again</label><div class="button nextWizard">Finish</div><div class="button closeWizard">Cancel</div></div></div>',
+  ]
+
+  var messageHTML = $('<div class="alert wizard"><div class="topbar"></div><img class="close closeAlert" src="/assets/img/x.png" /><div class="alertMessage">' + messageArray[num] + '</div>');
+  $('body').append(messageHTML)
+  messageHTML.show();
+  messageHTML.css('left', ((window.innerWidth/2) - (600/2)) +'px');
+  messageHTML.css('top', ((window.innerHeight/2)- (400/2)) +'px');
+
+}
+
+var noWizard = false
+$(document).on('click', '.wizardneveragain input', function() {
+  if ($(this).attr('checked')) {
+    $(this).attr('checked', false)
+    noWizard = false
+  } else {
+    $(this).attr('checked', true)
+    noWizard = true
+  }
+});
+
+var number = 0;
+$(document).on('click', ".closeWizard, .wizard .closeAlert", function() {
+  if ( noWizard == true ) { // if checkbox is checked
+    localStorage.setItem("noWizard", "true")
+  }
+  $(this).closest('.alert').remove();
+  if (!getUrlParameter('demo')) { // if not demo
+    countdownWrapper();
+  } else {
+    initGame()
+    soundtrack.play()
+  }
+});
+
+$(document).on('click', ".nextWizard", function() {
+  if ( getUrlParameter('time') ) { // difficulty
+    Publication.timeLeft = timeSet = getUrlParameter('time')
+  }
+  number = number + 1;
+  if ( noWizard == true ) { // if checkbox is checked
+    localStorage.setItem("noWizard", "true")
+  }
+  $('.alert').remove();
+  if (number <= 3) {
+    instructionMessage(number);
+  } else {
+    if (!getUrlParameter('demo')) { // if not demo
+      countdownWrapper();
+    } else {
+      soundtrack.play()
+    }
+    number = 0;
+
+  }
+});
 
 
 // --- CONTROLLER
 
 var x;
-$(document).ready(function() {
-	initCanvases()
+initCanvases()
+function initGame() {
 	onModElement()
 	if (window.location.href.indexOf('saved') < 0) {
 		// if not a saved publication
@@ -499,7 +634,7 @@ $(document).ready(function() {
 		x = setInterval(function() {
 			Publication.timeLeft = Publication.timeLeft - 10;
       if (infiniteTime == false) {
-        Publication.timeElapsed = parseInt( (timeSet - Publication.timeLeft) / 1000 )
+        Publication.timeElapsed = Publication.timeElapsed + 10 / 1000
       } else {
         Publication.timeElapsed = 0
       }
@@ -509,7 +644,7 @@ $(document).ready(function() {
 	} else { // saved publication
 		renderPublication(Publication)
 	}
-});
+}
 
 function addTime(bonusTime) {
 	Publication.timeLeft = Publication.timeLeft + bonusTime;
@@ -669,6 +804,7 @@ function showExpired() {
   if (Publication.expired != true) {
     soundtrack.stop()
     Publication.expired = true
+    Publication.timeElapsed = parseInt(Publication.timeElapsed)
 
     // locking elements
     lockElements(allElements())
