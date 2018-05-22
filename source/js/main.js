@@ -621,30 +621,31 @@ $(document).on('click', ".nextWizard", function() {
 // --- CONTROLLER
 
 var x;
+
 initCanvases()
 function initGame() {
 	onModElement()
-	if (window.location.href.indexOf('saved') < 0) {
-		// if not a saved publication
-		if ( getUrlParameter('time') ) { // difficulty
-			Publication.timeLeft = timeSet = getUrlParameter('time')
-		} else {
-      infiniteTime = true
+	if ( getUrlParameter('time') ) { // difficulty
+		Publication.timeLeft = timeSet = getUrlParameter('time')
+	} else {
+    infiniteTime = true
+  }
+	x = setInterval(function() {
+		Publication.timeLeft = Publication.timeLeft - 10;
+    if (infiniteTime == false) {
+      Publication.timeElapsed = Publication.timeElapsed + 10 / 1000
+    } else {
+      Publication.timeElapsed = 0
     }
-		x = setInterval(function() {
-			Publication.timeLeft = Publication.timeLeft - 10;
-      if (infiniteTime == false) {
-        Publication.timeElapsed = Publication.timeElapsed + 10 / 1000
-      } else {
-        Publication.timeElapsed = 0
-      }
-			controller(Publication);
-		}, 10)
-		mouseCounter()
-	} else { // saved publication
-		renderPublication(Publication)
-	}
+		controller(Publication);
+	}, 10)
+	mouseCounter()
 }
+$(document).ready(function() {
+  if (window.location.href.indexOf('saved') > 0) { // if it's /saved
+    renderPublication(Publication)
+  }
+});
 
 function addTime(bonusTime) {
 	Publication.timeLeft = Publication.timeLeft + bonusTime;
