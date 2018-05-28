@@ -100,7 +100,13 @@ function createElement(element, mousePos) {
  			canvases[element.page].add(img)
 		})
 	} else {
-		var deBasedText = atob(element.data.substring(23));
+    function b64DecodeUnicode(str) {
+      return decodeURIComponent(Array.prototype.map.call(atob(str), function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      }).join(''))
+    }
+		var deBasedText = b64DecodeUnicode(element.data.substring(23));
+    console.log(deBasedText);
     chunks = deBasedText.match(new RegExp('(.|[\r\n]){1,' + textChunksLength + '}', 'g'))
     var currPage = parseInt( element.page.substr(element.page.length - 1) )
     for (var i = 0; i < chunks.length; i++) {
